@@ -1,0 +1,31 @@
+parameters:
+- name: env
+  type: string
+- name: working_dir
+  type: string
+- name: validate_file_name
+  type: string
+
+steps:
+- powershell: |
+    $container = New-PesterContainer -Path '.\tests\${{parameters.validate_file_name}}' -Data @{ Environment = "${{parameters.env}}"  } 
+    $result = Invoke-Pester -Container $container -Passthru
+    $result | Export-NUnitReport -Path ".\tests\pester.${{parameters.env}}.xml"
+  workingDirectory: ${{parameters.working_dir}}
+  displayName: 'Run Tests ${{parameters.env}}'
+  env:
+    ARM_CLIENT_ID: $(arm_client_id)
+    ARM_CLIENT_SECRET: $(arm_client_secret)
+    ARM_TENANT_ID: $(arm_tenant_id)
+    ARM_SUBSCRIPTION_ID: $(arm_subscription_id)
+    ARM_ACCESS_KEY: $(arm_access_key)
+  condition: succeededOrFailed()
+  
+- task: PublishTestResults@2
+  name: publish_test_results_${{parameters.env}}
+  displayName: Publish Test Results ${{parameters.env}}
+  inputs:
+    testResultsFiles: $(Build.SourcesDirectory)\${{parameters.working_dir}}\tests\pester.${{parameters.env}}.xml
+    testResultsFormat: NUnit
+    failTaskOnFailedTests: true
+  condition: succeededOrFailed()

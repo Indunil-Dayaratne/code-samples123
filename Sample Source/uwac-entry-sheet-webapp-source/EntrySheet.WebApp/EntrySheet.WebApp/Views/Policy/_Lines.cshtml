@@ -1,0 +1,209 @@
+﻿ <!---Fifth Section Policy Additional Info-->
+<!--  ko stopBinding: true -->
+<div id="divLinesDetails">
+        <div class="panel panel-default">
+            <div class="panel-heading msportalfx-text-small panel-Header">
+                <div class="row">
+                    <div class="col-md-4" id="linesHeaderDiv">
+                        <div class="pull-left" style="width:100%">
+                            Lines
+                        </div>
+                        <div class="clearfix"></div>
+                    </div>
+                </div>
+            </div>
+            <div class="panel-body" style=" padding-top: 0px; padding-bottom: 0px;">
+                <div class="table-responsive table-scroll">
+                    <table class="table table-bordered table-hover table-striped" id="linesTable">
+                        <thead style="border-bottom-width:0px">
+                            <tr class="active">
+                                <th>LBS</th>
+                                <th>Section</th>
+                                <th>Entity</th>
+                                <th>Status</th>
+                                <th id="statusReason">Status Reason</th>
+                                <th id="quoteDate">Quote Date</th>
+                                <th id="quoteDays">Quote Days</th>
+                                <th>WL Ind</th>
+                                <th>Written Line</th>
+                                <th>Est Sign</th>
+                                <th>W / O</th>
+                                <th>Order %</th>
+                                <th>RI Code</th>
+                                <th>Exposure</th>
+                                <th>GNWP</th>
+                                <th id="deletePolicyLineRskSht">Delete</th>
+                            </tr>
+                        </thead>
+                        <tbody data-bind="foreach: lines">
+                            <tr>
+                                <td>
+                                    <input type="checkbox" class="form-check-input input-sm brit-accordion-checkbox-rowspan-2"
+                                           data-bind="checked:lbs, disable:isRiskEntrySheetLocked(),
+                                       attr:{id :'isLBSLine' + $index() , name: 'isLBSLine' + $index()}" />
+                                </td>
+                                <td>
+                                    <!--Map All Sections from API-->
+                                    <select class="form-control font-bold input-sm field-recommended required width-as-per-content"
+                                            data-bind="attr: { id: 'selSectionRM' + $index(), name: 'selSectionRM' + $index()  },
+                                        options:lineSections, disable:isRiskEntrySheetLocked(),
+                                        value : lineSection"></select>
+                                </td>
+                                <td>
+                                    <!--Map All entities from britcache-->
+                                    <select class="form-control font-bold input-sm field-recommended required width-as-per-content"
+                                            data-bind="attr: { id: 'selEntity' + $index(), name: 'selEntity' + $index()  },
+                                        value : entity , disable:isRiskEntrySheetLocked()">
+                                        <option>2987</option>
+                                        <option>2988</option>
+                                    </select>
+                                </td>
+                                <td>
+                                    <!--Map All entities from britcache-->
+                                    <div>
+                                        <select class="form-control font-bold input-sm field-recommended required"
+                                                data-bind="attr: { id: 'selStatus' + $index(), name: 'selStatus' + $index()  },
+                                            css: { 'width-as-per-content' : $parent.lines().length == 1 },
+                                            options:$parent.lineStatuses,disable:isRiskEntrySheetLocked(),
+                                            value : lineStatus,
+                                            event:{ change: $parent.lineStatusChanged.bind($data,$index())}"></select>
+                                    </div>
+                                </td>
+                                <td data-bind="style: {display: !$parent.isNTUStatusAvailable() ? 'none' : '' }">
+                                    <div data-bind="visible:isNTUStatus()">
+                                        <select class="form-control font-bold input-sm field-recommended required width-as-per-content"
+                                                data-bind="options:$parent.quoteStatusReasonList,
+                                        value : statusReason,disable:isRiskEntrySheetLocked(),
+                                        attr:{id :'selStatusReason' + $index() , name: 'selStatusReason' + $index()}"></select>
+                                    </div>
+                                    <div data-bind="visible:!isNTUStatus()">
+
+                                    </div>
+
+                                </td>
+                                <td data-bind="style: {display: !$parent.isQuoteStatusAvailable() ? 'none' : '' }">
+                                    <div data-bind="visible:!isQuoteStatus()">
+
+                                    </div>
+                                    <div data-bind="visible:isQuoteStatus()">
+                                        <input class="form-control input-sm font-bold field-recommended required width-as-per-content" type="text"
+                                               data-bind="attr: {id:'quoteDate' + $index(), name:'quoteDate' + $index()} ,
+                                       value:quoteDate, disable:isRiskEntrySheetLocked()" autocomplete="off" />
+                                    </div>
+                                </td>
+
+                                <td data-bind="style: {display: !$parent.isQuoteStatusAvailable() ? 'none' : '' }">
+                                    <div data-bind="visible:!isQuoteStatus()">
+
+                                    </div>
+                                    <div data-bind="visible:isQuoteStatus()">
+                                        <input class="form-control input-sm font-bold field-recommended required" type="text"
+                                               data-bind="attr: { id: 'txtQuoteDays' + $index(), name: 'txtQuoteDays' + $index()  },
+                                           numbersFormatted: quoteDays,disable:isRiskEntrySheetLocked()" autocomplete="off" />
+                                    </div>
+                                </td>
+                                <td>
+                                    <div data-bind="if: ($index() == 0 &&  ($parent.lines().length > 1))">
+                                        <div class="input-group input-group-sm">
+                                            <select class="form-control font-bold input-sm from-copy-field width-as-per-content"
+                                                    data-bind="attr: { id: 'selWLInd' + $index(), name: 'selWLInd' + $index()  },
+                                        options : $parent.percentageAmountIndList, value : wlIndicator, disable:isRiskEntrySheetLocked()">
+                                            </select>
+                                            <span class="input-group-btn">
+                                                <button type="button" id="copyWLInd" class="btn copy-btn" title="Copy WL Ind" data-bind="click:$parent.copyFieldValue.bind($data,$index(),'selWLInd')">
+                                                    <span class="glyphicon glyphicon-copy-option glyphicon-circle-arrow-down"></span>
+                                                </button>
+                                            </span>
+                                        </div>
+                                    </div>
+                                    <div data-bind="if: ($parent.lines().length ==  1 || $index() != 0)">
+                                        <select class="form-control font-bold input-sm"
+                                                data-bind="attr: { id: 'selWLInd' + $index(), name: 'selWLInd' + $index()  },
+                                            css: { 'width-as-per-content' : $parent.lines().length == 1 },
+                                            options : $parent.percentageAmountIndList, value : wlIndicator, disable:isRiskEntrySheetLocked()">
+                                        </select>
+                                    </div>
+                                </td>
+
+                                <td>
+                                    <input class="form-control input-sm font-bold field-recommended required " style="text-align:right !important" type="text"
+                                           data-bind="attr: { id: 'txtwrittenLine' + $index(), name: 'txtwrittenLine' + $index()  },
+                                       valueFormatted:writtenLine ,disable:isRiskEntrySheetLocked()" autocomplete="off" />
+                                </td>
+
+                                <td>
+                                    <input class="form-control input-sm font-bold field-recommended " style="text-align:right !important" type="text"
+                                           data-bind="attr: { id: 'txtEstSign' + $index(), name: 'txtEstSign' + $index()  },
+                                       valueFormatted:estSign, disable:isRiskEntrySheetLocked()" autocomplete="off" />
+                                </td>
+                                <td>
+
+                                    <div data-bind="if: ($index() == 0 &&  ($parent.lines().length > 1))">
+                                        <div class="input-group input-group-sm">
+                                            <select class="form-control font-bold input-sm field-recommended from-copy-field required"
+                                                    data-bind="attr: { id: 'selWO' + $index(), name: 'selWO' + $index()  },options:$parent.wholePartOrderList, value : wo,
+                                        disable:isRiskEntrySheetLocked()">
+                                            </select>
+                                            <span class="input-group-btn copy-span">
+                                                <button type="button" id="copyWO" class="btn copy-btn" title="Copy W / O" data-bind="click:$parent.copyFieldValue.bind($data,$index(),'selWO')">
+                                                    <span class="glyphicon glyphicon-copy-option glyphicon-circle-arrow-down"></span>
+                                                </button>
+                                            </span>
+                                        </div>
+                                    </div>
+                                    <div data-bind="if: ($parent.lines().length ==  1 || $index() != 0)">
+                                        <select class="form-control font-bold input-sm field-recommended required"
+                                                data-bind="attr: { id: 'selWO' + $index(), name: 'selWO' + $index()  },
+                                              css: { 'width-as-per-content' : $parent.lines().length == 1 },
+                                             options:$parent.wholePartOrderList, value : wo,
+                                        disable:isRiskEntrySheetLocked()">
+                                        </select>
+                                    </div>
+                                </td>
+                                <td>
+                                    <input class="form-control input-sm font-bold field-recommended required " style="text-align:right !important" type="text"
+                                           data-bind="attr: { id: 'txtOrder' + $index(), name: 'txtOrder' + $index()  },
+                                       valueFormatted:order , isPercentage: 1,disable:isRiskEntrySheetLocked()" autocomplete="off" />
+                                </td>
+                                <td>
+                                    <div>
+                                        <select class="form-control font-bold input-sm width-as-per-content valid"
+                                                data-bind="attr: { id: 'selRICode' + $index(), name: 'selRICode' + $index()  },
+                                            options:$parent.reinsCodeList,optionsText:'description',optionsValue:'code',
+                                                value : riCode,disable:isRiskEntrySheetLocked()"></select>
+                                    </div>
+                                </td>
+                                <td class="font-bold numeric" style="text-align:right !important" data-bind="numericText: exposure, positions: 2">
+                                </td>
+                                <td class="font-bold numeric" style="text-align:right !important" data-bind="numericText: gnwp, positions: 2">
+                                </td>
+                                <td style="text-align: center" data-bind="visible:isNewPolicyLine()">
+                                    <div data-bind="visible:isNewPolicyLine()">
+                                        <a target="_blank" class="btn btn-link" style="color: red;" data-bind="event:{ click:$parent.removeLine.bind($data,$index())}" title="Remove">
+                                            <i class="fa fa-close"></i>
+                                        </a>
+                                    </div>
+                                </td>
+                            </tr>
+                        </tbody>
+                        <tfoot style="border-top:0px">
+                            <tr>
+                                <td style="text-align: left;" colspan="16">
+                                    <div data-bind="visible:allLinesSigned()">
+                                        <a target="_blank" class="btn btn-link" id="addNewLineToRiskEntry" disabled="true"
+                                           style="padding:0px;color: #52677a;font-weight: bold; text-decoration:underline; font-size: 12px !important;">Add New</a>
+                                    </div>
+                                    <div data-bind="visible:!allLinesSigned()">
+                                        <a target="_blank" class="btn btn-link" id="addNewLineToRiskEntry"
+                                           data-bind="event:{ click:addLineRow.bind($data,-1)}"
+                                           style="padding:0px;color: #52677a;font-weight: bold; text-decoration:underline; font-size: 12px !important;">Add New</a>
+                                    </div>
+                                </td>
+                            </tr>
+                        </tfoot>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+<!-- /ko -->

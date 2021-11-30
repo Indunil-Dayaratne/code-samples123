@@ -1,0 +1,158 @@
+parameters:
+- name: sourceFolder
+  type: string
+  default: "src/"
+- name: devWebApps
+  type: object
+- name: tstWebApps
+  type: object
+- name: uatWebApps
+  type: object
+- name: stgWebApps
+  type: object
+- name: prdWebApps
+  type: object
+- name: deployDev
+- name: deployTst
+- name: deployUat
+- name: deployStg
+- name: deployPrd
+
+stages:
+ - stage: build
+   displayName: Build stage
+
+   jobs:
+   - job: Build
+     displayName: Build Project
+     pool:
+      vmImage: $(vmImageName)
+     steps:
+     - task: SonarQubePrepare@4
+       displayName: 'Prepare analysis on SonarQube'
+       inputs:
+         sonarQube: 'Sonarqube DEV'
+         projectKey: $(projectKey)
+         projectName: $(projectKey)
+         extraProperties: |
+           sonar.exclusions=**/packages/*
+           sonar.verbose=true
+           sonar.dependencyCheck.reportPath=$(build.artifactstagingdirectory)\dependency-check-report.xml
+           sonar.dependencyCheck.htmlReportPath=$(build.artifactstagingdirectory)\dependency-check-report.html
+
+     - task: DotNetCoreCLI@2
+       displayName: 'Restore Packages'
+       inputs:
+        command: 'restore'
+        projects: '**/*.csproj'
+        vstsFeed: 'BritCommonCode'
+        includeNuGetOrg: true
+
+     - task: DotNetCoreCLI@2
+       displayName: 'Build web app'
+       inputs:
+        arguments: '--configuration $(buildConfiguration)'
+        projects: '**/*.csproj'
+
+     - task: DotNetCoreCLI@2
+       displayName: 'Build Publish'
+       inputs:
+        command: publish
+        publishWebProjects: true
+        projects: '**/*.csproj'
+        arguments: '--configuration $(buildConfiguration) --output $(Build.ArtifactStagingDirectory)'
+        zipAfterPublish: true
+        modifyOutputPath: false
+
+     - task: DotNetCoreCLI@2
+       displayName: 'Run tests'
+       inputs:
+         command: test
+         projects: '**/*Test*.csproj'
+         arguments: '--configuration $(buildConfiguration) --collect "Code coverage"'
+
+     - task: SonarQubeAnalyze@4
+       displayName: 'Run Code Analysis'
+
+     - task: SonarQubePublish@4
+       displayName: 'Publish Sonar Quality Gate Result'
+       enabled: false
+       inputs:
+         pollingTimeoutSec: '300'
+
+     - task: PublishBuildArtifacts@1
+       displayName: 'Publish Artifact'
+       inputs:
+        PathtoPublish: '$(Build.ArtifactStagingDirectory)'
+        ArtifactName: drop
+        condition: succeededOrFailed()
+
+ - stage: dev
+   displayName: Deploy Dev
+   condition: and(succeeded(), eq(${{parameters.DeployDev}},true), or(eq(variables['Build.Reason'], 'Manual'), eq(variables['Build.SourceBranchName'], 'develop')))
+   dependsOn: build
+   jobs:
+     - ${{ each app in parameters.devWebApps }}:
+       - template: web-app.yml
+         parameters:
+           buildBranch: develop
+           azureSubscriptionName: 'Microsoft Azure Enterprise Non-Production'
+           vmImageName: $(vmImageName)
+           env: dev
+           appName: ${{app}}
+
+ - stage: tst
+   displayName: Deploy Test
+   condition: and(succeeded(), eq(variables['Build.Reason'], 'Manual'),eq(${{parameters.DeployTst}},true))
+   dependsOn: dev
+   jobs:
+     - ${{ each app in parameters.tstWebApps }}:
+       - template: web-app.yml
+         parameters:
+           buildBranch: $(Build.SourceBranchName)
+           azureSubscriptionName: 'Microsoft Azure Enterprise Non-Production'
+           vmImageName: $(vmImageName)
+           env: tst
+           appName: ${{app}}
+
+ - stage: uat
+   displayName: Deploy UAT
+   condition: and(succeeded(), eq(variables['Build.Reason'], 'Manual'),eq(${{parameters.DeployUat}},true))
+   dependsOn: tst
+   jobs:
+     - ${{ each app in parameters.uatWebApps }}:
+       - template: web-app.yml
+         parameters:
+           buildBranch: $(Build.SourceBranchName)
+           azureSubscriptionName: 'Microsoft Azure Enterprise Non-Production'
+           vmImageName: $(vmImageName)
+           env: uat
+           appName: ${{app}}
+
+ - stage: stg
+   displayName: Deploy Staging
+   condition: and(succeeded(), eq(variables['Build.Reason'], 'Manual'),eq(${{parameters.DeployStg}},true))
+   dependsOn: uat
+   jobs:
+     - ${{ each app in parameters.stgWebApps }}:
+       - template: web-app.yml
+         parameters:
+           buildBranch: $(Build.SourceBranchName)
+           azureSubscriptionName: 'Microsoft Azure Enterprise Non-Production'
+           vmImageName: $(vmImageName)
+           env: stg
+           appName: ${{app}}
+
+ - stage: prd
+   displayName: Deploy to Production
+   condition: and(succeeded(), and(eq(variables['Build.Reason'], 'Manual'), eq(variables['Build.SourceBranch'], 'refs/heads/main')),eq(${{parameters.DeployPrd}},true))
+   dependsOn: stg
+   jobs:
+     - ${{ each app in parameters.prdWebApps }}:
+       - template: web-app.yml
+         parameters:
+           buildBranch: $(Build.SourceBranchName)
+           azureSubscriptionName: 'Microsoft Azure Enterprise Production'
+           vmImageName: $(vmImageName)
+           env: prd
+           appName: ${{app}}

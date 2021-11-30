@@ -1,0 +1,40 @@
+parameters:
+  - name: azure_subscription
+  - name: env
+  - name: service_path
+
+steps:
+  - download: current
+    artifact: SPOnlineGateway
+  - task: FileTransform@2
+    displayName: Transform config files
+    inputs:
+      folderPath: ${{ parameters.service_path }}
+      xmlTransformationRules:
+      xmlTargetFiles: |
+        ${{ parameters.service_path }}/_PublishedWebsites/Brit.Sharepoint.DMS.SPOnline.Gateway/Web.config
+        ${{ parameters.service_path }}/Brit.Sharepoint.DMS.SPOnline.Gateway.AcceptanceTests.dll.config
+  - task: AzureWebApp@1
+    displayName: Deploy app service to UK South
+    inputs:
+      azureSubscription: ${{ parameters.azure_subscription }}
+      appType: 'webApp'
+      appName: 'dms-sponlinegateway-webapp-uks-${{ parameters.env }}'
+      package: '${{ parameters.service_path }}/_PublishedWebsites/Brit.Sharepoint.DMS.SPOnline.Gateway/'
+      deploymentMethod: 'auto'
+  - task: AzureWebApp@1
+    displayName: Deploy app service to UK West
+    inputs:
+      azureSubscription: ${{ parameters.azure_subscription }}
+      appType: 'webApp'
+      appName: 'dms-sponlinegateway-webapp-ukw-${{ parameters.env }}'
+      package: '${{ parameters.service_path }}/_PublishedWebsites/Brit.Sharepoint.DMS.SPOnline.Gateway/'
+      deploymentMethod: 'auto'
+  - task: VSTest@2
+    inputs:
+      testSelector: 'testAssemblies'
+      testAssemblyVer2: |
+        **\*AcceptanceTests.dll
+        !**\*TestAdapter.dll
+        !**\obj\**
+      searchFolder: ${{ parameters.service_path }}

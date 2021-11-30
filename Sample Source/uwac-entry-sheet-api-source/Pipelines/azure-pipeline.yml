@@ -1,0 +1,77 @@
+name: Eclipse Entry Sheet API $(Date:yyyyMMdd)$(rev:.r)
+
+resources:
+  repositories:
+    - repository: templates
+      type: git
+      name: Apps/pipeline-templates
+      ref: develop
+
+trigger:
+ batch: true
+ branches:
+  include:
+  - develop
+  - main
+  - release/*
+ paths:
+  include:
+  - src/*
+
+variables:
+  azureSubscriptionNonProd: 'Microsoft Azure Enterprise Non-Production'
+  azureSubscriptionProd: 'Microsoft Azure Enterprise Production'
+  vmImageName: 'windows-latest'
+  projectKey: 'eclipse-entry-sheet-api'
+  buildConfiguration: 'Release'
+
+parameters:
+- name: deployDev
+  displayName: Deploy Dev
+  type: boolean
+  default: true
+
+- name: deployTst
+  displayName: Deploy Test
+  type: boolean
+  default: false
+
+- name: deployUat
+  displayName: Deploy UAT
+  type: boolean
+  default: false
+
+- name: deployStg
+  displayName: Deploy Staging
+  type: boolean
+  default: false
+
+- name: deployPrd
+  displayName: Deploy PROD
+  type: boolean
+  default: false
+
+stages:
+- template: azure/func-app/pipeline.yml@templates
+  parameters: 
+    deployDev: ${{ parameters.deployDev }}
+    deployTst: ${{ parameters.deployTst }} 
+    deployUat: ${{ parameters.deployUat }} 
+    deployStg: ${{ parameters.deployStg }} 
+    deployPrd: ${{ parameters.deployPrd }}     
+    functionProjects:
+    - name: 'EntrySheet.Api.Function'
+      devApps:                              
+          - entry-sheet-api-func-uks-dev
+      tstApps:                              
+          - entry-sheet-api-func-uks-tst
+          - entry-sheet-api-func-ukw-tst
+      uatApps:                              
+          - entry-sheet-api-func-uks-uat 
+          - entry-sheet-api-func-ukw-uat 
+      stgApps:                              
+          - entry-sheet-api-func-uks-stg 
+          - entry-sheet-api-func-ukw-stg 
+      prdApps:                              
+          - entry-sheet-api-func-uks-prd 
+          - entry-sheet-api-func-ukw-prd

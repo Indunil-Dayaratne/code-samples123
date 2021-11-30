@@ -1,0 +1,12 @@
+# Terraform Module Folder
+# Modules Folder
+.terraform
+
+# State Files
+.terraform.tfstate
+.terraform.tfstate.backup
+terraform.tfstate
+terraform.tfstate.backup
+
+# Secure vars for CLI entry
+terraform-secure-vars.tfvars

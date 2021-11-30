@@ -1,0 +1,17 @@
+platform_state_key_name="platform.terraform.tfstate"
+platform_state_container_name="terraform-container-ukw-prod"
+platform_state_storage_account_name="terraformukwprod"
+platform_state_resource_group_name = "terraform-rg-ukw-prod"
+
+azure_short_region = "uks"
+azure_region = "UK South"
+project = "uwac"
+app = "eclipse-update"
+contact = "Ahmet Demir"
+contact_details = "ext 10129"
+costcentre = "G31"
+description = "Azure Table Storage resource in the ESB Storage account"
+app_short_name = "eclupd"
+
+subscription_id = "97537777-853f-4194-9301-8eab79b3c259"
+tenant_id = "8cee18df-5e2a-4664-8d07-0566ffea6dcd"

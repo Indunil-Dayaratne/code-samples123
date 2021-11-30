@@ -1,0 +1,300 @@
+name: Sharepoint DMS Redirector Source $(Date:yyyyMMdd)$(rev:.r)
+
+trigger:
+  batch: true
+  branches:
+    include:
+    - master
+    - develop
+  paths:
+    include:
+      - src/current/Brit.Sharepoint.DMS.SPOnline.BusinessLogic/*
+      - src/current/Brit.Sharepoint.DMS.SPOnline.DAL/*
+      - src/current/Brit.Sharepoint.DMS.SPOnline.Redirector/*
+      - src/current/Brit.Sharepoint.DMS.SPOnline.Redirector.Tests/*
+variables:
+  - name: base-directory
+    value: $(System.DefaultWorkingDirectory)
+stages:
+   - stage: build
+     displayName: Build
+     jobs:
+      - job: build
+        displayName: Build SPOnline Redirector Project
+        pool:
+            vmImage: 'windows-latest'
+        steps:
+          - checkout: self
+          - task: NuGetCommand@2
+            inputs:
+              command: 'restore'
+              restoreSolution: '$(Build.SourcesDirectory)/src/current/Brit.Sharepoint.DMS.SPOnline.Gateway.sln'
+          - task: CopyFiles@2
+            inputs:
+              sourceFolder:  $(Build.SourcesDirectory)/dms-redirector-platform-infrastructure
+              contents: 'scm_access_restriction_toggle.ps1' 
+              TargetFolder: $(Build.SourcesDirectory)/buildoutput
+          - task: MSBuild@1
+            inputs:
+              solution: '$(Build.SourcesDirectory)/src/current/Brit.Sharepoint.DMS.SPOnline.Redirector/Brit.Sharepoint.DMS.SPOnline.Redirector.csproj'
+              msbuildArguments: '/p:OutputPath="$(Build.SourcesDirectory)\\buildoutput"'
+              msbuildArchitecture: 'x64'
+          - publish: $(Build.SourcesDirectory)/buildoutput
+            artifact: SPOnlineRedirector
+   - stage: dev
+     displayName: Deploy Dev
+     condition: and(succeeded(), or(eq(variables['Build.Reason'], 'Manual'), eq(variables['Build.SourceBranchName'], 'develop')))
+     dependsOn: build
+     variables:
+      - name: env
+        value: dev
+     jobs:
+       - deployment: devSpOnlineRedirectorService 
+         pool:
+            vmImage: 'windows-latest'
+         environment: $(env)
+         displayName: Deploy Dev SP Online Redirector Service
+         variables:
+           - group: BritDmsSpOnlineRedirectorDev
+           - group: Terraform Non-Prod Deploy
+         strategy:
+            runOnce:
+              deploy:
+                steps:
+                  - download: current
+                    artifact: SPOnlineRedirector
+                  - task: FileTransform@2
+                    displayName: Transform config files
+                    inputs:
+                      folderPath: '$(Pipeline.Workspace)/SPOnlineRedirector/'
+                      xmlTransformationRules:
+                      xmlTargetFiles: |
+                        _PublishedWebsites/Brit.Sharepoint.DMS.SPOnline.Redirector/Web.config
+                  - task: PowerShell@2
+                    displayName: Switch off Access Restrictions on SCM Site UKS
+                    inputs:
+                      targetType: 'filePath'
+                      filePath: $(Pipeline.Workspace)/SPOnlineRedirector/scm_access_restriction_toggle.ps1
+                      arguments: 
+                        -subscriptionId $(arm_subscription_id)
+                        -tenantId $(arm_tenant_id)
+                        -resourceGroupName 'sharepoint-dms-rg-uks-$(env)'
+                        -appName 'dms-sponlineredirector-webapp-uks-$(env)'
+                        -spnName $(arm_client_id)
+                        -spnPassword (ConvertTo-SecureString "$(arm_client_secret)" -AsPlainText -Force)
+                        -useSameRestrictionsForScmSite false
+                  - task: AzureWebApp@1
+                    displayName: Deploy app service UKS
+                    inputs:
+                      azureSubscription: 'Microsoft Azure Enterprise Non-Production'
+                      appType: 'webApp'
+                      appName: "dms-sponlineredirector-webapp-uks-$(env)"
+                      package: '$(Pipeline.Workspace)/SPOnlineRedirector/_PublishedWebsites/Brit.Sharepoint.DMS.SPOnline.Redirector/'
+                      deploymentMethod: 'auto'  
+                  - task: PowerShell@2
+                    displayName: Switch on Access Restrictions on SCM Site UKS
+                    inputs:
+                      targetType: 'filePath'
+                      filePath: $(Pipeline.Workspace)/SPOnlineRedirector/scm_access_restriction_toggle.ps1
+                      arguments: 
+                        -subscriptionId $(arm_subscription_id)
+                        -tenantId $(arm_tenant_id)
+                        -resourceGroupName 'sharepoint-dms-rg-uks-$(env)'
+                        -appName 'dms-sponlineredirector-webapp-uks-$(env)'
+                        -spnName $(arm_client_id)
+                        -spnPassword (ConvertTo-SecureString "$(arm_client_secret)" -AsPlainText -Force)
+                        -useSameRestrictionsForScmSite true   
+   - stage: uat
+     displayName: Deploy UAT
+     condition: and(succeeded(), eq(variables['Build.Reason'], 'Manual'))
+     dependsOn: dev
+     variables:
+      - name: env
+        value: uat
+     jobs:
+       - deployment: uatSpOnlineRedirectorService 
+         pool:
+            vmImage: 'windows-latest'
+         environment: $(env)
+         displayName: Deploy UAT SP Online Redirector Service
+         variables:
+           - group: BritDmsSpOnlineRedirectorUat
+           - group: Terraform Non-Prod Deploy
+         strategy:
+            runOnce:
+              deploy:
+                steps:
+                  - download: current
+                    artifact: SPOnlineRedirector
+                  - task: FileTransform@2
+                    displayName: Transform config files
+                    inputs:
+                      folderPath: '$(Pipeline.Workspace)/SPOnlineRedirector/'
+                      xmlTransformationRules:
+                      xmlTargetFiles: |
+                        _PublishedWebsites/Brit.Sharepoint.DMS.SPOnline.Redirector/Web.config                        
+                  - task: PowerShell@2
+                    displayName: Switch off Access Restrictions on SCM Site UKS
+                    inputs:
+                      targetType: 'filePath'
+                      filePath: $(Pipeline.Workspace)/SPOnlineRedirector/scm_access_restriction_toggle.ps1
+                      arguments: 
+                        -subscriptionId $(arm_subscription_id)
+                        -tenantId $(arm_tenant_id)
+                        -resourceGroupName 'sharepoint-dms-rg-uks-$(env)'
+                        -appName 'dms-sponlineredirector-webapp-uks-$(env)'
+                        -spnName $(arm_client_id)
+                        -spnPassword (ConvertTo-SecureString "$(arm_client_secret)" -AsPlainText -Force)
+                        -useSameRestrictionsForScmSite false
+                  - task: AzureWebApp@1
+                    displayName: Deploy app service UKS
+                    inputs:
+                      azureSubscription: 'Microsoft Azure Enterprise Non-Production'
+                      appType: 'webApp'
+                      appName: "dms-sponlineredirector-webapp-uks-$(env)"
+                      package: '$(Pipeline.Workspace)/SPOnlineRedirector/_PublishedWebsites/Brit.Sharepoint.DMS.SPOnline.Redirector/'
+                      deploymentMethod: 'auto'                   
+                  - task: PowerShell@2
+                    displayName: Switch on Access Restrictions on SCM Site UKS
+                    inputs:
+                      targetType: 'filePath'
+                      filePath: $(Pipeline.Workspace)/SPOnlineRedirector/scm_access_restriction_toggle.ps1
+                      arguments: 
+                        -subscriptionId $(arm_subscription_id)
+                        -tenantId $(arm_tenant_id)
+                        -resourceGroupName 'sharepoint-dms-rg-uks-$(env)'
+                        -appName 'dms-sponlineredirector-webapp-uks-$(env)'
+                        -spnName $(arm_client_id)
+                        -spnPassword (ConvertTo-SecureString "$(arm_client_secret)" -AsPlainText -Force)
+                        -useSameRestrictionsForScmSite true
+                  - task: PowerShell@2
+                    displayName: Switch off Access Restrictions on SCM Site UKW
+                    inputs:
+                      targetType: 'filePath'
+                      filePath: $(Pipeline.Workspace)/SPOnlineRedirector/scm_access_restriction_toggle.ps1
+                      arguments: 
+                        -subscriptionId $(arm_subscription_id)
+                        -tenantId $(arm_tenant_id)
+                        -resourceGroupName 'sharepoint-dms-rg-ukw-$(env)'
+                        -appName 'dms-sponlineredirector-webapp-ukw-$(env)'
+                        -spnName $(arm_client_id)
+                        -spnPassword (ConvertTo-SecureString "$(arm_client_secret)" -AsPlainText -Force)
+                        -useSameRestrictionsForScmSite false
+                  - task: AzureWebApp@1
+                    displayName: Deploy app service to UKW
+                    inputs:
+                      azureSubscription: 'Microsoft Azure Enterprise Non-Production'
+                      appType: 'webApp'
+                      appName: "dms-sponlineredirector-webapp-ukw-$(env)"
+                      package: '$(Pipeline.Workspace)/SPOnlineRedirector/_PublishedWebsites/Brit.Sharepoint.DMS.SPOnline.Redirector/'
+                      deploymentMethod: 'auto'      
+                  - task: PowerShell@2
+                    displayName: Switch on Access Restrictions on SCM Site UKW
+                    inputs:
+                      targetType: 'filePath'
+                      filePath: $(Pipeline.Workspace)/SPOnlineRedirector/scm_access_restriction_toggle.ps1
+                      arguments: 
+                        -subscriptionId $(arm_subscription_id)
+                        -tenantId $(arm_tenant_id)
+                        -resourceGroupName 'sharepoint-dms-rg-ukw-$(env)'
+                        -appName 'dms-sponlineredirector-webapp-ukw-$(env)'
+                        -spnName $(arm_client_id)
+                        -spnPassword (ConvertTo-SecureString "$(arm_client_secret)" -AsPlainText -Force)
+                        -useSameRestrictionsForScmSite true
+   - stage: prod
+     displayName: Deploy Prod
+     condition: and(succeeded(), and(eq(variables['Build.Reason'], 'Manual'), eq(variables['Build.SourceBranch'], 'refs/heads/master')))
+     dependsOn: uat
+     variables:
+      - name: env
+        value: prd
+     jobs:
+       - deployment: prdSpOnlineRedirectorService 
+         pool:
+            vmImage: 'windows-latest'
+         environment: $(env)
+         displayName: Deploy Prod SP Online Redirector Service
+         variables:
+           - group: BritDmsSpOnlineRedirectorPrd
+           - group: Terraform Prod Deploy
+         strategy:
+            runOnce:
+              deploy:
+                steps:
+                  - download: current
+                    artifact: SPOnlineRedirector
+                  - task: FileTransform@2
+                    displayName: Transform config files
+                    inputs:
+                      folderPath: '$(Pipeline.Workspace)/SPOnlineRedirector/'
+                      xmlTransformationRules:
+                      xmlTargetFiles: |
+                        _PublishedWebsites/Brit.Sharepoint.DMS.SPOnline.Redirector/Web.config                        
+                  - task: PowerShell@2
+                    displayName: Switch off Access Restrictions on SCM Site UKS
+                    inputs:
+                      targetType: 'filePath'
+                      filePath: $(Pipeline.Workspace)/SPOnlineRedirector/scm_access_restriction_toggle.ps1
+                      arguments: 
+                        -subscriptionId $(arm_subscription_id)
+                        -tenantId $(arm_tenant_id)
+                        -resourceGroupName 'sharepoint-dms-rg-uks-$(env)'
+                        -appName 'dms-sponlineredirector-webapp-uks-$(env)'
+                        -spnName $(arm_client_id)
+                        -spnPassword (ConvertTo-SecureString "$(arm_client_secret)" -AsPlainText -Force)
+                        -useSameRestrictionsForScmSite false
+                  - task: AzureWebApp@1
+                    displayName: Deploy app service UKS
+                    inputs:
+                      azureSubscription: 'Microsoft Azure Enterprise Production'
+                      appType: 'webApp'
+                      appName: "dms-sponlineredirector-webapp-uks-$(env)"
+                      package: '$(Pipeline.Workspace)/SPOnlineRedirector/_PublishedWebsites/Brit.Sharepoint.DMS.SPOnline.Redirector/'
+                      deploymentMethod: 'auto'
+                  - task: PowerShell@2
+                    displayName: Switch on Access Restrictions on SCM Site UKS
+                    inputs:
+                      targetType: 'filePath'
+                      filePath: $(Pipeline.Workspace)/SPOnlineRedirector/scm_access_restriction_toggle.ps1
+                      arguments: 
+                        -subscriptionId $(arm_subscription_id)
+                        -tenantId $(arm_tenant_id)
+                        -resourceGroupName 'sharepoint-dms-rg-uks-$(env)'
+                        -appName 'dms-sponlineredirector-webapp-uks-$(env)'
+                        -spnName $(arm_client_id)
+                        -spnPassword (ConvertTo-SecureString "$(arm_client_secret)" -AsPlainText -Force)
+                        -useSameRestrictionsForScmSite true 
+                  - task: PowerShell@2
+                    displayName: Switch off Access Restrictions on SCM Site UKW
+                    inputs:
+                      targetType: 'filePath'
+                      filePath: $(Pipeline.Workspace)/SPOnlineRedirector/scm_access_restriction_toggle.ps1
+                      arguments: 
+                        -subscriptionId $(arm_subscription_id)
+                        -tenantId $(arm_tenant_id)
+                        -resourceGroupName 'sharepoint-dms-rg-ukw-$(env)'
+                        -appName 'dms-sponlineredirector-webapp-ukw-$(env)'
+                        -spnName $(arm_client_id)
+                        -spnPassword (ConvertTo-SecureString "$(arm_client_secret)" -AsPlainText -Force)
+                        -useSameRestrictionsForScmSite false
+                  - task: AzureWebApp@1
+                    displayName: Deploy app service to UKW
+                    inputs:
+                      azureSubscription: 'Microsoft Azure Enterprise Production'
+                      appType: 'webApp'
+                      appName: "dms-sponlineredirector-webapp-ukw-$(env)"
+                      package: '$(Pipeline.Workspace)/SPOnlineRedirector/_PublishedWebsites/Brit.Sharepoint.DMS.SPOnline.Redirector/'
+                      deploymentMethod: 'auto'     
+                  - task: PowerShell@2
+                    displayName: Switch on Access Restrictions on SCM Site UKW
+                    inputs:
+                      targetType: 'filePath'
+                      filePath: $(Pipeline.Workspace)/SPOnlineRedirector/scm_access_restriction_toggle.ps1
+                      arguments: 
+                        -subscriptionId $(arm_subscription_id)
+                        -tenantId $(arm_tenant_id)
+                        -resourceGroupName 'sharepoint-dms-rg-ukw-$(env)'
+                        -appName 'dms-sponlineredirector-webapp-ukw-$(env)'
+                        -spnName $(arm_client_id)
+                        -spnPassword (ConvertTo-SecureString "$(arm_client_secret)" -AsPlainText -Force)
+                        -useSameRestrictionsForScmSite true 

@@ -1,0 +1,28 @@
+parameters:
+- name: buildBranch
+- name: azureSubscriptionName
+- name: vmImageName
+- name: appName
+- name: env
+
+jobs:
+- deployment: Deploy_${{replace(parameters.appName, '-', '_')}}
+  displayName: Deploy_${{parameters.appName}}
+  environment: ${{parameters.env}}
+  pool:
+   vmImage: ${{parameters.vmImageName}}
+
+  strategy:
+   runOnce:
+    deploy:
+     steps:
+
+     - task: AzureRmWebAppDeployment@4
+       displayName: 'Azure App Service Deploy'
+       inputs:
+        azureSubscription:  ${{parameters.azureSubscriptionName}}
+        WebAppName: ${{parameters.appName}}
+        package: '$(Pipeline.Workspace)/drop/**/*.zip'
+        enableCustomDeployment: true
+        TakeAppOfflineFlag: true
+        RemoveAdditionalFilesFlag: true

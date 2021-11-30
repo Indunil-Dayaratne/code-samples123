@@ -1,0 +1,35 @@
+name: Terraform Modules Test
+
+resources:
+  - repo: self
+
+trigger:
+  batch: true
+  branches:
+    include:
+      - master
+
+stages:
+  - stage: validate
+    displayName: Validate
+    jobs:
+      - job: validate
+        displayName: Validate
+        pool: terraform12-pool
+        steps:
+          - checkout: self
+            clean: true
+          
+          - task: PowerShell@2 
+            displayName: Run Pester Tests
+            inputs:
+              targetType: inline
+              script: Invoke-Pester -Script "$(System.DefaultWorkingDirectory)\Tests\ValidateModules.Tests.ps1" -OutputFile "$(System.DefaultWorkingDirectory)\Tests\Pester.XML" -OutputFormat "NUnitXML"
+
+          - task: PublishTestResults@2
+            displayName: Publish Pester Results
+            inputs:
+              testResultsFormat: NUnit
+              testResultsFiles: $(System.DefaultWorkingDirectory)\Tests\Pester.XML
+              failTaskOnFailedTests: true
+            condition: always()

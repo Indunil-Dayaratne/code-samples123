@@ -1,0 +1,150 @@
+name: Common Shared Platform $(Date:yyyyMMdd)$(rev:.r)
+
+resources:
+  repositories:
+    - repository: tf_modules
+      type: git
+      name: PSCloudModules/TerraformModules
+      ref: develop
+
+trigger:
+  batch: true
+  branches:
+    include:
+    - develop
+    - master
+  paths:
+    include:
+    - src/*
+
+stages:
+   - stage: build
+     displayName: Build
+     jobs:
+      - job: validatetf_nonprod
+        displayName: Validate TF
+        condition: eq(variables['Build.Reason'], 'PullRequest')
+        pool: terraform12-pool
+        variables:
+         - group: Terraform Non-Prod Deploy
+        steps:
+          - checkout: self
+          - checkout: tf_modules
+
+          - task: PowerShell@2
+            name: tf_validate_nonprod
+            displayName: Run Validation Tests
+            inputs:
+              targetType: inline
+              script: Invoke-Pester -Script @{Path = ".\tests\validate.tests.ps1"; Parameters = @{Environment = "nonprod"}} -OutputFile ".\tests\pester.nonprod.xml" -OutputFormat "NUnitXML"
+              workingDirectory: $(Build.SourcesDirectory)\apps-common-shared-infrastructure-fixed\src
+            env:
+              ARM_CLIENT_ID: $(arm_client_id)
+              ARM_CLIENT_SECRET: $(arm_client_secret)
+              ARM_TENANT_ID: $(arm_tenant_id)
+              ARM_SUBSCRIPTION_ID: $(arm_subscription_id)
+              ARM_ACCESS_KEY: $(arm_access_key)
+          
+          - task: PublishTestResults@2
+            name: publish_nonprod
+            displayName: Publish Test Results
+            inputs:
+              testResultsFiles: $(Build.SourcesDirectory)\apps-common-shared-infrastructure-fixed\src\tests\pester.*.xml
+              testResultsFormat: NUnit
+              failTaskOnFailedTests: true
+            condition: succeededOrFailed()
+
+      - job: validatetf_prod
+        displayName: Validate TF
+        condition: eq(variables['Build.Reason'], 'PullRequest')
+        pool: terraform12-pool
+        variables:
+         - group: Terraform Prod Deploy
+        steps:
+          - checkout: self
+          - checkout: tf_modules
+
+          - task: PowerShell@2
+            name: tf_validate_prod
+            displayName: Run Validation Tests
+            inputs:
+              targetType: inline
+              script: Invoke-Pester -Script @{Path = ".\tests\validate.tests.ps1"; Parameters = @{Environment = "prod"}} -OutputFile ".\tests\pester.prod.xml" -OutputFormat "NUnitXML"
+              workingDirectory: $(Build.SourcesDirectory)\apps-common-shared-infrastructure-fixed\src
+            env:
+              ARM_CLIENT_ID: $(arm_client_id)
+              ARM_CLIENT_SECRET: $(arm_client_secret)
+              ARM_TENANT_ID: $(arm_tenant_id)
+              ARM_SUBSCRIPTION_ID: $(arm_subscription_id)
+              ARM_ACCESS_KEY: $(arm_access_key)
+
+          - task: PublishTestResults@2
+            name: publish_prod
+            displayName: Publish Test Results
+            inputs:
+              testResultsFiles: $(Build.SourcesDirectory)\apps-common-shared-infrastructure-fixed\src\tests\pester.*.xml
+              testResultsFormat: NUnit
+              failTaskOnFailedTests: true
+            condition: succeededOrFailed()
+
+   - stage: nonprod
+     displayName: Deploy Non Prod
+     condition: and(succeeded(), or(eq(variables['Build.Reason'], 'Manual'), eq(variables['Build.SourceBranchName'], 'develop')))
+     dependsOn: build
+     variables:
+      - group: Terraform Non-Prod Deploy
+      - name: env
+        value: nonprod
+     jobs:
+       - deployment: nonprodTF
+         pool: terraform12-pool
+         environment: $(env)
+         displayName: Deploy nonprod TF
+         strategy:
+           runOnce:
+             deploy:
+               steps:
+                 - checkout: self
+                 - checkout: tf_modules
+
+                 - template: tf-build.yml
+                   parameters:
+                     working_dir: $(Build.SourcesDirectory)\apps-common-shared-infrastructure-fixed\src
+                     client_id: $(arm_client_id)
+                     client_secret: $(arm_client_secret)
+                     tenant_id: $(arm_tenant_id)
+                     sub_id: $(arm_subscription_id)
+                     access_key: $(arm_access_key)
+                     env: $(env)
+                     backend_config_file_name: partial_config_nonprod.tf
+
+   - stage: prod
+     displayName: Deploy Prod
+     condition: and(succeeded(), and(eq(variables['Build.Reason'], 'Manual'), eq(variables['Build.SourceBranch'], 'refs/heads/main')))
+     dependsOn: nonprod
+     variables:
+      - group: Terraform Prod Deploy
+      - name: env
+        value: prod
+     jobs:
+       - deployment: prodTF
+         pool: terraform12-pool
+         environment: $(env)
+         displayName: Deploy Prod TF
+         strategy:
+           runOnce:
+             deploy:
+               steps:
+                 - checkout: self
+                 - checkout: tf_modules
+
+                 - template: tf-build.yml
+                   parameters:
+                     working_dir: $(Build.SourcesDirectory)\apps-common-shared-infrastructure-fixed\src
+                     client_id: $(arm_client_id)
+                     client_secret: $(arm_client_secret)
+                     tenant_id: $(arm_tenant_id)
+                     sub_id: $(arm_subscription_id)
+                     access_key: $(arm_access_key)
+                     env: $(env)
+                     backend_config_file_name: partial_config_prod.tf

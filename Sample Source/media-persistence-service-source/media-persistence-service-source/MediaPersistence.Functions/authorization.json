@@ -1,0 +1,12 @@
+{
+  "routes": [
+    {
+      "path_prefix": "/api",
+      "policies": { "unauthenticated_action": "RejectWith401" }
+    },
+    {
+      "path_prefix": "/api/MediaPersistenceService/v1/HealthCheck",
+      "policies": { "unauthenticated_action": "AllowAnonymous" }
+    }
+  ]
+}

@@ -1,0 +1,12 @@
+{
+  "ServerUri": "https://sonarq-webapp-dev.azurewebsites.net",
+  "Organization": null,
+  "ProjectKey": "media-persistence-develop",
+  "ProjectName": "media-persistence-develop",
+  "Profiles": {
+    "CSharp": {
+      "ProfileKey": "AWnYyxD9wCGcy39o1gXS",
+      "ProfileTimestamp": "2019-04-01T13:42:58+01:00"
+    }
+  }
+}

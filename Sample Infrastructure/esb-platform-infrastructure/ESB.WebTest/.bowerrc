@@ -1,0 +1,6 @@
+{
+  "directory": "wwwroot/lib",
+  "proxy": "http://165.225.80.40:80",
+  "https-proxy": "http://165.225.80.40:80",
+  "strict-ssl": false
+}

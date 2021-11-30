@@ -1,0 +1,26 @@
+﻿@page
+@{
+    Layout = null;
+}
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>TestCors</title>
+    <script src="~/lib/jquery/dist/jquery.js" asp-append-version="true"></script>
+    <script src="~/js/testCors.js" asp-append-version="true"></script>
+</head>
+<body>
+    <h1>Test Cors zzaabbb with a change</h1>
+    <button id="testCors">Test Cors</button>
+    <button id="testPutCors">Test Put Cors</button>
+    <button id="testPutCorsNoAuth">testPutCorsNoAuth</button>
+    <div>
+        <textarea id="message"></textarea>
+        <button id="postTopicMessage">Post Topic Message</button>
+    </div>
+</body>
+</html>

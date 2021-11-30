@@ -1,0 +1,244 @@
+name: Sharepoint DMS Redirector $(Date:yyyyMMdd)$(rev:.r)
+
+resources:
+  repositories:
+    - repository: tf_modules
+      type: git
+      name: PSCloudModules/TerraformModules
+      ref: develop
+    - repository: tf_modules2
+      type: git
+      name: terraform-modules
+      ref: develop
+
+trigger:
+  batch: true
+  branches:
+    include:
+    - develop
+    - master
+  paths:
+    include:
+    - dms-redirector-platform-infrastructure/*
+
+stages:
+   - stage: build
+     displayName: Build
+     jobs:
+      - job: validatetf_nonprod
+        displayName: Validate TF
+        condition: eq(variables['Build.Reason'], 'PullRequest')
+        pool:
+             vmImage: 'windows-latest'
+        variables:
+         - group: Terraform Non-Prod Deploy
+        steps:
+          - checkout: self
+          - checkout: tf_modules
+          - checkout: tf_modules2
+          - task: PowerShell@2
+            displayName: Terraform - Install
+            name: tf_intall
+            inputs:
+              targetType: inline
+              script: choco install terraform --version 0.12.31 --yes
+              workingDirectory: $(Build.SourcesDirectory)\brit-dms-source\dms-redirector-platform-infrastructure
+              
+          - task: PowerShell@2
+            name: tf_validate_dev
+            displayName: Run Validation Tests - Dev
+            inputs:
+              targetType: inline
+              script: |
+                if ((Get-Module Pester -ListAvailable).Version -le "4.10.1") {
+                  Import-Module Pester -MaximumVersion 4.10.1
+                } else {
+                  Get-PSRepository | Set-PSRepository -InstallationPolicy Trusted
+                  Install-Module Pester -RequiredVersion "4.10.1" -Scope CurrentUser -AllowClobber -Force
+                  Import-Module Pester -RequiredVersion "4.10.1"
+                }
+                Invoke-Pester -Script @{Path = ".\Tests\Validate.Tests.ps1"; Parameters = @{Environment = "dev"}} -OutputFile ".\Tests\Pester.dev.xml" -OutputFormat "NUnitXML"
+              workingDirectory: $(Build.SourcesDirectory)\brit-dms-source\dms-redirector-platform-infrastructure
+            env:
+              ARM_CLIENT_ID: $(arm_client_id)
+              ARM_CLIENT_SECRET: $(arm_client_secret)
+              ARM_TENANT_ID: $(arm_tenant_id)
+              ARM_SUBSCRIPTION_ID: $(arm_subscription_id)
+              ARM_ACCESS_KEY: $(arm_access_key)
+
+          - task: PowerShell@2
+            name: tf_validate_uat
+            displayName: Run Validation Tests - UAT
+            inputs:
+              targetType: inline
+              script: |
+                if ((Get-Module Pester -ListAvailable).Version -le "4.10.1") {
+                  Import-Module Pester -MaximumVersion 4.10.1
+                } else {
+                  Get-PSRepository | Set-PSRepository -InstallationPolicy Trusted
+                  Install-Module Pester -RequiredVersion "4.10.1" -Scope CurrentUser -AllowClobber -Force
+                  Import-Module Pester -RequiredVersion "4.10.1"
+                }
+                Invoke-Pester -Script @{Path = ".\Tests\Validate.Tests.ps1"; Parameters = @{Environment = "uat"}} -OutputFile ".\Tests\Pester.uat.xml" -OutputFormat "NUnitXML"
+              workingDirectory: $(Build.SourcesDirectory)\brit-dms-source\dms-redirector-platform-infrastructure
+            env:
+              ARM_CLIENT_ID: $(arm_client_id)
+              ARM_CLIENT_SECRET: $(arm_client_secret)
+              ARM_TENANT_ID: $(arm_tenant_id)
+              ARM_SUBSCRIPTION_ID: $(arm_subscription_id)
+              ARM_ACCESS_KEY: $(arm_access_key)
+
+          - task: PublishTestResults@2
+            name: publish_nonprod
+            displayName: Publish Test Results
+            inputs:
+              testResultsFiles: $(Build.SourcesDirectory)\brit-dms-source\dms-redirector-platform-infrastructure\Tests\Pester.*.xml
+              testResultsFormat: NUnit
+              failTaskOnFailedTests: true
+            condition: succeededOrFailed()
+
+      - job: validatetf_prod
+        displayName: Validate PROD TF
+        condition: eq(variables['Build.Reason'], 'PullRequest')
+        pool:
+              vmImage: 'windows-latest'
+        variables:
+         - group: Terraform Prod Deploy
+        steps:
+          - checkout: self
+          - checkout: tf_modules
+          - checkout: tf_modules2
+          - task: PowerShell@2
+            displayName: Terraform - Install
+            name: tf_intall
+            inputs:
+              targetType: inline
+              script: choco install terraform --version 0.12.31 --yes
+              workingDirectory: $(Build.SourcesDirectory)\brit-dms-source\dms-redirector-platform-infrastructure
+          - task: PowerShell@2
+            name: tf_validate_prod
+            displayName: Run Validation Tests
+            inputs:
+              targetType: inline
+              script: |
+                if ((Get-Module Pester -ListAvailable).Version -le "4.10.1") {
+                  Import-Module Pester -MaximumVersion 4.10.1
+                } else {
+                  Get-PSRepository | Set-PSRepository -InstallationPolicy Trusted
+                  Install-Module Pester -RequiredVersion "4.10.1" -Scope CurrentUser -AllowClobber -Force
+                  Import-Module Pester -RequiredVersion "4.10.1"
+                }
+                Invoke-Pester -Script @{Path = ".\Tests\Validate.Tests.ps1"; Parameters = @{Environment = "prd"}} -OutputFile ".\Tests\Pester.prd.xml" -OutputFormat "NUnitXML"
+              workingDirectory: $(Build.SourcesDirectory)\brit-dms-source\dms-redirector-platform-infrastructure
+            env:
+              ARM_CLIENT_ID: $(arm_client_id)
+              ARM_CLIENT_SECRET: $(arm_client_secret)
+              ARM_TENANT_ID: $(arm_tenant_id)
+              ARM_SUBSCRIPTION_ID: $(arm_subscription_id)
+              ARM_ACCESS_KEY: $(arm_access_key)
+
+          - task: PublishTestResults@2
+            name: publish_prod
+            displayName: Publish Test Results
+            inputs:
+              testResultsFiles: $(Build.SourcesDirectory)\brit-dms-source\dms-redirector-platform-infrastructure\Tests\Pester.prd.xml
+              testResultsFormat: NUnit
+              failTaskOnFailedTests: true
+            condition: succeededOrFailed()
+
+   - stage: dev
+     displayName: Deploy Dev
+     condition: and(succeeded(), or(eq(variables['Build.Reason'], 'Manual'), eq(variables['Build.SourceBranchName'], 'develop')))
+     dependsOn: build
+     variables:
+      - group: Terraform Non-Prod Deploy
+      - name: env
+        value: dev
+     jobs:
+       - deployment: devTF
+         pool:
+             vmImage: 'windows-latest'
+         environment: $(env)
+         displayName: Deploy Dev TF
+         strategy:
+           runOnce:
+             deploy:
+               steps:
+                 - checkout: self
+                 - checkout: tf_modules
+                 - checkout: tf_modules2
+                 - template: tf-build.yml
+                   parameters:
+                     working_dir: $(Build.SourcesDirectory)/brit-dms-source/dms-redirector-platform-infrastructure
+                     client_id: $(arm_client_id)
+                     client_secret: $(arm_client_secret)
+                     tenant_id: $(arm_tenant_id)
+                     sub_id: $(arm_subscription_id)
+                     access_key: $(arm_access_key)
+                     env: $(env)
+                     backend_config_file_name: partial_config-nonprod.tf
+                     version: '0.12.31'
+   - stage: uat
+     displayName: Deploy UAT
+     condition: and(succeeded(), eq(variables['Build.Reason'], 'Manual'))
+     dependsOn: dev
+     variables:
+      - group: Terraform Non-Prod Deploy
+      - name: env
+        value: uat
+     jobs:
+       - deployment: uatTF
+         pool:
+             vmImage: 'windows-latest'
+         environment: $(env)
+         displayName: Deploy UAT TF
+         strategy:
+           runOnce:
+             deploy:
+               steps:
+                 - checkout: self
+                 - checkout: tf_modules
+                 - checkout: tf_modules2
+                 - template: tf-build.yml
+                   parameters:
+                     working_dir: $(Build.SourcesDirectory)/brit-dms-source/dms-redirector-platform-infrastructure
+                     client_id: $(arm_client_id)
+                     client_secret: $(arm_client_secret)
+                     tenant_id: $(arm_tenant_id)
+                     sub_id: $(arm_subscription_id)
+                     access_key: $(arm_access_key)
+                     env: $(env)
+                     backend_config_file_name: partial_config-nonprod.tf
+                     version: '0.12.31'
+   - stage: prod
+     displayName: Deploy Prod
+     condition: and(succeeded(), and(eq(variables['Build.Reason'], 'Manual'), eq(variables['Build.SourceBranch'], 'refs/heads/master')))
+     dependsOn: uat
+     variables:
+      - group: Terraform Prod Deploy
+      - name: env
+        value: prd
+     jobs:
+       - deployment: prdTF
+         pool:
+             vmImage: 'windows-latest'
+         environment: $(env)
+         displayName: Deploy Prod TF
+         strategy:
+           runOnce:
+             deploy:
+               steps:
+                 - checkout: self
+                 - checkout: tf_modules
+                 - checkout: tf_modules2
+                 - template: tf-build.yml
+                   parameters:
+                     working_dir: $(Build.SourcesDirectory)/brit-dms-source/dms-redirector-platform-infrastructure
+                     client_id: $(arm_client_id)
+                     client_secret: $(arm_client_secret)
+                     tenant_id: $(arm_tenant_id)
+                     sub_id: $(arm_subscription_id)
+                     access_key: $(arm_access_key)
+                     env: $(env)
+                     backend_config_file_name: partial_config-prod.tf
+                     version: '0.12.31'

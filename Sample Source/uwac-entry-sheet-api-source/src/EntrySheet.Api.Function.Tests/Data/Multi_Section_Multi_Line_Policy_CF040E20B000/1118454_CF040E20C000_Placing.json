@@ -1,0 +1,909 @@
+{
+  "britAttributes": {
+    "conductRating": "Low Conduct Risk",
+    "aggRiskData": "Yes - Aggregates and modelling",
+    "eplacementSystem": null,
+    "producingTeam": "C",
+    "brokerPseud": "WLM",
+    "pasSystemBrokerId": "11322",
+    "pasSystemQuoteId": null,
+    "uniqueMarketRef": "B080121806M20",
+    "lloydsLeader": "COF 1036",
+    "companyLeader": null,
+    "placingType": "F",
+    "InstalmentPeriod": "365D"
+  },
+  "uuId": "00000000-0000-0000-0000-000000000000",
+  "placingExchangeReference": null,
+  "serviceProviderReference": null,
+  "creationDate": "0001-01-01T00:00:00",
+  "sentDate": "0001-01-01T00:00:00",
+  "contractVersionDate": "0001-01-01T00:00:00",
+  "placingStage": null,
+  "placingTransactionFunction": null,
+  "placingEntry": null,
+  "policyWordingActionType": null,
+  "quoteRequestedByDate": null,
+  "quoteRequestedByDateDescription": null,
+  "quoteValidUntilDate": null,
+  "transactionReasonDescription": null,
+  "expectedResponseType": null,
+  "transactionResponseReason": null,
+  "quoteTermsDescription": null,
+  "quoteExclusionsDescription": null,
+  "explanation": null,
+  "groupReference": null,
+  "itemsInGroupTotal": null,
+  "combinedPlacingGroupReference": null,
+  "combinedPlacingItemsInGroupTotal": null,
+  "serviceProviderGroupReference": null,
+  "serviceProviderGroupItemsTotal": null,
+  "verticalPlacingIndicator": false,
+  "replacementPlacingIndicator": null,
+  "referredPlacing": null,
+  "backloadMessageStatus": null,
+  "webApplication": {
+    "url": "https://entry-sheet-api-func-uks-dev.azurewebsites.net/api/EntrySheet/Policy",
+    "userId": null
+  },
+  "cedent": null,
+  "cedentDescription": null,
+  "operatingCedent": null,
+  "certificateRecipientCedent": null,
+  "reinsurer": {
+    "party": {
+      "id": null,
+      "name": null
+    },
+    "contact": null,
+    "address": null
+  },
+  "insurer": {
+    "party": null,
+    "contact": {
+      "britAttributes": {
+        "pasSystemContactId": null,
+        "initials": "ACS"
+      },
+      "description": null,
+      "personName": null,
+      "telephone": null,
+      "fax": null,
+      "email": null
+    },
+    "address": null
+  },
+  "coInsurer": null,
+  "broker": {
+    "party": {
+      "id": "801",
+      "name": "Willis Limited (London- Willis Building)"
+    },
+    "contact": {
+      "britAttributes": {
+        "pasSystemContactId": "27688",
+        "initials": null
+      },
+      "description": null,
+      "personName": "Francis Randall",
+      "telephone": null,
+      "fax": null,
+      "email": null
+    },
+    "address": null
+  },
+  "serviceProvider": null,
+  "placingExchange": null,
+  "coverHolder": {
+    "party": {
+      "id": null,
+      "name": null
+    },
+    "contact": null,
+    "address": null
+  },
+  "insured": {
+    "party": {
+      "id": null,
+      "name": "AMERISOURCE BERGEN CORPORATION"
+    },
+    "contact": null,
+    "address": null
+  },
+  "insuredDescription": null,
+  "insuredOperationsDescription": null,
+  "insuredFilingCountrySubentity": null,
+  "insuredFilingCountrySubentityDescription": null,
+  "originalPolicyInsured": null,
+  "originalPolicyholder": null,
+  "originalInsurerOrReinsurer": null,
+  "producingBroker": null,
+  "correspondentBroker": null,
+  "otherBroker": null,
+  "underwritingManager": null,
+  "lossPayee": null,
+  "policyDataListedUnderContractIndicator": null,
+  "producingBrokerSurplusLinesRequirementsDescription": null,
+  "schemeCanadaRequirementsDescription": null,
+  "riskSummaryDescription": null,
+  "contract": {
+    "versionNbr": null,
+    "contra": false,
+    "contractName": null,
+    "contractGroupName": null,
+    "contractType": null,
+    "contractTypeDescription": null,
+    "accountingBasis": null,
+    "treatyFac": null,
+    "contractNature": null,
+    "businessChannel": null,
+    "aggregateDeductibleMethod": null,
+    "cedentReference": null,
+    "cedentRenewedReference": null,
+    "cedentBinderReference": null,
+    "cedentGroupReference": null,
+    "cedentParentContractReference": null,
+    "cedentBuildReference": null,
+    "cedentRiskReference": null,
+    "brokerReference": null,
+    "brokerRenewedReference": null,
+    "brokerBinderReference": null,
+    "brokerGroupReference": null,
+    "brokerParentContractReference": null,
+    "brokerBuildReference": null,
+    "brokerRiskReference": null,
+    "reinsurerReference": null,
+    "reinsurerSecondaryReference": null,
+    "reinsurerRenewedReference": null,
+    "reinsurerBinderReference": null,
+    "reinsurerCertificateReference": null,
+    "reinsurerParentContractReference": null,
+    "reinsurerBuildReference": null,
+    "reinsurerRiskReference": null,
+    "insurerReference": "CF040E20",
+    "insurerSecondaryReference": null,
+    "insurerRenewedReference": null,
+    "insurerBinderReference": null,
+    "insurerParentContractReference": null,
+    "insurerBuildReference": null,
+    "insurerRiskReference": null,
+    "coInsurerReference": null,
+    "coInsurerSecondaryReference": null,
+    "coInsurerRenewedReference": null,
+    "coInsurerBinderReference": null,
+    "coInsurerParentContractReference": null,
+    "coInsurerBuildReference": null,
+    "coInsurerRiskReference": null,
+    "serviceProviderReference": null,
+    "serviceProviderRenewedReference": null,
+    "serviceProviderBinderReference": null,
+    "serviceProviderParentContractReference": null,
+    "serviceProviderBuildReference": null,
+    "serviceProviderRiskReference": null,
+    "serviceProviderTreatySchemeReference": null,
+    "placingExchangeReference": null,
+    "placingExchangeRenewedReference": null,
+    "placingExchangeBinderReference": null,
+    "placingExchangeGroupReference": null,
+    "placingExchangeBuildReference": null,
+    "placingExchangeRiskReference": null,
+    "originalInsurerOrReinsurerReference": null,
+    "originalInsurerOrReinsurerRiskReference": null,
+    "underwritingManagerRiskReference": null,
+    "coverHolderReference": null,
+    "coverholderRiskReference": null,
+    "insuredRiskReference": null,
+    "endorsementReference": null,
+    "claimsMadeYear": null,
+    "closingToCedentFiscalYear": null,
+    "compliantToStandard": null
+  },
+  "endorsement": null,
+  "contractSections": [
+    {
+      "britAttributes": {
+        "britPolicyId": 0,
+        "pasSystemPolicyId": "945790",
+        "isContractCertain": true,
+        "contractCertainExceptionCode": null,
+        "contractCertainDate": "2020-10-30T00:00:00",
+        "riskRating": "A",
+        "insuranceLevel": "H",
+        "innerAgg": {
+          "amt": {
+            "ccy": null,
+            "share": null,
+            "ccyIndic": null,
+            "value": 0.0
+          }
+        },
+        "writtenLineIndicator": null,
+        "classType": "M",
+        "minorClass": "CO",
+        "subClass": "12900",
+        "isLBS": null,
+        "reportingCcy": "USD",
+        "adrLevel": null,
+        "isMainSection": false
+      },
+      "highLevelReference": null,
+      "lowLevelReference": null,
+      "sectionReference": "CF040E20C000",
+      "description": null,
+      "contractSectionFunction": null,
+      "placingTransactionEffectiveDate": null,
+      "coverType": null,
+      "riskConditionsType": null,
+      "coverTypeDescription": null,
+      "coverOperatingBasis": "RAD",
+      "coverOperatingBasisDescription": null,
+      "layerOrSurplusNbr": null,
+      "insuredRiskOrInterestDescription": null,
+      "contractPeriod": {
+        "endDateTime": null,
+        "startDateTime": null,
+        "startDate": "2020-11-01T00:00:00",
+        "endDate": "2021-08-01T00:00:00",
+        "timeZoneNarrative": null,
+        "timeDuration": {
+          "periodType": "quarter",
+          "periodIndicator": null,
+          "value": 3
+        },
+        "localStandardTimeAppliesIndicator": null,
+        "periodScope": null,
+        "periodScopeDescription": null,
+        "periodStatus": null
+      },
+      "contractPeriodDescription": null,
+      "underwritingYear": 2020,
+      "periodExtensionProvisionsDescription": null,
+      "claimsMadeProvisions": null,
+      "policySignedCountry": null,
+      "contractSectionClasses": [
+        {
+          "classOfBusinessDescription": null,
+          "excludedJvClassOfBusiness": null,
+          "jvClassOfBusiness": "G",
+          "excludedNaicClassOfBusiness": null,
+          "naicClassOfBusiness": null
+        }
+      ],
+      "riskLocations": [
+        {
+          "address": null,
+          "location": {
+            "country": "16116",
+            "supraentity": "604",
+            "description": null,
+            "subentity": null,
+            "subentityDescription": null
+          },
+          "excludedLocation": null,
+          "locationPercentage": null
+        }
+      ],
+      "arbitrationLocation": null,
+      "jurisdictionLocation": null,
+      "parentContractJurisdictionLocation": null,
+      "objectInsuredOccupancy": null,
+      "riskType": null,
+      "usaRiskClassifications": null,
+      "lloydsLicenseClassification": null,
+      "fsaClientClassifications": [
+        {
+          "fsaClientClass": "Medium or Large Corporate",
+          "distanceMarketingDirectiveIndicator": null
+        }
+      ],
+      "perilsIncluded": null,
+      "perilsExcluded": null,
+      "policyPerilsConditionsDescription": null,
+      "conditionsDescription": null,
+      "jurisdictionsCoveredDescription": null,
+      "arbitrationArrangementsDescription": null,
+      "reinsuranceContractForm": null,
+      "insurancePolicyForm": null,
+      "followingInsurancePolicyFormIndicator": null,
+      "proposalFormDetails": null,
+      "slipPolicyNotice": null,
+      "amountsExpressionBasis": null,
+      "contractAmountsCurrency": null,
+      "basisOfValuation": null,
+      "basisOfValuationDescription": null,
+      "contractCededPercentage": null,
+      "cedentSharePercentage": null,
+      "insurerSharePercentage": null,
+      "reinsurerSharePercentage": null,
+      "coInsurerSharePercentage": null,
+      "brokerSharePercentage": null,
+      "serviceProviderSharePercentage": null,
+      "orderPercentage": {
+        "rate": {
+          "rateUnit": null,
+          "value": 0.0
+        }
+      },
+      "quotaSharePercentage": null,
+      "surplusLineAmount": null,
+      "linePercentageBasis": null,
+      "signedLinePercentageBasis": null,
+      "linesPercentageOfOrderIndicator": null,
+      "contractCoverages": [
+        {
+          "britAttributes": {
+            "pasSystemContractCoverageId": "736151894",
+            "perilCode": null,
+            "isTopCoverage": true
+          },
+          "description": null,
+          "coverageAmount": {
+            "amt": {
+              "ccy": "USD",
+              "share": null,
+              "ccyIndic": null,
+              "value": 250000000.00
+            }
+          },
+          "numberOfLines": null,
+          "coveragePercentage": null,
+          "coverageBasis": "AOO",
+          "coverageBasisDescription": null,
+          "coverageSubjectMatter": null,
+          "coverageSubjectMatterDescription": null,
+          "numberOfUnits": null,
+          "coverageType": null
+        }
+      ],
+      "contractDeductibles": [
+        {
+          "description": null,
+          "deductibleAmount": {
+            "amt": {
+              "ccy": null,
+              "share": null,
+              "ccyIndic": null,
+              "value": 250000000.00
+            }
+          },
+          "numberOfLines": null,
+          "deductiblePercentage": null,
+          "deductibleBasis": null,
+          "deductibleBasisDescription": null,
+          "deductibleSubjectMatter": null,
+          "deductibleSubjectMatterDescription": null,
+          "numberOfUnits": null,
+          "deductibleType": "loss_excess_policy"
+        },
+        {
+          "description": null,
+          "deductibleAmount": {
+            "amt": {
+              "ccy": null,
+              "share": null,
+              "ccyIndic": null,
+              "value": 0.0
+            }
+          },
+          "numberOfLines": null,
+          "deductiblePercentage": null,
+          "deductibleBasis": null,
+          "deductibleBasisDescription": null,
+          "deductibleSubjectMatter": null,
+          "deductibleSubjectMatterDescription": null,
+          "numberOfUnits": null,
+          "deductibleType": "retention"
+        }
+      ],
+      "additionalCoveragesDescription": null,
+      "premiums": [
+        {
+          "britAttributes": {
+            "pasSystemPremiumId": "995839272",
+            "baseAmount": null,
+            "technicalPrice": {
+              "ccy": null,
+              "share": null,
+              "ccyIndic": null,
+              "value": 1292963.00
+            },
+            "modelPrice": {
+              "ccy": null,
+              "share": null,
+              "ccyIndic": null,
+              "value": 3694181.00
+            },
+            "projectedLossRatio": {
+              "rate": {
+                "rateUnit": "Percentage",
+                "value": 66.96
+              }
+            },
+            "changeInLDA": {
+              "rate": {
+                "rateUnit": null,
+                "value": 100.00
+              }
+            },
+            "changeInCoverage": {
+              "rate": {
+                "rateUnit": null,
+                "value": 95.00
+              }
+            },
+            "changeInOther": {
+              "rate": {
+                "rateUnit": null,
+                "value": 107.50
+              }
+            },
+            "riskAdjustedRateChange": {
+              "rate": {
+                "rateUnit": null,
+                "value": 125.00
+              }
+            },
+            "totalDeductionsPercentage": null
+          },
+          "description": null,
+          "premiumAmount": [
+            {
+              "ccy": "USD",
+              "share": null,
+              "ccyIndic": null,
+              "value": 1500000.00
+            }
+          ],
+          "premiumAdjustableIndicator": null,
+          "premiumRate": null,
+          "premiumCalculationBasis": null,
+          "premiumIncomeAmountBasis": null,
+          "paymentDate": "2021-01-01T00:00:00",
+          "termsOfTradePeriod": {
+            "timeDuration": {
+              "periodType": null,
+              "periodIndicator": null,
+              "value": 61
+            }
+          },
+          "instalmentsTotalNbr": {
+            "count": 1
+          },
+          "payableByDate": null,
+          "paymentsDue": null,
+          "paymentsDescription": null,
+          "premiumTerrorismCoverType": null,
+          "premiumType": "FLAT"
+        }
+      ],
+      "premiumInstalments": null,
+      "deferredPremiumPaymentIndicator": null,
+      "deferredPremiumCreditPeriod": null,
+      "contractReinstatements": null,
+      "premiumAdjustment": null,
+      "premiumReserve": null,
+      "depositRetainedOnUnearnedPremiumPercentage": null,
+      "taxableInterestOnUnearnedPremiumDepositPercentage": null,
+      "premiumPortfolioIndicator": null,
+      "premiumPortfolioDescription": null,
+      "premiumPortfolioEntry": null,
+      "premiumPortfolioWithdrawal": null,
+      "premiumAllocationToCodingDescription": null,
+      "premiumAllocationToAccountingYearsDescription": null,
+      "commission": null,
+      "overridingCommission": null,
+      "profitCommission": null,
+      "managementExpensesAllowance": null,
+      "brokerages": [
+        {
+          "description": null,
+          "brokeragePercentage": {
+            "rate": {
+              "rateUnit": null,
+              "value": 25.00000
+            }
+          },
+          "brokerageAmount": null,
+          "brokerageBasis": null,
+          "retailBrokeragePercentage": null,
+          "retailBrokerageAmount": null,
+          "wholesaleBrokeragePercentage": null,
+          "wholesaleBrokerageAmount": null
+        }
+      ],
+      "otherDeductions": null,
+      "feePayableByClientIndicator": null,
+      "deferredPremiumReserveOutstandingIndicator": null,
+      "claimAdviceThreshold": null,
+      "cashCallThreshold": null,
+      "claimsPayableAbroadIndicator": null,
+      "lossReserve": null,
+      "depositRetainedOnOutstandingLossesPercentage": null,
+      "taxableInterestOnOutstandingLossesDepositPercentage": null,
+      "taxableInterestOnOcaPercentage": null,
+      "lossPortfolioIndicator": null,
+      "lossPortfolioEntry": null,
+      "lossPortfolioWithdrawal": null,
+      "outstandingClaimAdvanceIndicator": null,
+      "additionalWarrantyPeriod": null,
+      "clauses": null,
+      "noticeOfCancellation": null,
+      "noticesDescription": null,
+      "subjectivitiesDescription": null,
+      "expressWarrantiesDescription": null,
+      "conditionsPrecedentDescription": null,
+      "contractChangesAgreementBasis": null,
+      "contractChangesAgreementBasisDescription": null,
+      "delegatedAuthorityDescription": null,
+      "lineSlipAdministrationProceduresDescription": null,
+      "documentProductionDetailsDescription": null,
+      "bindingAuthorityAdministrationProceduresDescription": null,
+      "bindingAuthorityDocumentationProceduresDescription": null,
+      "claimsAgreementBasisDescription": null,
+      "claimsDelegatedAuthorityDescription": null,
+      "claimsAdministrationDescription": null,
+      "expertFeesCollectionMethodDescription": null,
+      "recordingTransmittingStoringInformationProvisionsDescription": null,
+      "bureauxArrangementsDescription": null,
+      "nonBureauxArrangementsDescription": null,
+      "lineSlipOrBindingAuthoritySpecialArrangementsDescription": null,
+      "signingProvisionsDescription": null,
+      "taxOnDepositInterestPercentage": null,
+      "taxApplications": null,
+      "taxPercentage": null,
+      "taxProvisions": null,
+      "accountReporting": null,
+      "cessionsBordereauReporting": null,
+      "claimsBordereauReporting": null,
+      "lossReserveBordereauReporting": null,
+      "settlementDue": null,
+      "methodOfSettlement": null,
+      "vesselName": null,
+      "conveyanceName": null,
+      "vesselOrConveyanceDescription": null,
+      "contractSchedules": null,
+      "contractMarkets": [
+        {
+          "britAttributes": {
+            "pasSystemPolicyLineId": "877018",
+            "insurerWrittenLineIndicator": "P",
+            "reInsuranceCode": null,
+            "exposure": {
+              "amt": {
+                "ccy": null,
+                "share": null,
+                "ccyIndic": null,
+                "value": 2103250.0
+              }
+            },
+            "wholePartOrder": "part_of_whole",
+            "orderPercentage": {
+              "rate": {
+                "rateUnit": "Percentage",
+                "value": 100.00
+              }
+            },
+            "estimatedSigningDownPercentage": {
+              "rate": {
+                "rateUnit": "Percentage",
+                "value": 84.00
+              }
+            }
+          },
+          "coInsurer": null,
+          "insurer": {
+            "party": {
+              "id": "2988",
+              "name": null
+            },
+            "contact": null,
+            "address": null
+          },
+          "reinsurer": null,
+          "participantFunction": null,
+          "lineTransactionFunction": "Signed",
+          "endorsementParticipantFunction": null,
+          "endorsementAgreementConditions": null,
+          "alwaysRequireNotificationIndicator": null,
+          "claimParticipantFunction": null,
+          "declarationParticipantFunction": null,
+          "correspondentBroker": null,
+          "transactionResponseReason": null,
+          "processingInstructions": null,
+          "coInsurerRiskReference": null,
+          "insurerRiskReference": null,
+          "reinsurerRiskReference": null,
+          "coInsurerContractSecondaryReference": null,
+          "insurerContractSecondaryReference": null,
+          "reinsurerContractSecondaryReference": null,
+          "coInsurerContractReference": null,
+          "insurerContractReference": null,
+          "reinsurerContractReference": null,
+          "coInsurerContractRenewedReference": null,
+          "insurerContractRenewedReference": null,
+          "reinsurerContractRenewedReference": null,
+          "coInsurerContractGroupReference": null,
+          "insurerContractGroupReference": null,
+          "reinsurerContractGroupReference": null,
+          "premiumRegulatoryAllocationSchemes": [
+            {
+              "allocationCodeListDescription": null,
+              "allocations": [
+                {
+                  "allocationCode": "V",
+                  "allocationPercentage": null,
+                  "allocationReference": null,
+                  "description": null
+                }
+              ],
+              "agency": null
+            }
+          ],
+          "coInsurerQuoteMinimumSharePercentage": null,
+          "insurerQuoteMinimumSharePercentage": null,
+          "reinsurerQuoteMinimumSharePercentage": null,
+          "coInsurerQuoteMinimumShareAmount": null,
+          "insurerQuoteMinimumShareAmount": null,
+          "reinsurerQuoteMinimumShareAmount": null,
+          "coInsurerQuoteMinimumNumberOfLines": null,
+          "insurerQuoteMinimumNumberOfLines": null,
+          "reinsurerQuoteMinimumNumberOfLines": null,
+          "coInsurerQuoteMinimumNumberOfUnits": null,
+          "insurerQuoteMinimumNumberOfUnits": null,
+          "reinsurerQuoteMinimumNumberOfUnits": null,
+          "coInsurerQuoteMinimumLimitAmount": null,
+          "insurerQuoteMinimumLimitAmount": null,
+          "reinsurerQuoteMinimumLimitAmount": null,
+          "coInsurerQuoteMaximumSharePercentage": null,
+          "insurerQuoteMaximumSharePercentage": null,
+          "reinsurerQuoteMaximumSharePercentage": null,
+          "coInsurerQuoteMaximumShareAmount": null,
+          "insurerQuoteMaximumShareAmount": null,
+          "reinsurerQuoteMaximumShareAmount": null,
+          "coInsurerQuoteMaximumNumberOfLines": null,
+          "insurerQuoteMaximumNumberOfLines": null,
+          "reinsurerQuoteMaximumNumberOfLines": null,
+          "coInsurerQuoteMaximumNumberOfUnits": null,
+          "insurerQuoteMaximumNumberOfUnits": null,
+          "reinsurerQuoteMaximumNumberOfUnits": null,
+          "coInsurerQuoteMaximumLimitAmount": null,
+          "insurerQuoteMaximumLimitAmount": null,
+          "reinsurerQuoteMaximumLimitAmount": null,
+          "coInsurerWrittenPercentage": null,
+          "insurerWrittenPercentage": null,
+          "reinsurerWrittenPercentage": null,
+          "coInsurerWrittenNumberOfLines": null,
+          "insurerWrittenNumberOfLines": null,
+          "reinsurerWrittenNumberOfLines": null,
+          "coInsurerWrittenNumberOfUnits": null,
+          "insurerWrittenNumberOfUnits": null,
+          "reinsurerWrittenNumberOfUnits": null,
+          "coInsurerWrittenLimitAmount": null,
+          "insurerWrittenLimitAmount": null,
+          "reinsurerWrittenLimitAmount": null,
+          "writtenDateTime": "2020-10-30T00:00:00",
+          "lineToStandIndicator": null,
+          "conditionalResponseType": null,
+          "responseRequiredByDate": null,
+          "revisedResponseRequiredByDate": null,
+          "lineConditions": null,
+          "endorsementLineConditions": null,
+          "correctionDescription": null,
+          "insurerSharePercentage": {
+            "rate": {
+              "rateUnit": "Percentage",
+              "value": 1.00
+            }
+          },
+          "reinsurerSharePercentage": null,
+          "coInsurerSharePercentage": null,
+          "insurerShareNumberOfLines": null,
+          "reinsurerShareNumberOfLines": null,
+          "coInsurerShareNumberOfLines": null,
+          "insurerShareNumberOfUnits": null,
+          "reinsurerShareNumberOfUnits": null,
+          "coInsurerShareNumberOfUnits": null,
+          "insurerShareLimitAmount": {
+            "amt": {
+              "ccy": null,
+              "share": null,
+              "ccyIndic": null,
+              "value": 0.0
+            }
+          },
+          "reinsurerShareLimitAmount": null,
+          "coInsurerShareLimitAmount": null,
+          "insurerSharePremiumAmount": null,
+          "reinsurerSharePremiumAmount": null,
+          "coInsurerSharePremiumAmount": null,
+          "insurerShareNetPremiumAmount": {
+            "amt": {
+              "ccy": null,
+              "share": null,
+              "ccyIndic": null,
+              "value": 9465.0
+            }
+          },
+          "reinsurerShareNetPremiumAmount": null,
+          "coInsurerShareNetPremiumAmount": null,
+          "shareAllocations": null,
+          "subaccountReference": null,
+          "newBusinessIndicator": null,
+          "marketAddressedIndicator": true
+        },
+        {
+          "britAttributes": {
+            "pasSystemPolicyLineId": "877017",
+            "insurerWrittenLineIndicator": "P",
+            "reInsuranceCode": null,
+            "exposure": {
+              "amt": {
+                "ccy": null,
+                "share": null,
+                "ccyIndic": null,
+                "value": 24188750.0
+              }
+            },
+            "wholePartOrder": "part_of_whole",
+            "orderPercentage": {
+              "rate": {
+                "rateUnit": "Percentage",
+                "value": 100.00
+              }
+            },
+            "estimatedSigningDownPercentage": {
+              "rate": {
+                "rateUnit": "Percentage",
+                "value": 84.00
+              }
+            }
+          },
+          "coInsurer": null,
+          "insurer": {
+            "party": {
+              "id": "2987",
+              "name": null
+            },
+            "contact": null,
+            "address": null
+          },
+          "reinsurer": null,
+          "participantFunction": null,
+          "lineTransactionFunction": "Signed",
+          "endorsementParticipantFunction": null,
+          "endorsementAgreementConditions": null,
+          "alwaysRequireNotificationIndicator": null,
+          "claimParticipantFunction": null,
+          "declarationParticipantFunction": null,
+          "correspondentBroker": null,
+          "transactionResponseReason": null,
+          "processingInstructions": null,
+          "coInsurerRiskReference": null,
+          "insurerRiskReference": null,
+          "reinsurerRiskReference": null,
+          "coInsurerContractSecondaryReference": null,
+          "insurerContractSecondaryReference": null,
+          "reinsurerContractSecondaryReference": null,
+          "coInsurerContractReference": null,
+          "insurerContractReference": null,
+          "reinsurerContractReference": null,
+          "coInsurerContractRenewedReference": null,
+          "insurerContractRenewedReference": null,
+          "reinsurerContractRenewedReference": null,
+          "coInsurerContractGroupReference": null,
+          "insurerContractGroupReference": null,
+          "reinsurerContractGroupReference": null,
+          "premiumRegulatoryAllocationSchemes": [
+            {
+              "allocationCodeListDescription": null,
+              "allocations": [
+                {
+                  "allocationCode": "V",
+                  "allocationPercentage": null,
+                  "allocationReference": null,
+                  "description": null
+                }
+              ],
+              "agency": null
+            }
+          ],
+          "coInsurerQuoteMinimumSharePercentage": null,
+          "insurerQuoteMinimumSharePercentage": null,
+          "reinsurerQuoteMinimumSharePercentage": null,
+          "coInsurerQuoteMinimumShareAmount": null,
+          "insurerQuoteMinimumShareAmount": null,
+          "reinsurerQuoteMinimumShareAmount": null,
+          "coInsurerQuoteMinimumNumberOfLines": null,
+          "insurerQuoteMinimumNumberOfLines": null,
+          "reinsurerQuoteMinimumNumberOfLines": null,
+          "coInsurerQuoteMinimumNumberOfUnits": null,
+          "insurerQuoteMinimumNumberOfUnits": null,
+          "reinsurerQuoteMinimumNumberOfUnits": null,
+          "coInsurerQuoteMinimumLimitAmount": null,
+          "insurerQuoteMinimumLimitAmount": null,
+          "reinsurerQuoteMinimumLimitAmount": null,
+          "coInsurerQuoteMaximumSharePercentage": null,
+          "insurerQuoteMaximumSharePercentage": null,
+          "reinsurerQuoteMaximumSharePercentage": null,
+          "coInsurerQuoteMaximumShareAmount": null,
+          "insurerQuoteMaximumShareAmount": null,
+          "reinsurerQuoteMaximumShareAmount": null,
+          "coInsurerQuoteMaximumNumberOfLines": null,
+          "insurerQuoteMaximumNumberOfLines": null,
+          "reinsurerQuoteMaximumNumberOfLines": null,
+          "coInsurerQuoteMaximumNumberOfUnits": null,
+          "insurerQuoteMaximumNumberOfUnits": null,
+          "reinsurerQuoteMaximumNumberOfUnits": null,
+          "coInsurerQuoteMaximumLimitAmount": null,
+          "insurerQuoteMaximumLimitAmount": null,
+          "reinsurerQuoteMaximumLimitAmount": null,
+          "coInsurerWrittenPercentage": null,
+          "insurerWrittenPercentage": null,
+          "reinsurerWrittenPercentage": null,
+          "coInsurerWrittenNumberOfLines": null,
+          "insurerWrittenNumberOfLines": null,
+          "reinsurerWrittenNumberOfLines": null,
+          "coInsurerWrittenNumberOfUnits": null,
+          "insurerWrittenNumberOfUnits": null,
+          "reinsurerWrittenNumberOfUnits": null,
+          "coInsurerWrittenLimitAmount": null,
+          "insurerWrittenLimitAmount": null,
+          "reinsurerWrittenLimitAmount": null,
+          "writtenDateTime": "2020-10-30T00:00:00",
+          "lineToStandIndicator": null,
+          "conditionalResponseType": null,
+          "responseRequiredByDate": null,
+          "revisedResponseRequiredByDate": null,
+          "lineConditions": null,
+          "endorsementLineConditions": null,
+          "correctionDescription": null,
+          "insurerSharePercentage": {
+            "rate": {
+              "rateUnit": "Percentage",
+              "value": 11.50
+            }
+          },
+          "reinsurerSharePercentage": null,
+          "coInsurerSharePercentage": null,
+          "insurerShareNumberOfLines": null,
+          "reinsurerShareNumberOfLines": null,
+          "coInsurerShareNumberOfLines": null,
+          "insurerShareNumberOfUnits": null,
+          "reinsurerShareNumberOfUnits": null,
+          "coInsurerShareNumberOfUnits": null,
+          "insurerShareLimitAmount": {
+            "amt": {
+              "ccy": null,
+              "share": null,
+              "ccyIndic": null,
+              "value": 0.0
+            }
+          },
+          "reinsurerShareLimitAmount": null,
+          "coInsurerShareLimitAmount": null,
+          "insurerSharePremiumAmount": null,
+          "reinsurerSharePremiumAmount": null,
+          "coInsurerSharePremiumAmount": null,
+          "insurerShareNetPremiumAmount": {
+            "amt": {
+              "ccy": null,
+              "share": null,
+              "ccyIndic": null,
+              "value": 108849.0
+            }
+          },
+          "reinsurerShareNetPremiumAmount": null,
+          "coInsurerShareNetPremiumAmount": null,
+          "shareAllocations": null,
+          "subaccountReference": null,
+          "newBusinessIndicator": null,
+          "marketAddressedIndicator": true
+        }
+      ],
+      "contractReportingLevel": null,
+      "extension": null
+    }
+  ],
+  "sender": null,
+  "receiver": null
+}

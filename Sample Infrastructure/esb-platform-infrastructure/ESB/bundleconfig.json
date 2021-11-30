@@ -1,0 +1,14 @@
+﻿[
+  {
+    "inputFiles": [ "node_modules/bootstrap/dist/css/bootstrap.css" ],
+    "outputFileName": "wwwroot/css/bootstrap.css",
+    "minify": { "enabled": false }
+  },
+  {
+    "inputFiles": [
+      "node_modules/bootstrap/dist/css/bootstrap.min.css"
+    ],
+    "outputFileName": "wwwroot/css/bootstrap.min.css",
+    "minify": { "enabled": false }
+  }
+]

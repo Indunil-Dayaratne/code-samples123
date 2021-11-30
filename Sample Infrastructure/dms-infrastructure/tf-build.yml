@@ -1,0 +1,87 @@
+parameters:
+- name: working_dir
+- name: client_id
+- name: client_secret
+- name: tenant_id
+- name: sub_id
+- name: access_key
+- name: env
+- name: backend_config_file_name
+- name: version
+
+steps:
+  - task: PowerShell@2
+    displayName: Terraform - Install
+    name: tf_intall
+    inputs:
+      targetType: inline
+      script: choco install terraform --version ${{parameters.version}} --yes
+      workingDirectory: ${{ parameters.working_dir }}
+    env:
+      ARM_CLIENT_ID: ${{ parameters.client_id }}
+      ARM_CLIENT_SECRET: ${{ parameters.client_secret }}
+      ARM_TENANT_ID: ${{ parameters.tenant_id }}
+      ARM_SUBSCRIPTION_ID: ${{ parameters.sub_id }}
+      ARM_ACCESS_KEY: ${{ parameters.access_key }}
+
+  - task: PowerShell@2
+    displayName: Terraform - Init
+    name: tf_init
+    inputs:
+      targetType: inline
+      script: terraform init -backend-config="./backend-config/${{ parameters.backend_config_file_name }}"
+      workingDirectory: ${{ parameters.working_dir }}
+    env:
+      ARM_CLIENT_ID: ${{ parameters.client_id }}
+      ARM_CLIENT_SECRET: ${{ parameters.client_secret }}
+      ARM_TENANT_ID: ${{ parameters.tenant_id }}
+      ARM_SUBSCRIPTION_ID: ${{ parameters.sub_id }}
+      ARM_ACCESS_KEY: ${{ parameters.access_key }}
+
+  - task: PowerShell@2
+    displayName: Terraform - Select Workspace
+    name: tf_workspace
+    inputs:
+      targetType: inline
+      script: |
+        $ws = (terraform workspace list | select-string ${{ parameters.env }})
+        if ($ws) {
+          terraform workspace select ${{ parameters.env }}
+        } else {
+          terraform workspace new ${{ parameters.env }}
+        }
+      workingDirectory: ${{ parameters.working_dir }}
+    env:
+      ARM_CLIENT_ID: ${{ parameters.client_id }}
+      ARM_CLIENT_SECRET: ${{ parameters.client_secret }}
+      ARM_TENANT_ID: ${{ parameters.tenant_id }}
+      ARM_SUBSCRIPTION_ID: ${{ parameters.sub_id }}
+      ARM_ACCESS_KEY: ${{ parameters.access_key }}
+
+  - task: PowerShell@2
+    displayName: Terraform - Plan
+    name: tf_plan
+    inputs:
+      targetType: inline
+      script: terraform plan -refresh=true -input=false -var-file="./terraform-vars/${{ parameters.env }}.terraform.tfvars" -out=plan
+      workingDirectory: ${{ parameters.working_dir }}
+    env:
+      ARM_CLIENT_ID: ${{ parameters.client_id }}
+      ARM_CLIENT_SECRET: ${{ parameters.client_secret }}
+      ARM_TENANT_ID: ${{ parameters.tenant_id }}
+      ARM_SUBSCRIPTION_ID: ${{ parameters.sub_id }}
+      ARM_ACCESS_KEY: ${{ parameters.access_key }}
+
+  - task: PowerShell@2
+    name: tf_apply
+    displayName: Terraform - Apply
+    inputs:
+      targetType: inline
+      script: terraform apply plan
+      workingDirectory: ${{ parameters.working_dir }}
+    env:
+      ARM_CLIENT_ID: ${{ parameters.client_id }}
+      ARM_CLIENT_SECRET: ${{ parameters.client_secret }}
+      ARM_TENANT_ID: ${{ parameters.tenant_id }}
+      ARM_SUBSCRIPTION_ID: ${{ parameters.sub_id }}
+      ARM_ACCESS_KEY: ${{ parameters.access_key }}

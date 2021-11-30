@@ -1,0 +1,460 @@
+resources:
+  repositories:
+    - repository: tf_modules
+      type: git
+      name: PSCloudModules/TerraformModules
+      ref: develop
+    - repository: tf_modules2
+      type: git
+      name: terraform-modules
+      ref: develop
+
+name: Sharepoint DMS $(Date:yyyyMMdd)$(rev:.r)
+
+trigger:
+  batch: true
+  branches:
+    include:
+    - master
+    - develop
+
+stages:
+   - stage: build
+     displayName: Build
+     jobs:
+      - job: validatetf_npd
+        displayName: Validate TF Non-Prod
+        pool:
+             vmImage: 'windows-latest'
+        variables:
+          - group: Terraform Non-Prod Deploy
+        steps:
+          - checkout: self
+          - checkout: tf_modules
+          - checkout: tf_modules2
+          - task: PowerShell@2
+            displayName: Terraform - Install
+            name: tf_intall
+            inputs:
+              targetType: inline
+              script: choco install terraform --version 0.12.31 --yes
+              workingDirectory: $(Build.SourcesDirectory)\brit-dms-source\infra
+
+          - task: PowerShell@2
+            displayName: Run Validation Tests - Dev
+            inputs:
+              targetType: inline
+              script: |
+                if ((Get-Module Pester -ListAvailable).Version -le "4.10.1") {
+                  Import-Module Pester -MaximumVersion 4.10.1
+                } else {
+                  Get-PSRepository | Set-PSRepository -InstallationPolicy Trusted
+                  Install-Module Pester -RequiredVersion "4.10.1" -Scope CurrentUser -AllowClobber -Force
+                  Import-Module Pester -RequiredVersion "4.10.1"
+                }
+                Invoke-Pester -Script @{Path = ".\Tests\Validate.Tests.ps1"; Parameters = @{Environment = "dev"}} -OutputFile ".\Tests\Pester.dev.xml" -OutputFormat "NUnitXML"
+              workingDirectory: $(Build.SourcesDirectory)\brit-dms-source\infra
+            env:
+              ARM_CLIENT_ID: $(arm_client_id)
+              ARM_CLIENT_SECRET: $(arm_client_secret)
+              ARM_TENANT_ID: $(arm_tenant_id)
+              ARM_SUBSCRIPTION_ID: $(arm_subscription_id)
+              ARM_ACCESS_KEY: $(arm_access_key)
+
+          - task: PowerShell@2
+            displayName: Run Validation Tests - UAT
+            inputs:
+              targetType: inline
+              script: |
+                if ((Get-Module Pester -ListAvailable).Version -le "4.10.1") {
+                  Import-Module Pester -MaximumVersion 4.10.1
+                } else {
+                  Get-PSRepository | Set-PSRepository -InstallationPolicy Trusted
+                  Install-Module Pester -RequiredVersion "4.10.1" -Scope CurrentUser -AllowClobber -Force
+                  Import-Module Pester -RequiredVersion "4.10.1"
+                }
+                Invoke-Pester -Script @{Path = ".\Tests\Validate.Tests.ps1"; Parameters = @{Environment = "uat"}} -OutputFile ".\Tests\Pester.uat.xml" -OutputFormat "NUnitXML"
+              workingDirectory: $(Build.SourcesDirectory)\brit-dms-source\infra
+            env:
+              ARM_CLIENT_ID: $(arm_client_id)
+              ARM_CLIENT_SECRET: $(arm_client_secret)
+              ARM_TENANT_ID: $(arm_tenant_id)
+              ARM_SUBSCRIPTION_ID: $(arm_subscription_id)
+              ARM_ACCESS_KEY: $(arm_access_key)
+
+          - task: PublishTestResults@2
+            displayName: Publish Test Results
+            inputs:
+              testResultsFiles: $(Build.SourcesDirectory)\brit-dms-source\infra\Tests\Pester.*.xml
+              testResultsFormat: NUnit
+              failTaskOnFailedTests: true
+            condition: succeededOrFailed()
+
+      - job: validatetf_prd
+        displayName: Validate PROD TF
+        pool:
+              vmImage: 'windows-latest'
+        variables:
+          - group: Terraform Prod Deploy
+        steps:
+          - checkout: self
+          - checkout: tf_modules
+          - checkout: tf_modules2
+          - task: PowerShell@2
+            displayName: Terraform - Install
+            name: tf_intall
+            inputs:
+              targetType: inline
+              script: choco install terraform --version 0.12.31 --yes
+              workingDirectory: $(Build.SourcesDirectory)\brit-dms-source\infra
+              
+          - task: PowerShell@2
+            displayName: Run Validation Tests - PROD
+            inputs:
+              targetType: inline
+              script: |
+                if ((Get-Module Pester -ListAvailable).Version -le "4.10.1") {
+                  Import-Module Pester -MaximumVersion 4.10.1
+                } else {
+                  Get-PSRepository | Set-PSRepository -InstallationPolicy Trusted
+                  Install-Module Pester -RequiredVersion "4.10.1" -Scope CurrentUser -AllowClobber -Force
+                  Import-Module Pester -RequiredVersion "4.10.1"
+                }
+                Invoke-Pester -Script @{Path = ".\Tests\Validate.Tests.ps1"; Parameters = @{Environment = "prd"}} -OutputFile ".\Tests\Pester.prd.xml" -OutputFormat "NUnitXML"
+              workingDirectory: $(Build.SourcesDirectory)\brit-dms-source\infra
+            env:
+              ARM_CLIENT_ID: $(arm_client_id)
+              ARM_CLIENT_SECRET: $(arm_client_secret)
+              ARM_TENANT_ID: $(arm_tenant_id)
+              ARM_SUBSCRIPTION_ID: $(arm_subscription_id)
+              ARM_ACCESS_KEY: $(arm_access_key)
+
+          - task: PublishTestResults@2
+            displayName: Publish Test Results
+            inputs:
+              testResultsFiles: $(Build.SourcesDirectory)\brit-dms-source\infra\Tests\Pester.*.xml
+              testResultsFormat: NUnit
+              failTaskOnFailedTests: true
+            condition: succeededOrFailed()
+
+      - job: build
+        displayName: Build SPOnline Gateway Solution
+        pool:
+            vmImage: 'windows-latest'
+        steps:
+          - checkout: self
+          - task: NuGetCommand@2
+            inputs:
+              command: 'restore'
+              restoreSolution: '$(Build.SourcesDirectory)/src/current/Brit.Sharepoint.DMS.SPOnline.Gateway.sln'
+          - task: MSBuild@1
+            inputs:
+              solution: '$(Build.SourcesDirectory)/src/current/Brit.Sharepoint.DMS.SPOnline.Gateway.sln'
+              msbuildArguments: '/p:OutputPath="$(Build.SourcesDirectory)\\buildoutput"'
+              msbuildArchitecture: 'x64'
+          - publish: $(Build.SourcesDirectory)/buildoutput
+            artifact: SPOnlineGateway
+
+   - stage: dev
+     displayName: Deploy Dev
+     condition: and(succeeded(), or(eq(variables['Build.Reason'], 'Manual'), eq(variables['Build.SourceBranchName'], 'develop')))
+     dependsOn: build
+     variables:
+      - name: env
+        value: dev
+     jobs:
+       - deployment: devTF
+         pool:
+             vmImage: 'windows-latest'
+         variables:
+           - group: Terraform Non-Prod Deploy
+         environment: $(env)
+         displayName: Deploy Dev TF
+         strategy:
+           runOnce:
+             deploy:
+               steps:
+                 - checkout: self
+                 - checkout: tf_modules
+                 - checkout: tf_modules2
+                 - template: tf-build.yml
+                   parameters:
+                     working_dir: $(Build.SourcesDirectory)/brit-dms-source/infra
+                     client_id: $(arm_client_id)
+                     client_secret: $(arm_client_secret)
+                     tenant_id: $(arm_tenant_id)
+                     sub_id: $(arm_subscription_id)
+                     access_key: $(arm_access_key)
+                     env: $(env)
+                     backend_config_file_name: partial_config-nonprod.tf
+                     version: '0.12.31'
+       - deployment: deployDevDatabase
+         pool: devops-prod-pool
+         dependsOn: devTF
+         environment: $(env)
+         displayName: Deploy DMG_SQLOUTPUT database schema
+         variables:
+           - group: BritDmsSpOnlineGatewayDev
+         strategy:
+          runOnce:
+            deploy:
+              steps:
+                - task: SqlDacpacDeploymentOnMachineGroup@0
+                  inputs:
+                    TaskType: 'dacpac'
+                    DacpacFile: '$(Pipeline.Workspace)/SPOnlineGateway/**/*.dacpac'
+                    TargetMethod: 'server'
+                    ServerName: '$(SqlServerName)'
+                    DatabaseName: 'DMG_SQLOUTPUT'
+                    AuthScheme: 'windowsAuthentication'
+                    AdditionalArguments: '/Variables:SqlServerServiceAccount="$(SqlServerServiceAccount)" /Variables:spOnlineGatewayUserPassword="$(SqlUserPassword)"'
+       - deployment: devSpOnlineGatewayService
+         pool:
+            vmImage: 'windows-latest'
+         dependsOn: deployDevDatabase
+         environment: $(env)
+         displayName: Deploy Dev SP Online Gateway Service
+         variables:
+           - group: BritDmsSpOnlineGatewayDev
+         strategy:
+            runOnce:
+              deploy:
+                steps:
+                  - template: deploy-and-test-service.yml
+                    parameters:
+                      service_path: '$(Pipeline.Workspace)/SPOnlineGateway/'
+                      env: $(env)
+                      azure_subscription: 'Microsoft Azure Enterprise Non-Production'
+
+   - stage: devSSIS
+     displayName: Deploy Dev SSIS
+     condition: and(succeeded(), eq(variables['Build.Reason'], 'Manual'))
+     dependsOn: dev
+     pool: devops-prod-pool
+     variables:
+      - name: env
+        value: dev
+     jobs:
+       - deployment: devSSIS
+         environment: $(env)
+         displayName: Deploy Dev SSIS
+         strategy:
+           runOnce:
+             deploy:
+               steps:
+                 - checkout: self
+                 - template: ssis-deploy.yml
+                   parameters:
+                     ssis_server_name: sharepoint-d-01.wren.co.uk
+                     dmg_db_server_name: sharepoint-d-01.wren.co.uk
+                     dmg_db_name: DMG
+                     velocity_db_server_name: DB01Dev
+                     velocity_db_name: Velocity
+                     eclipse_db_server_name: ecl-06-lgcy-tst.wren.co.uk
+                     eclipse_db_name: BritEclipseExtensionsITST
+                     great_plains_db_server_name: LONGPDB001u.wren.co.uk
+                     great_plains_db_name: DYNAMICS
+                     claims_db_server_name: ecl-06-lgcy-tst.wren.co.uk
+                     claims_db_name: BritEclipseExtensionsITST
+   - stage: uat
+     displayName: Deploy UAT
+     dependsOn: dev
+     variables:
+       - name: env
+         value: uat
+     jobs:
+       - deployment: uatTF
+         pool:
+             vmImage: 'windows-latest'
+         variables:
+           - group: Terraform Non-Prod Deploy
+         environment: $(env)
+         displayName: Deploy UAT TF
+         strategy:
+           runOnce:
+             deploy:
+               steps:
+                 - checkout: self
+                 - checkout: tf_modules
+                 - checkout: tf_modules2
+                 - template: tf-build.yml
+                   parameters:
+                     working_dir: $(Build.SourcesDirectory)/brit-dms-source/infra
+                     client_id: $(arm_client_id)
+                     client_secret: $(arm_client_secret)
+                     tenant_id: $(arm_tenant_id)
+                     sub_id: $(arm_subscription_id)
+                     access_key: $(arm_access_key)
+                     env: $(env)
+                     backend_config_file_name: partial_config-nonprod.tf
+                     version: '0.12.31'
+       - deployment: deployUatDatabase
+         pool: devops-prod-pool
+         dependsOn: uatTF
+         environment: $(env)
+         displayName: Deploy UAT DMG_SQLOUTPUT database schema
+         variables:
+           - group: BritDmsSpOnlineGatewayUat
+         strategy:
+           runOnce:
+             deploy:
+               steps:
+                 - task: SqlDacpacDeploymentOnMachineGroup@0
+                   inputs:
+                     TaskType: 'dacpac'
+                     DacpacFile: '$(Pipeline.Workspace)/SPOnlineGateway/**/*.dacpac'
+                     TargetMethod: 'server'
+                     ServerName: '$(SqlServerName)'
+                     DatabaseName: 'DMG_SQLOUTPUT'
+                     AuthScheme: 'windowsAuthentication'
+                     AdditionalArguments: '/Variables:SqlServerServiceAccount="$(SqlServerServiceAccount)" /Variables:spOnlineGatewayUserPassword="$(SqlUserPassword)"'
+       - deployment: uatSpOnlineGatewayService
+         pool:
+           vmImage: 'windows-latest'
+         dependsOn: deployUatDatabase
+         environment: $(env)
+         displayName: Deploy UAT SP Online Gateway Service
+         variables:
+           - group: BritDmsSpOnlineGatewayUat
+         strategy:
+           runOnce:
+             deploy:
+               steps:
+                 - template: deploy-and-test-service-with-dr.yml
+                   parameters:
+                     service_path: '$(Pipeline.Workspace)/SPOnlineGateway/'
+                     env: $(env)
+                     azure_subscription: 'Microsoft Azure Enterprise Non-Production'
+
+   - stage: uatSSIS
+     displayName: Deploy UAT SSIS
+     condition: and(succeeded(), eq(variables['Build.Reason'], 'Manual'))
+     dependsOn: devSSIS
+     pool: devops-prod-pool
+     variables:
+       - name: env
+         value: uat
+     jobs:
+       - deployment: uatSSIS
+         environment: $(env)
+         displayName: Deploy UAT SSIS
+         strategy:
+           runOnce:
+             deploy:
+               steps:
+                 - checkout: self
+                 - template: ssis-deploy.yml
+                   parameters:
+                     ssis_server_name: sharepoint-u-01.wren.co.uk
+                     dmg_db_server_name: sharepoint-u-01.wren.co.uk
+                     dmg_db_name: DMG
+                     velocity_db_server_name: DB01MO
+                     velocity_db_name: Velocity
+                     eclipse_db_server_name: ecl-06-lgcy-tst.wren.co.uk
+                     eclipse_db_name: BritEclipseExtensionsItst
+                     great_plains_db_server_name: greatplain-u-01.wren.co.uk
+                     great_plains_db_name: DYNAMICS
+                     claims_db_server_name: ecl-06-lgcy-tst.wren.co.uk
+                     claims_db_name: BritEclipseExtensionsItst
+
+   - stage: prod
+     displayName: Deploy Prod
+     condition: and(succeeded(), and(eq(variables['Build.Reason'], 'Manual'), eq(variables['Build.SourceBranch'], 'refs/heads/master')))
+     dependsOn: uat
+     variables:
+       - name: env
+         value: prd
+     jobs:
+       - deployment: prdTF
+         pool:
+             vmImage: 'windows-latest'
+         variables:
+           - group: Terraform Prod Deploy
+         environment: $(env)
+         displayName: Deploy Prod TF
+         strategy:
+           runOnce:
+             deploy:
+               steps:
+                 - checkout: self
+                 - checkout: tf_modules
+                 - checkout: tf_modules2
+                 - template: tf-build.yml
+                   parameters:
+                     working_dir: $(Build.SourcesDirectory)/brit-dms-source/infra
+                     client_id: $(arm_client_id)
+                     client_secret: $(arm_client_secret)
+                     tenant_id: $(arm_tenant_id)
+                     sub_id: $(arm_subscription_id)
+                     access_key: $(arm_access_key)
+                     env: $(env)
+                     backend_config_file_name: partial_config-prod.tf
+                     version: '0.12.31'
+       - deployment: deployProdDatabase
+         pool: devops-prod-pool
+         dependsOn: prdTF
+         environment: $(env)
+         displayName: Deploy Prod DMG_SQLOUTPUT database schema
+         variables:
+           - group: BritDmsSpOnlineGatewayPrd
+         strategy:
+           runOnce:
+             deploy:
+               steps:
+                 - task: SqlDacpacDeploymentOnMachineGroup@0
+                   inputs:
+                     TaskType: 'dacpac'
+                     DacpacFile: '$(Pipeline.Workspace)/SPOnlineGateway/**/*.dacpac'
+                     TargetMethod: 'server'
+                     ServerName: '$(SqlServerName)'
+                     DatabaseName: 'DMG_SQLOUTPUT'
+                     AuthScheme: 'windowsAuthentication'
+                     AdditionalArguments: '/Variables:SqlServerServiceAccount="$(SqlServerServiceAccount)" /Variables:spOnlineGatewayUserPassword="$(SqlUserPassword)"'
+       - deployment: prodSpOnlineGatewayService
+         pool:
+           vmImage: 'windows-latest'
+         dependsOn: deployProdDatabase
+         environment: $(env)
+         displayName: Deploy Prod SP Online Gateway Service
+         variables:
+           - group: BritDmsSpOnlineGatewayPrd
+         strategy:
+           runOnce:
+             deploy:
+               steps:
+                 - template: deploy-and-test-service-with-dr.yml
+                   parameters:
+                     service_path: '$(Pipeline.Workspace)/SPOnlineGateway/'
+                     env: $(env)
+                     azure_subscription: 'Microsoft Azure Enterprise Production'
+
+   - stage: prdSSIS
+     displayName: Deploy Prod SSIS
+     condition: and(succeeded(), eq(variables['Build.Reason'], 'Manual'))
+     dependsOn: uatSSIS
+     pool: devops-prod-pool
+     variables:
+       - name: env
+         value: prd
+     jobs:
+       - deployment: prdSSIS
+         environment: $(env)
+         displayName: Deploy Prod SSIS
+         strategy:
+           runOnce:
+             deploy:
+               steps:
+                 - checkout: self
+                 - template: ssis-deploy.yml
+                   parameters:
+                     ssis_server_name: sharepoint-p-01.wren.co.uk
+                     dmg_db_server_name: sharepoint-p-01.wren.co.uk
+                     dmg_db_name: DMG
+                     velocity_db_server_name: DB01
+                     velocity_db_name: Velocity
+                     eclipse_db_server_name: ecl-06-lgcy-prd.wren.co.uk
+                     eclipse_db_name: BritEclipseExtensions
+                     great_plains_db_server_name: greatplain-p-01.wren.co.uk
+                     great_plains_db_name: DYNAMICS
+                     claims_db_server_name: ecl-06-lgcy-prd.wren.co.uk
+                     claims_db_name: BritEclipseExtensions

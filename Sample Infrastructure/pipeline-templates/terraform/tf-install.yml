@@ -1,0 +1,6 @@
+parameters:
+  - name: version
+
+steps:
+- pwsh: choco install terraform --version ${{parameters.version}} --yes
+  displayName: Install Terraform ${{parameters.version}}

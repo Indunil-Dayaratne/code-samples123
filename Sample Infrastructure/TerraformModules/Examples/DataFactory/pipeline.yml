@@ -1,0 +1,54 @@
+name: Example - DataFactory
+
+resources:
+  repositories:
+    - repository: tf_modules
+      type: git
+      name: PSCloudModules\TerraformModules
+
+trigger: none
+
+stages:
+  - stage: build
+    displayName: ADF Build
+    jobs:
+      - deployment: terraform_datafactory
+        displayName: Terraform - DataFactory
+        pool: terraform12-pool
+        variables:
+          - group: terraform_azure_creds
+        workspace:
+          clean: all
+        strategy:
+          runOnce:
+            deploy:
+              steps:
+                - checkout: self
+                - checkout: tf_modules
+
+                - powershell: terraform_init
+                  displayName: TF Init
+                  workingDirectory: $(System.DefaultWorkingDirectory)\$(Build.Repository.Name)
+                  env:
+                    ARM_CLIENT_ID: $(arm_client_id)
+                    ARM_CLIENT_SECRET: $(arm_client_secret)
+                    ARM_SUBSCRIPTION_ID: $(arm_subscription_id)
+                    ARM_TENANT_ID: $(arm_tenant_id)
+
+                - powershell: terraform plan -var-file="terraform.tfvars" -out=plan
+                  displayName: TF Plan
+                  workingDirectory: $(System.DefaultWorkingDirectory)\$(Build.Repository.Name)
+                  env:
+                    ARM_CLIENT_ID: $(arm_client_id)
+                    ARM_CLIENT_SECRET: $(arm_client_secret)
+                    ARM_SUBSCRIPTION_ID: $(arm_subscription_id)
+                    ARM_TENANT_ID: $(arm_tenant_id)
+
+                - powershell: terraform apply plan
+                  displayName: TF Apply
+                  workingDirectory: $(System.DefaultWorkingDirectory)\$(Build.Repository.Name)
+                  env:
+                    ARM_CLIENT_ID: $(arm_client_id)
+                    ARM_CLIENT_SECRET: $(arm_client_secret)
+                    ARM_SUBSCRIPTION_ID: $(arm_subscription_id)
+                    ARM_TENANT_ID: $(arm_tenant_id)

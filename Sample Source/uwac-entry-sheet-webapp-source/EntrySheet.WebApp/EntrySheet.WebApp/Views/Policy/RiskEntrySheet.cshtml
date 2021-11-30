@@ -1,0 +1,462 @@
+﻿@{
+    Layout = null;
+}
+
+@using Microsoft.Extensions.Options
+@using Newtonsoft.Json
+@using EntrySheet.WebApp.Helpers
+@model EntrySheetDataViewModel
+
+@inject IFingerprint _fingerprint
+@inject IOptions<EntrySheetApi> _apiConfig
+@inject IOptions<PbqaApi> _pbqaApiConfig
+@inject IOptions<Settings> _config
+@inject IOptions<IgnisApi> _ignisApiConfig
+
+
+<style type='text/css'>
+
+    .control-label {
+        text-align: left !important;
+        max-width: 246px;
+        word-wrap: break-word;
+    }
+    .container {
+        margin-left: 5px;
+        padding-right: 0px;
+    }
+
+    .brit-accordion-checkbox-rowspan-3 {
+        width: 15px;
+        height: 15px;
+        border-radius: 5px;
+        margin-top: 1px !important;
+    }
+</style>
+
+<script type="text/javascript">
+    var entrySheetvm;
+    console.log('-------------- started-------------');
+    var riskEntrySheetConfig = {
+        britCacheClientId: azureConfig.britCacheClientId,
+        britCacheScope: azureConfig.britCacheScope,
+        britCacheBaseUrl: azureConfig.britCacheBaseUrl,
+        notificationSvcClientId: azureConfig.notificationSvcClientId,
+        notificationSvcUrl: azureConfig.notificationSvcUrl,
+        notificationSvcBaseUrl: azureConfig.notificationSvcBaseUrl,
+        notificationSvcScope: azureConfig.notificationSvcScope,
+        pbqaPlacingTypes: "@_config.Value.PbqaPlacingBasisTypes".split(","),
+        entrySheetApi: {
+            clientId: "@_apiConfig.Value.ClientId",
+            scope:  "@_apiConfig.Value.Scope",
+            baseUrl:  "@_apiConfig.Value.BaseUrl"
+        },
+        pbqaApi: {
+            clientId: "@_pbqaApiConfig.Value.ClientId",
+            scope: "@_pbqaApiConfig.Value.Scope",
+            baseUrl: "@_pbqaApiConfig.Value.BaseUrl"
+        },
+        ignisApi: {
+            baseUrl: "@_ignisApiConfig.Value.BaseUrl",
+            environmentName : "@_ignisApiConfig.Value.EnvironmentName"
+        },
+        enableBISubLimitForGroupClass: "@_config.Value.EnableBISubLimitForGroupClass".toUpperCase().replace(/&AMP;/g, "&"),
+        lineStatusLst : "@_config.Value.LineStatuses",
+        scriptsToLoad: [
+            '@_fingerprint.Tag("/js/shared/utils.js")',
+            '@_fingerprint.Tag("/js/clients/RiskEntrySheetClient.js")',
+            '@_fingerprint.Tag("/js/RiskEntrySheet/view-models/AdditionalDetailsVM.js")',
+            '@_fingerprint.Tag("/js/RiskEntrySheet/view-models/SystemStatusesVM.js")',
+            '@_fingerprint.Tag("/js/RiskEntrySheet/view-models/RiskEntrySheetVM.js")',
+            '@_fingerprint.Tag("/js/RiskEntrySheet/view-models/LinesVM.js")',
+            '@_fingerprint.Tag("/js/RiskEntrySheet/view-models/PremiumRatingDetailsVM.js")',
+            '@_fingerprint.Tag("/js/RiskEntrySheet/view-models/PolicySectionVM.js")',
+            '@_fingerprint.Tag("/js/clients/BritCacheClient.js")',
+            '@_fingerprint.Tag("/js/clients/PbqaClient.js")'
+        ],
+        stylesToLoad: ["@_config.Value.RootUrl" + "/css/site.css"]
+    }
+    bladeUI.loadScripts(riskEntrySheetConfig.scriptsToLoad, riskEntrySheetConfig.stylesToLoad, true).done(function () {
+        var policyDetails = @Html.Raw(@JsonConvert.SerializeObject(Model));
+        console.log("PolicyDetails", policyDetails);
+        ko.bindingHandlers.stopBinding = {
+            init: function () {
+                return { controlsDescendantBindings: true };
+            }
+        };
+        ko.virtualElements.allowedBindings.stopBinding = true;
+
+        ko.bindingHandlers.numericText = {
+            update: function (element, valueAccessor, allBindingsAccessor) {
+                var value = ko.utils.unwrapObservable(valueAccessor());
+                if (value != null) {
+                    var positions = ko.utils.unwrapObservable(allBindingsAccessor().positions) || ko.bindingHandlers.numericText.defaultPositions;
+                    var formattedValue = value.toFixed(positions);
+                    var finalFormatted = ko.bindingHandlers.numericText.withCommas(formattedValue);
+
+                    ko.bindingHandlers.text.update(element, function () { return finalFormatted; });
+                }
+            },
+
+            defaultPositions: 2,
+
+            withCommas: function (original) {
+                original += '';
+                x = original.split('.');
+                x1 = x[0];
+                x2 = x.length > 1 ? '.' + x[1] : '';
+                var rgx = /(\d+)(\d{3})/;
+                while (rgx.test(x1)) {
+                    x1 = x1.replace(rgx, '$1' + ',' + '$2');
+                }
+                return x1 + x2;
+
+            }
+        };
+
+        ko.bindingHandlers.valueFormatted = {
+            init: function (element, valueAccessor, allBindingsAccessor) {
+                var el = $(element);
+                var value = ko.utils.unwrapObservable(valueAccessor());
+                var valueAcc = valueAccessor();
+                var positions = ko.utils.unwrapObservable(allBindingsAccessor().positions) || ko.bindingHandlers.valueFormatted.defaultPositions;
+                var isPercentage = ko.utils.unwrapObservable(allBindingsAccessor().isPercentage) || ko.bindingHandlers.valueFormatted.defaultIsPercentage;
+                
+                el.on({
+                   change : function () {
+                        let valueEntered = el.val().replaceAll(",", "");
+                        let parsedValue = parseFloat(valueEntered);
+                        if (isPercentage == 1 && parsedValue > 100) {
+                            valueAcc("");
+                        }
+                        else {
+                            valueAcc(parsedValue);
+                        }
+                    },
+                    keydown: function () {
+                        // Allow: backspace, delete, tab, escape, and enter
+                        if (event.keyCode == 46 || event.keyCode == 8 || event.keyCode == 9 || event.keyCode == 27 || event.keyCode == 13 ||
+                            // Allow: Ctrl+A
+                            (event.keyCode == 65 && event.ctrlKey === true) ||
+                            // Allow: . ,
+                            (event.keyCode == 188 || event.keyCode == 190 || event.keyCode == 110) ||
+                            // Allow: home, end, left, right
+                            (event.keyCode >= 35 && event.keyCode <= 39)) {
+                            // let it happen, don't do anything
+                            return;
+                        }
+                        else {
+                            // Ensure that it is a number and stop the keypress
+                            if (event.shiftKey || (event.keyCode < 48 || event.keyCode > 57) && (event.keyCode < 96 || event.keyCode > 105)) {
+                                event.preventDefault();
+                            }
+                        }
+                    },
+                    focusout: function () {
+                        let valueEntered = el.val().replaceAll(",", "");
+                        let parsedValue = parseFloat(valueEntered);
+                        if (isPercentage == 1 && parsedValue > 100) {
+                            valueAcc("");
+                        }
+                        else {
+                            valueAcc(parsedValue);
+                        }
+                    }
+                });
+
+                if (value > 0 && positions > 0) {
+                    var formattedValue = value.toFixed(positions);
+                    var finalFormatted = ko.bindingHandlers.valueFormatted.withCommas(formattedValue);
+                    ko.bindingHandlers.value.update(element, function () { return finalFormatted; });
+                }
+                else {
+                    ko.bindingHandlers.value.update(element, function () { return 0.00; });
+                }
+            },
+            update: function (element, valueAccessor, allBindingsAccessor) {
+                var value = ko.utils.unwrapObservable(valueAccessor());
+                var positions = ko.utils.unwrapObservable(allBindingsAccessor().positions) || ko.bindingHandlers.valueFormatted.defaultPositions;
+                if (value > 0 && positions > 0) {
+                    var formattedValue = value.toFixed(positions);
+                    var finalFormatted = ko.bindingHandlers.valueFormatted.withCommas(formattedValue);
+                    ko.bindingHandlers.value.update(element, function () { return finalFormatted; });
+                }
+                else {
+                    ko.bindingHandlers.value.update(element, function () { return 0.00; });
+                }
+            },
+
+            defaultPositions: 2,
+            defaultIsPercentage: 0,
+
+            withCommas: function (original) {
+                original += '';
+                x = original.split('.');
+                x1 = x[0];
+                x2 = x.length > 1 ? '.' + x[1] : '';
+                var rgx = /(\d+)(\d{3})/;
+                while (rgx.test(x1)) {
+                    x1 = x1.replace(rgx, '$1' + ',' + '$2');
+                }
+                return x1 + x2;
+
+            }
+        };
+
+
+        ko.bindingHandlers.numbersFormatted = {
+            init: function (element, valueAccessor, allBindingsAccessor) {
+                var el = $(element);
+                var value = ko.utils.unwrapObservable(valueAccessor());
+                var valueAcc = valueAccessor();
+                el.on({
+                    keydown: function () {
+                        // Allow: backspace, delete, tab, escape, and enter
+                        if (event.keyCode == 46 || event.keyCode == 8 || event.keyCode == 9 || event.keyCode == 27 || event.keyCode == 13 ||
+                            // Allow: Ctrl+A
+                            (event.keyCode == 65 && event.ctrlKey === true) ||
+                            // Allow: home, end, left, right
+                            (event.keyCode >= 35 && event.keyCode <= 39)) {
+                            // let it happen, don't do anything
+                            if (el.is(":visible")) {
+                                el.parent().find('label.field-validation-error').remove();
+                            }
+                            return;
+                        }
+                        else {
+                            // Ensure that it is a number and stop the keypress
+                            if (event.shiftKey || (event.keyCode < 48 || event.keyCode > 57) && (event.keyCode < 96 || event.keyCode > 105)) {
+                                event.preventDefault();
+                            }
+                        }
+                    },
+                    change: function () {
+                        let valueEntered = el.val();
+                        valueAcc(valueEntered);
+                    },
+                });
+                if (value > 0) {
+                    ko.bindingHandlers.value.update(element, function () { return value; });
+                }
+                else {
+                    ko.bindingHandlers.value.update(element, function () { return 0; });
+                }
+            },
+            update: function (element, valueAccessor, allBindingsAccessor) {
+                var value = ko.utils.unwrapObservable(valueAccessor());
+                if (value > 0) {
+                    ko.bindingHandlers.value.update(element, function () { return value; });
+                }
+                else {
+                    ko.bindingHandlers.value.update(element, function () { return 0; });
+                }
+            },
+        };
+
+        ko.bindingHandlers.periodFormatted = {
+            init: function (element, valueAccessor, allBindingsAccessor) {
+                var el = $(element);
+                var value = ko.utils.unwrapObservable(valueAccessor());
+                var valueAcc = valueAccessor();
+                let regEx = new RegExp("^(?=.*?[0-9])[0-9]+[DdMmWwQqYy]$");
+
+                el.on({
+                    keydown: function () {
+                                               
+                        if (event.keyCode == 46 || event.keyCode == 8 || event.keyCode == 9 || event.keyCode == 27 || event.keyCode == 13 ||
+                            // Allow: Ctrl+A
+                            (event.keyCode == 65 && event.ctrlKey === true) ||
+                            // Allow: . ,
+                            (event.keyCode == 188 || event.keyCode == 190 || event.keyCode == 110) ||
+                            // Allow: home, end, left, right
+                            (event.keyCode >= 35 && event.keyCode <= 39) ||
+                            //Allow M, D,Q,W,Y
+                            (event.keyCode == 68 || event.keyCode == 77
+                                || event.keyCode == 81 || event.keyCode == 87 || event.keyCode == 89)) {
+                            // let it happen, don't do anything
+                            return;
+                        }
+                        else {
+                            
+                            // Ensure that it is a number and stop the keypress
+                            if (event.shiftKey || (event.keyCode < 48 || event.keyCode > 57) && (event.keyCode < 96 || event.keyCode > 105)) {
+                                event.preventDefault();
+                            }
+                        }
+                    },
+                    change: function () {
+                        let valueEntered = el.val();
+                        valueAcc(valueEntered);
+                    },
+                });
+                
+                ko.bindingHandlers.value.update(element, function () { return value; });
+            },
+            update: function (element, valueAccessor, allBindingsAccessor) {
+                
+                var value = ko.utils.unwrapObservable(valueAccessor());
+                ko.bindingHandlers.value.update(element, function () { return value; });
+            },
+        }
+               
+        entrySheetvm = new riskEntrySheet.EntrySheetDetailsViewModel(riskEntrySheetConfig, _BLADE_INSTANCE_, policyDetails);
+        entrySheetvm.initialise();
+    });
+</script>
+<form id="frmRiskEntrySheet" class="fxs-part" data-bind="submit :saveEntrySheet">
+    <div id="riskEntryDiv">
+        <div id="validationDiv" class="panel panel-danger" data-bind="visible: validationErrors() && validationErrors().length > 0">
+            <div class="panel-heading msportalfx-text-small panel-Header">
+                <div class="row">
+                    <div>
+                        <div class="pull-left" style="padding-top: 4px;margin-left: 14px;">
+                            Validation Error Details
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="panel-body">
+                <div class="col-md-12">
+                    <div class="form-horizontal form-group form-group-sm">
+                        <ul data-bind="foreach: {data: validationErrors, as : 'errorItem'}">
+                            <li class="control-label" data-bind="text:errorItem.reason">
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+        <div id="policyInformationId" class="panel panel-default" style="margin-bottom: 14px; width:856px !important; float:left">
+            <div class="panel-heading msportalfx-text-small panel-Header">
+                <div class="row">
+                    <div>
+                        <div class="pull-left" style="padding-top: 4px;margin-left: 14px;">
+                            Policy Information
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="panel-body" data-bind="with:policy,bind:policy">
+                <!--Adding first horizontal Row under policy information Panel-->
+                <!--Adding first horizontal Row under policy information Panel-->
+                <div class="row form-horizontal">
+                    <div class="col-md-12">
+                        <div class="form-group form-group-sm">
+                            <label for="ProgrammeRef" class="col-md-2 control-label">Programme Header</label>
+                            <div class="col-md-4">
+                                <label class="control-label font-bold" id="ProgrammeRef" data-bind="text:programRef"></label>
+                            </div>
+                            <label class="col-md-2 control-label" for="CustomerType">Customer Type</label>
+                            <div class="col-md-4">
+                                <select id="selCustomerType" name="selCustomerType" class="form-control font-bold "
+                                        data-bind="options:$root.customerTypeList, value : customerType,disable:isRiskEntrySheetLocked()"></select>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!--Adding second horizontal Row under policy information Panel-->
+                <div class="row form-horizontal">
+                    <div class="col-md-12">
+                        <div class="form-group form-group-sm">
+                            <label for="Coverholder" class="col-md-2 control-label ">Insured</label>
+                            <div class="col-md-4">
+                                <label class="control-label font-bold" id="Insured" data-bind="text:insured().partyName"></label>
+                            </div>
+                            <label for="selConductRating" class="col-md-2 control-label ">Conduct Rating</label>
+                            <div class="col-md-4">
+                                <select id="selConductRating" name="selConductRating" class="form-control font-bold "
+                                        data-bind="options:$root.conductRatingList, value: conductRating,disable:isRiskEntrySheetLocked()"></select>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!--Adding third horizontal Row under policy information Panel-->
+                <div class="row form-horizontal">
+                    <div class="col-md-12">
+                        <div class="form-group form-group-sm">
+                            <label for="CoverHolder" class="col-md-2 control-label ">CoverHolder</label>
+                            <div class="col-md-4">
+                                <label class="control-label font-bold" id="CoverHolder" data-bind="text:coverholder().partyName"></label>
+                            </div>
+                            <label class="col-md-2 control-label" for="EPlacing">E- Placing</label>
+                            <div class="col-md-4">
+                                <select id="selEPlacing" name="selEPlacing" class="form-control font-bold "
+                                        data-bind="options:$root.ePlacingList, value :ePlacing,disable:isRiskEntrySheetLocked()"></select>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!--Adding fourth horizontal row under policy information-->
+                <div class="row form-horizontal">
+                    <div class="col-md-12">
+                        <div class="form-group form-group-sm">
+                            <label for="Reinsured" class="col-md-2 control-label ">Reinsured</label>
+                            <div class="col-md-4">
+                                <label class="control-label font-bold" id="Reinsured" data-bind="text:reinsured().partyName"></label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="panel-body">
+            <div class="row form-horizontal">
+                <div style="float:right;">
+                    <div class="form-horizontal form-group form-group-sm">
+                        <label class="col-md-8 control-label" for="CompletedCheckbox">Completed</label>
+                        <div class="col-md-2">
+                            <input type="checkbox" class="form-check-input  brit-accordion-checkbox-rowspan-3" id="CompletedCheckbox" name="CompletedCheckbox"
+                                   data-bind="checked:$root.entrySheetcompleted" />
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+
+        <!---Second Section Policy Section Info-->
+        <partial name="_Sections.cshtml" />
+        <!--Third Section-->
+        <partial name="_PremiumAndRatingDetails.cshtml" />
+        <!--Fourth Section-->
+        <partial name="_Lines.cshtml" />
+        <!--Fiveth Section-->
+        <partial name="_AdditionalDetails.cshtml" />
+    </div>
+    <!--Sixth Section-->
+    <partial name="_SystemStatuses.cshtml" />
+
+    <!--  ko stopBinding: true -->
+    <div id="BrokerContactModalRiskEntry" class="modal fade" tabindex="-1" role="dialog" data-backdrop="false" data-keyboard="false">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <div id="BrokerContactTitleRS" class="modal-title">Confirm</div>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close" style="margin-top: -21px;"
+                            data-bind="event:{ click:entrySheetvm.sectionViewModel.cancelBrokerContactEntry.bind($data,entrySheetvm.sectionViewModel.brokerContactModalData().rowId)}">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div id="BrokerContactBodyRS" class="modal-body">
+                    This <span data-bind="text:entrySheetvm.sectionViewModel.brokerContactModalData().brokerContact"></span>
+                    Broker Contact does not exist in the database and will be added. Do you wish to continue?
+                </div>
+                <div id="BrokerContactFooterRS" class="modal-footer">
+                    <div style="float: left;width: 100%;">
+                        <button type="button" id="saveBrokerContactNameRS" class="btn btn-primary"
+                                data-bind="event:{ click:entrySheetvm.sectionViewModel.saveBrokerContactName.bind($data,entrySheetvm.sectionViewModel.brokerContactModalData().rowId)}" data-dismiss="modal">
+                            Yes
+                        </button>
+                        <button type="button" class="btn" data-dismiss="modal" data-bind="event:{ click:entrySheetvm.sectionViewModel.cancelBrokerContactEntry.bind($data,entrySheetvm.sectionViewModel.brokerContactModalData().rowId)}">No</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- /ko -->
+</form>

@@ -1,0 +1,134 @@
+{
+  "id": null,
+  "britPolicyId": 1098461,
+  "EPlacing": null,
+  "Completed": false,
+  "LastUpdatedOn": "0001-01-01T00:00:00",
+  "LastUpdatedBy": null,
+  "UserName": null,
+  "ContractSection": [
+    {
+      "PolicySectionId": "936173",
+      "BritPolicyId": 1098461,
+      "PolicyRef": "10044A20A000",
+      "UWInitials": "JNOR",
+      "BrokerName": "Identity Fraud.Inc (CA)",
+      "BrokerCode": "2045",
+      "LloydsBrokerId": "17743",
+      "BrokerPseud": "IFI",
+      "ContactName": null,
+      "BrokerContactId": null,
+      "ClassType": "P",
+      "MinorClass": "CY",
+      "MajorClass": "C",
+      "SubClass": "99630",
+      "LimitCcy": "USD",
+      "Limit": 1000000.00,
+      "LimitBasis": "AGG CI",
+      "BiSubLimitBasis": null,
+      "BiSubLimitCcy": null,
+      "BiSubLimit": 0.0,
+      "ContractCoverageId": "736118069",
+      "Excess": 0.00,
+      "Deductible": 1000.00,
+      "InnerAGG": 0.0,
+      "ADRLevel": null,
+      "CyberExposure": null,
+      "YOA": 2020,
+      "Syndicate": "BGU8",
+      "ProducingTeam": "1",
+      "IsMainSection": false,
+      "IndustryCode": null,
+      "CustomerType": null,
+      "ProgramRef": "10044A20",
+      "Insured": {
+        "PartyName": "BEAUMONT MEDICAL CENTER HOTEL, LLC"
+      },
+      "Reinsured": {
+        "PartyName": null
+      },
+      "Coverholder": {
+        "PartyName": null
+      },
+      "ConductRating": null,
+      "ContractPeriodStartDate": "2020-04-24T00:00:00",
+      "GroupClass": "BGSU CYBER",
+      "IsRiskEntrySheetLocked": true,
+      "TerritoryIdAssured": "16116",
+      "TerritoryId": "570",
+      "OverridingCommission": 0.0,
+      "OtherDeductions": 0.0,
+      "ProfitCommission": 0.0,
+      "CoverOperatingBasis": "CMD"
+    }
+  ],
+  "PremiumRatings": [
+    {
+      "PolicyPremiumRatingId": "995829537",
+      "PolicyRef": "10044A20A000",
+      "PremiumCcy": "USD",
+      "ReportingCcy": "USD",
+      "WrittenPremium": 1000.00,
+      "TechPrice": 1000.00,
+      "ModelPrice": 1000.00,
+      "PLR": 75.00,
+      "ChangeInLDA": 0.0,
+      "ChangeInCoverage": 0.0,
+      "ChangeInOther": 100.00,
+      "RiskAdjustedRateChange": 0.0,
+      "BaseAmount": 0.0,
+      "Brokerage": 25.00000,
+      "BrokerageCcy": null,
+      "BrokerageRateType": "Percentage",
+      "IsRiskEntrySheetLocked": true,
+      "PremiumType": "FLAT",
+      "InitialToT": 60,
+      "PaymentDate": "2020-06-23T00:00:00",
+      "NumberOfInstallment": 1
+    }
+  ],
+  "PolicyLines": [],
+  "AdditionalDetails": [
+    {
+      "PolicyAdditionalDetailId": "936173",
+      "PolicyRef": "10044A20A000",
+      "Period": "366day",
+      "InceptionDate": "2020-04-24T00:00:00",
+      "ExpiryDate": "2021-04-25T00:00:00",
+      "ContractCertain": true,
+      "ContractCertainCode": null,
+      "ContractCertainDate": "2020-04-29T00:00:00",
+      "RiskRating": null,
+      "AggRiskData": "Yes - Aggregates and modelling",
+      "InsuranceLevel": null,
+      "GroupClass": "BGSU CYBER",
+      "PlacingType": "E",
+      "InstalmentPeriod": "365D",
+      "TimeDurationValue": 366,
+      "TimeDurationPeriodType": "D",
+      "IsRiskEntrySheetLocked": true
+    }
+  ],
+  "RelatedPoliciesDetails": [
+    {
+      "BritPolicyId": 1098461,
+      "CustomerType": null,
+      "ProgramRef": "10044A20",
+      "Insured": {
+        "PartyName": "BEAUMONT MEDICAL CENTER HOTEL, LLC"
+      },
+      "Reinsured": {
+        "PartyName": null
+      },
+      "Coverholder": {
+        "PartyName": null
+      },
+      "ConductRating": null,
+      "UniqueMarketRef": "B2045CYP142720",
+      "CompanyLeader": null,
+      "LloydsLeader": "BRT 2987",
+      "PlacingType": "F",
+      "InstalmentPeriod": "365D"
+    }
+  ]
+}

@@ -1,0 +1,12 @@
+{
+  "ServerUri": "https://sonarq-webapp-dev.azurewebsites.net/",
+  "Organization": null,
+  "ProjectKey": "eclipse-entry-sheet-api",
+  "ProjectName": "eclipse-entry-sheet-api",
+  "Profiles": {
+    "CSharp": {
+      "ProfileKey": "AWnYyxD9wCGcy39o1gXS",
+      "ProfileTimestamp": "2021-04-12T09:32:47Z"
+    }
+  }
+}

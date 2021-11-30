@@ -1,0 +1,70 @@
+name: BEAS APIM Platform $(Date:yyyyMMdd)$(rev:.r)
+
+resources:
+  repositories:
+    - repository: templates
+      type: git
+      name: pipeline-templates
+      ref: develop
+    - repository: tf_modules
+      type: git
+      name: terraform-modules
+
+trigger:
+  batch: true
+  branches:
+    include:
+    - develop
+    - master
+  paths:
+    include:
+    - src/*
+
+schedules:
+  - cron: 0 2 * * 0
+    displayName: Config Drift Check
+    branches:
+      include:
+        - develop
+        - master
+    always: true
+
+variables:
+  backend_config_file_name_nonprod: 'partial_config_nonprod.tf'
+  backend_config_file_name_prod: 'partial_config_prod.tf'
+  terraform_version: "0.15.2"
+
+parameters:
+- name: deployDev
+  displayName: Deploy Dev
+  type: boolean
+  default: false
+- name: deployTst
+  displayName: Deploy Test
+  type: boolean
+  default: false
+- name: deployUAT
+  displayName: Deploy UAT
+  type: boolean
+  default: false
+- name: deployStg
+  displayName: Deploy Staging
+  type: boolean
+  default: false
+- name: deployPrd
+  displayName: Deploy Prod
+  type: boolean
+  default: false
+
+stages:
+  - template: terraform/pipeline.yml@templates
+    parameters:
+      working_dir: "uwac-beas-apim-platform-infrastructure/src"
+      moduleRepos:
+        - tf_modules
+      validate_file_name: validate.tests.ps1
+      deployDev: ${{parameters.deployDev}}
+      deployTst: ${{parameters.deployTst}}
+      deployUAT: ${{parameters.deployUAT}}
+      deployStg: ${{parameters.deployStg}}
+      deployPrd: ${{parameters.deployPrd}}

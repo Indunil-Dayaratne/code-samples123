@@ -1,0 +1,318 @@
+﻿<!---Second Section Policy Section Info-->
+<!--  ko stopBinding: true -->
+<div id="divSections">
+    <div id="divpolicyContractSection">
+        <div class="panel panel-default">
+            <div class="panel-heading msportalfx-text-small panel-Header">
+                <div class="row">
+                    <div class="col-md-4" id="sectionHeaderDiv">
+                        <div class="pull-left" style="width:100%">
+                            Sections
+                        </div>
+                        <div class="clearfix"></div>
+                    </div>
+                </div>
+            </div>
+            <div class="panel-body" style=" padding-top: 0px; padding-bottom: 0px;">
+                <div class="table-responsive table-scroll">
+                    <table class="table table-bordered table-hover table-striped" id="policySectionTable">
+                        <thead style="border-bottom-width:0px">
+                            <tr class="active">
+                                <th>Policy Ref</th>
+                                <th>UW</th>
+                                <th>Broker</th>
+                                <th>Broker Contact</th>
+                                <th>Major Class</th>
+                                <th>Minor Class</th>
+                                <th>Sub Class &amp; Description</th>
+                                <th>Industry Codes</th>
+                                <th>Limit Ccy</th>
+                                <th>Limit</th>
+                                <th>Limit Basis</th>
+                                <th>BI Sub  Limit</th>
+                                <th>Excess</th>
+                                <th>Deductible</th>
+                                <th>Inner Agg</th>
+                                <th>ADR Level</th>
+                                <th>Cyber Exposure</th>
+                            </tr>
+                        </thead>
+                        <tbody data-bind="foreach: policySections">
+                            <tr>
+                                <td data-bind="text:policyRef">
+                                    @*<input id="txtPolicyRef" class="form-control font-bold readonly-input" readonly="readonly" data-bind="value:policyRef" />*@
+                                </td>
+                                <td>
+                                    <div data-bind="if: ($index() == 0 &&  ($parent.policySections().length > 1))">
+                                        <div class="input-group input-group-sm">
+                                            <select class="form-control font-bold input-sm field-recommended required from-copy-field"
+                                                    data-bind="attr: { id: 'selUnderwriters' + $index(), name: 'selUnderwriters' + $index()  },
+                                        options:underwriters,  optionsText:'UWInitials',optionsValue:'UWInitials', value: uwInitials,
+                                            disable:isRiskEntrySheetLocked()
+                                        , event:{ change: $parent.underWriterChanged.bind($data,$index())}"></select>
+                                            <span class="input-group-btn copy-span">
+                                                <button type="button" id="copyUW" class="btn copy-btn" title="Copy UW" 
+                                                        data-bind="click:$parent.copyFieldValue.bind($data,$index(),'selUnderwriters'),disable:isRiskEntrySheetLocked()">
+                                                    <span class="glyphicon glyphicon-copy-option  glyphicon-circle-arrow-down"></span>
+                                                </button>
+                                            </span>
+                                        </div>
+                                    </div>
+                                    <div data-bind="if: ($parent.policySections().length ==  1 || $index() != 0)">
+                                        <select class="form-control font-bold input-sm field-recommended required"
+                                                data-bind="attr: { id: 'selUnderwriters' + $index(), name: 'selUnderwriters' + $index()  },
+                                        options:underwriters,  optionsText:'UWInitials',optionsValue:'UWInitials', value: uwInitials,
+                                            disable:isRiskEntrySheetLocked()
+                                        , event:{ change: $parent.underWriterChanged.bind($data,$index())}"></select>
+                                    </div>
+
+                                </td>
+                                <td>
+                                    <div data-bind="if: ($index() == 0 &&  ($parent.policySections().length > 1))">
+                                        <div class="input-group input-group-sm">
+                                            <input class="form-control input-sm font-bold ui-autocomplete-input field-recommended required width-as-per-content from-copy-field"
+                                                   data-bind="attr: { id: 'searchBroker_autocomplete' + $index(), name: 'searchBroker_autocomplete' + $index()  },
+                                                       value:broker,disable:isRiskEntrySheetLocked()">
+                                            <span class="input-group-btn copy-span">
+                                                <button type="button" id="copyBroker" class="btn copy-btn" title="Copy Broker" data-bind="click:$parent.copyFieldValue.bind($data,$index(),'searchBroker_autocomplete')">
+                                                    <span class="glyphicon glyphicon-copy-option  glyphicon-circle-arrow-down"></span>
+                                                </button>
+                                            </span>
+                                        </div>
+                                    </div>
+                                    <div data-bind="if: ($parent.policySections().length ==  1 || $index() != 0)">
+                                        <input class="form-control input-sm font-bold ui-autocomplete-input field-recommended required"
+                                               data-bind="attr: { id: 'searchBroker_autocomplete' + $index(), name: 'searchBroker_autocomplete' + $index()  },
+                                               css: { 'width-as-per-content' : $parent.policySections().length == 1 },
+                                                       value:broker,disable:isRiskEntrySheetLocked()">
+                                    </div>
+                                </td>
+                                <td>
+                                        <input class="form-control input-sm font-bold ui-autocomplete-input width-as-per-content" type="text"
+                                               data-bind="attr: { id: 'searchBrokerContact_autocomplete' + $index(), name: 'searchBrokerContact_autocomplete' + $index()  },
+                                               value:brokerContact,disable:isRiskEntrySheetLocked()">
+                                </td>
+                                <td>
+                                    <div data-bind="if: ($index() == 0 &&  ($parent.policySections().length > 1))">
+                                        <div class="input-group input-group-sm">
+                                            <select class="form-control input-sm font-bold field-recommended required from-copy-field section-from-copy-field"
+                                                    data-bind="attr: { id: 'selMajorClass' + $index(), name: 'selMajorClass' + $index()  },options:majorClasses,optionsText:'MajorClassLabel',
+                                                    optionsValue:'MajorClassValue',disable:isRiskEntrySheetLocked(),
+                                                    value : majorClass, event:{ change: $parent.majorClassChanged.bind($data,$index())}"></select>
+
+                                            <span class="input-group-btn copy-span">
+                                                <button type="button" id="copyMajorClass" class="btn copy-btn" title="Copy Major Class" data-bind="click:$parent.copyFieldValue.bind($data,$index(),'selMajorClass')">
+                                                    <span class="glyphicon glyphicon-copy-option  glyphicon-circle-arrow-down"></span>
+                                                </button>
+                                            </span>
+                                        </div>
+                                    </div>
+
+                                    <div data-bind="if: ($parent.policySections().length ==  1 || $index() != 0)">
+                                        <select class="form-control input-sm font-bold field-recommended required "
+                                                data-bind="attr: { id: 'selMajorClass' + $index(), name: 'selMajorClass' + $index()  },options:majorClasses,optionsText:'MajorClassLabel',
+                                                    optionsValue:'MajorClassValue',disable:isRiskEntrySheetLocked(),
+                                                    value : majorClass, event:{ change: $parent.majorClassChanged.bind($data,$index())}"></select>
+                                    </div>
+                                </td>
+                                <td>
+                                    <div data-bind="if: ($index() == 0 &&  ($parent.policySections().length > 1))">
+                                        <div class="input-group input-group-sm">
+                                            <select class="form-control input-sm font-bold field-recommended required from-copy-field section-from-copy-field"
+                                                    data-bind="attr: { id: 'selMinorClass' + $index(), name: 'selMinorClass' + $index()  },
+                                        options:minorClasses,optionsText:'MinorClassLabel',disable:isRiskEntrySheetLocked(),
+                                                    optionsValue:'MinorClassValue', value : minorClass,
+                                        event:{ change: $parent.minorClassChanged.bind($data,$index())}"></select>
+
+                                            <span class="input-group-btn copy-span">
+                                                <button type="button" id="copyMinorClass" class="btn copy-btn" title="Copy Minor Class" data-bind="click:$parent.copyFieldValue.bind($data,$index(),'selMinorClass')">
+                                                    <span class="glyphicon glyphicon-copy-option  glyphicon-circle-arrow-down"></span>
+                                                </button>
+                                            </span>
+                                        </div>
+                                    </div>
+
+                                    <div data-bind="if: ($parent.policySections().length ==  1 || $index() != 0)">
+                                        <select class="form-control input-sm font-bold field-recommended required"
+                                                data-bind="attr: { id: 'selMinorClass' + $index(), name: 'selMinorClass' + $index() },
+                                                 options:minorClasses,optionsText:'MinorClassLabel',disable:isRiskEntrySheetLocked(),
+                                                    optionsValue:'MinorClassValue', value : minorClass,
+                                        event:{ change: $parent.minorClassChanged.bind($data,$index())}"></select>
+                                    </div>
+                                </td>
+                                <td>
+                                    <div data-bind="if: ($index() == 0 &&  ($parent.policySections().length > 1))">
+                                        <div class="input-group input-group-sm">
+                                            <select class="form-control input-sm font-bold field-recommended required from-copy-field section-from-copy-field"
+                                                    data-bind="attr: { id: 'selSubClass' + $index(), name: 'selSubClass' + $index()  },
+                                        options:subClasses,optionsText:'ClassLabel',
+                                                    optionsValue:'ClassValue',
+                                            disable:isRiskEntrySheetLocked(),
+                                                    value : subClass"></select>
+                                            <span class="input-group-btn copy-span">
+                                                <button type="button" id="copySubClass" class="btn copy-btn" title="Copy Sub Class & Description" data-bind="click:$parent.copyFieldValue.bind($data,$index(),'selSubClass')">
+                                                    <span class="glyphicon glyphicon-copy-option  glyphicon-circle-arrow-down"></span>
+                                                </button>
+                                            </span>
+                                        </div>
+                                    </div>
+
+                                    <div data-bind="if: ($parent.policySections().length ==  1 || $index() != 0)">
+                                        <select class="form-control input-sm font-bold field-recommended required"
+                                                data-bind="attr: { id: 'selSubClass' + $index(), name: 'selSubClass' + $index()  },
+                                        options:subClasses,optionsText:'ClassLabel',
+                                                    optionsValue:'ClassValue',
+                                            disable:isRiskEntrySheetLocked(),
+                                                    value : subClass"></select>
+                                    </div>
+                                </td>
+                                <td>
+                                    <div data-bind="if: ($index() == 0 &&  ($parent.policySections().length > 1))">
+                                        <div class="input-group input-group-sm">
+                                            <select class="form-control input-sm  font-bold width-as-per-content from-copy-field"
+                                                    data-bind="attr: { id: 'selIndustryCodes' + $index(), name: 'selIndustryCodes' + $index()  },
+                                        options:$parent.industryCodes,
+                                                optionsText:'DisplayName',
+                                                optionsValue: 'Code',
+                                        disable:isRiskEntrySheetLocked(),
+                                                value : industryCode"></select>
+
+
+                                            <span class="input-group-btn">
+                                                <button type="button" id="copyIndustryCodes" class="btn copy-btn" title="Copy Industry Codes" data-bind="click:$parent.copyFieldValue.bind($data,$index(),'selIndustryCodes')">
+                                                    <span class="glyphicon glyphicon-copy-option  glyphicon-circle-arrow-down"></span>
+                                                </button>
+                                            </span>
+                                        </div>
+                                    </div>
+
+                                    <div data-bind="if: ($parent.policySections().length ==  1 || $index() != 0)">
+                                        <select class="form-control input-sm  font-bold "
+                                                data-bind="attr: { id: 'selIndustryCodes' + $index(), name: 'selIndustryCodes' + $index()  },
+                                        options:$parent.industryCodes,
+                                                optionsText:'DisplayName',
+                                                optionsValue: 'Code',
+                                        disable:isRiskEntrySheetLocked(),
+                                                value : industryCode"></select>
+                                    </div>
+                                </td>
+                                <td class="font-bold " data-bind="text:limitCcy">
+                                    @*<input class="form-control font-bold readonly-input" readonly="readonly" />*@
+                                </td>
+                                <td>
+                                    <input class="form-control input-sm font-bold field-recommended required numeric "
+                                           style="text-align: right !important ; width:100% !important" type="text"
+                                           data-bind="attr: { id: 'txtLimit' + $index(), name: 'txtLimit' + $index()  },valueFormatted: limit, positions: 2,disable:isRiskEntrySheetLocked()" />
+                                </td>
+                                <td>
+                                    <div data-bind="if: ($index() == 0 &&  ($parent.policySections().length > 1))">
+                                        <div class="input-group input-group-sm">
+                                            <select class="form-control input-sm font-bold field-recommended required width-as-per-content from-copy-field"
+                                                    data-bind="attr: { id: 'selLimitBasis' + $index(), name: 'selLimitBasis' + $index()  },
+                                        options:$parent.limitBasisList, value : limitBasis,disable:isRiskEntrySheetLocked()"></select>
+                                            <span class="input-group-btn copy-span">
+                                                <button type="button" id="copyLimitBasis" class="btn copy-btn" title="Copy Limit Basis" data-bind="click:$parent.copyFieldValue.bind($data,$index(),'selLimitBasis')">
+                                                    <span class="glyphicon glyphicon-copy-option  glyphicon-circle-arrow-down"></span>
+                                                </button>
+                                            </span>
+                                        </div>
+                                    </div>
+
+                                    <div data-bind="if: ($parent.policySections().length ==  1 || $index() != 0)">
+                                        <select class="form-control input-sm font-bold field-recommended required "
+                                                data-bind="attr: { id: 'selLimitBasis' + $index(), name: 'selLimitBasis' + $index()  },
+                                        options:$parent.limitBasisList, value : limitBasis,disable:isRiskEntrySheetLocked()"></select>
+                                    </div>
+                                </td>
+                                <td>
+                                    <div data-bind="if: ($index() == 0 &&  ($parent.policySections().length > 1))">
+                                        <div class="input-group input-group-sm">
+                                            <select class="form-control input-sm font-bold width-as-per-content from-copy-field"
+                                                    data-bind="attr: { id: 'selSubLimit' + $index(), name: 'selSubLimit' + $index()  },
+                                        options:$parent.subLimitsList, value : subLimit,enable: enableBISubLimit"></select>
+                                            <span class="input-group-btn copy-span">
+                                                <button type="button" id="copyBiSubLimit" class="btn copy-btn" title="Copy BI Sub Limit" 
+                                                        data-bind="click:$parent.copyFieldValue.bind($data,$index(),'selSubLimit'),enable: enableBISubLimit">
+                                                    <span class="glyphicon glyphicon-copy-option  glyphicon-circle-arrow-down"></span>
+                                                </button>
+                                            </span>
+                                        </div>
+                                    </div>
+
+                                    <div data-bind="if: ($parent.policySections().length ==  1 || $index() != 0)">
+                                        <select class="form-control input-sm font-bold"
+                                                data-bind="attr: { id: 'selSubLimit' + $index(), name: 'selSubLimit' + $index()  },
+                                        options:$parent.subLimitsList, value : subLimit,enable: enableBISubLimit"></select>
+                                    </div>
+                                </td>
+
+                                <td>
+                                    <input class="form-control input-sm font-bold numeric" style="text-align:right !important; width:100% !important" type="text"
+                                           data-bind="attr: { id: 'txtExcess' + $index(), name: 'txtExcess' + $index()  },valueFormatted :excess,disable:isRiskEntrySheetLocked()" />
+                                </td>
+                                <td>
+                                    <input class="form-control input-sm input-sm font-bold numeric" style="text-align:right !important;width:100% !important" type="text"
+                                           data-bind="attr: { id: 'txtDeductibe' + $index(), name: 'txtDeductibe' + $index()  },valueFormatted :deductible,disable:isRiskEntrySheetLocked()" />
+                                </td>
+                                <td>
+                                    <input class="form-control input-sm font-bold numeric " style="text-align:right !important;width:100% !important" type="text"
+                                           data-bind="attr: { id: 'txtAGG' + $index(), name: 'txtAGG' + $index()  },valueFormatted :innerAGG,disable:isRiskEntrySheetLocked()" />
+                                </td>
+                                <td>
+                                    <div data-bind="if: ($index() == 0 &&  ($parent.policySections().length > 1))">
+                                        <div class="input-group input-group-sm">
+                                            <select class="form-control input-sm font-bold  width-as-per-content from-copy-field"
+                                                    data-bind="attr: { id: 'selAdrLevel' + $index(), name: 'selAdrLevel' + $index()  },options:$parent.adrLevelList,
+                                                optionsText:'Name', optionsValue:'PerilGroupId', value : adrLevel,disable:isRiskEntrySheetLocked()"></select>
+
+                                            <span class="input-group-btn">
+                                                <button type="button" id="copyAdrLevel" class="btn copy-btn" title="Copy ADR Level" data-bind="click:$parent.copyFieldValue.bind($data,$index(),'selAdrLevel')">
+                                                    <span class="glyphicon glyphicon-copy-option  glyphicon-circle-arrow-down"></span>
+                                                </button>
+                                            </span>
+                                        </div>
+                                    </div>
+
+                                    <div data-bind="if: ($parent.policySections().length ==  1 || $index() != 0)">
+                                        <select class="form-control input-sm font-bold"
+                                                data-bind="attr: { id: 'selAdrLevel' + $index(), name: 'selAdrLevel' + $index()  },options:$parent.adrLevelList,
+                                                css: { 'width-as-per-content' : $parent.policySections().length == 1 },
+                                                optionsText:'Name', optionsValue:'PerilGroupId', value : adrLevel,disable:isRiskEntrySheetLocked()"></select>
+                                    </div>
+                                </td>
+                                <td>
+                                    <div data-bind="if: ($index() == 0 &&  ($parent.policySections().length > 1))">
+                                        <div class="input-group input-group-sm">
+                                            <select class="form-control input-sm font-bold width-as-per-content from-copy-field"
+                                                    data-bind="attr: { id: 'selCyberExposure' + $index(), name: 'selCyberExposure' + $index()  },options:$parent.cyberExposureList,
+                                            optionsText:'Name', optionsValue:'PerilGroupId',
+                                            disable:isRiskEntrySheetLocked(),
+                                            value : cyberExposure"></select>
+
+                                            <span class="input-group-btn">
+                                                <button type="button" id="copyCyberExposure" class="btn copy-btn" title="Copy Cyber Exposure" data-bind="click:$parent.copyFieldValue.bind($data,$index(),'selCyberExposure')">
+                                                    <span class="glyphicon glyphicon-copy-option  glyphicon-circle-arrow-down"></span>
+                                                </button>
+                                            </span>
+                                        </div>
+                                    </div>
+
+                                    <div data-bind="if: ($parent.policySections().length ==  1 || $index() != 0)">
+                                        <select class="form-control input-sm font-bold"
+                                                data-bind="attr: { id: 'selCyberExposure' + $index(), name: 'selCyberExposure' + $index()  },options:$parent.cyberExposureList,
+                                            optionsText:'Name', optionsValue:'PerilGroupId',
+                                            disable:isRiskEntrySheetLocked(),
+                                            value : cyberExposure"></select>
+                                    </div>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+</div>
+<!-- /ko -->

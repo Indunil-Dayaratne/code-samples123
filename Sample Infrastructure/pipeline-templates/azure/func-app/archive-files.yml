@@ -1,0 +1,25 @@
+parameters:
+- name: sourceFolder
+  type: string
+  default: "src/"
+- name: projects
+  type: object
+  default: {}
+
+steps:
+- ${{ each project in parameters.projects }}:
+  - task: CopyFiles@2
+    displayName: 'Copy ${{project.name}} files'
+    inputs:
+      sourceFolder: "$(System.DefaultWorkingDirectory)/${{parameters.sourceFolder}}${{project.name}}/publish"
+      contents: '**'
+      cleanTargetFolder: true
+      targetFolder: $(System.DefaultWorkingDirectory)/${{project.name}}/Output
+  - task: ArchiveFiles@2
+    displayName: 'Archive ${{project.name}} files'
+    inputs:
+      rootFolderOrFile: $(System.DefaultWorkingDirectory)/${{project.name}}/Output
+      includeRootFolder: false
+      archiveType: zip
+      archiveFile: $(Build.ArtifactStagingDirectory)/${{project.name}}.zip
+      replaceExistingArchive: true

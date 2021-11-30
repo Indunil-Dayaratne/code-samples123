@@ -1,0 +1,661 @@
+﻿<!--  ko stopBinding: true -->
+<div id="divPolicySystemsStatus">
+    <div id="systemStatusDiv" class="panel panel-default" style="margin-bottom: 10px; width:730px !important">
+        <div class="panel panel-default">
+            <div class="panel-heading msportalfx-text-small panel-Header">
+                <div class="row">
+                    <div class="col-md-4" id="SystemStatusHeaderDiv">
+                        <div class="pull-left" style="width:100%">
+                            System Status
+                        </div>
+                        <div class="clearfix"></div>
+                    </div>
+                </div>
+            </div>
+            <div class="panel-body" style="width:730px !important; padding-top: 0px; padding-bottom: 0px;">
+                <div class="table-responsive table-scroll">
+                    <table class="table table-bordered table-hover table-striped" id="policySystemStatusGrid">
+                        <thead style="border-bottom-width:0px">
+                            <tr class="active">
+                                <th>
+                                    <label class="control-label">BUAA</label>
+                                </th>
+                                <th>
+                                    <label class="control-label"> DWF</label>
+                                </th>
+                                <th>
+                                    <label class="control-label"> TPU</label>
+                                </th>
+                                <th>
+                                    <label class="control-label">Query</label>
+                                </th>
+                                <th>
+                                    <label class="control-label">Referral</label>
+                                </th>
+                                <th>
+                                    <label class="control-label">CMT</label>
+                                </th>
+                                <th>
+                                    <label class="control-label"> Pricing</label>
+                                </th>
+                                <th>
+                                    <label class="control-label">Ignis</label>
+                                </th>
+                                <th>
+                                    <label class="control-label">CDP</label>
+                                </th>
+                                <th>
+                                    <label class="control-label">Peer Review</label>
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>
+                                    <div data-bind="if:selectedPolicy().SystemStatus.BUAA_Request != undefined && selectedPolicy().SystemStatus.BUAA_Request.items != undefined && selectedPolicy().SystemStatus.BUAA_Request.items.length > 0">
+                                        <a href="" title="View BUAA Details" data-bind="click:showItemsDialog.bind($data,'BUAA')">
+                                            <span class="badge"
+                                                  data-bind="attr: { class: 'badge badge-' + selectedPolicy().SystemStatus.BUAA_Request.colour },
+                                                      text: selectedPolicy().SystemStatus.BUAA_Request != undefined && selectedPolicy().SystemStatus.BUAA_Request.items != undefined ?  selectedPolicy().SystemStatus.BUAA_Request.items.length : 0"></span>
+                                        </a>
+                                    </div>
+                                    <div data-bind="if:selectedPolicy().SystemStatus.BUAA_Request != undefined && selectedPolicy().SystemStatus.BUAA_Request.items != undefined && selectedPolicy().SystemStatus.BUAA_Request.items.length == 0">
+                                        <button class="btn btn-xs always-on" title="Create New BUAA" data-bind="click:openBUAABlade">
+                                            <span class="glyphicon glyphicon-plus"></span>
+                                        </button>
+                                    </div>
+                                </td>
+                                <td>
+                                    <div data-bind="if:selectedPolicy().SystemStatus.DWF_Batch != undefined && selectedPolicy().SystemStatus.DWF_Batch.items != undefined && selectedPolicy().SystemStatus.DWF_Batch.items.length > 0">
+                                        <a href="" title="View Batch Details" data-bind="click:showItemsDialog.bind($data,'DWF')">
+                                            <span class="badge" data-bind="attr: { class: 'badge badge-' + selectedPolicy().SystemStatus.DWF_Batch.colour },
+                                                  text: selectedPolicy().SystemStatus.DWF_Batch != undefined && selectedPolicy().SystemStatus.DWF_Batch.items != undefined ? selectedPolicy().SystemStatus.DWF_Batch.items.length : 0"></span>
+                                        </a>
+                                    </div>
+                                </td>
+                                <td>
+                                    <div data-bind="if:selectedPolicy().SystemStatus.Britflow_TPU != undefined && selectedPolicy().SystemStatus.Britflow_TPU.items != undefined && selectedPolicy().SystemStatus.Britflow_TPU.items.length > 0">
+                                        <a href="" title="View TPU Details" data-bind="click:showItemsDialog.bind($data,'TPU')">
+                                            <span class="badge" data-bind="attr: { class: 'badge badge-' + selectedPolicy().SystemStatus.Britflow_TPU.colour },
+                                                      text: selectedPolicy().SystemStatus.Britflow_TPU != undefined && selectedPolicy().SystemStatus.Britflow_TPU.items != undefined ? selectedPolicy().SystemStatus.Britflow_TPU.items.length : 0"></span>
+                                        </a>
+                                    </div>
+                                    <div data-bind="if:selectedPolicy().SystemStatus.Britflow_TPU != undefined && selectedPolicy().SystemStatus.Britflow_TPU.items != undefined && selectedPolicy().SystemStatus.Britflow_TPU.items.length == 0">
+                                        <button class="btn btn-xs always-on" title="Create New TPU" data-bind="click:createNewSystemStatusItem.bind($data,'TPU')">
+                                            <span class="glyphicon glyphicon-plus"></span>
+                                        </button>
+                                    </div>
+                                </td>
+                                <td>
+                                    <div data-bind="if:selectedPolicy().SystemStatus.Britflow_Query != undefined && selectedPolicy().SystemStatus.Britflow_Query.items != undefined && selectedPolicy().SystemStatus.Britflow_Query.items.length > 0">
+                                        <a href="" title="View Query Details" data-bind="click:showItemsDialog.bind($data,'Query')">
+                                            <span class="badge" data-bind="attr: { class: 'badge badge-' + selectedPolicy().SystemStatus.Britflow_Query.colour },
+                                                      text: selectedPolicy().SystemStatus.Britflow_Query != undefined && selectedPolicy().SystemStatus.Britflow_Query.items != undefined ? selectedPolicy().SystemStatus.Britflow_Query.items.length : 0"></span>
+                                        </a>
+                                    </div>
+                                    <div data-bind="if:selectedPolicy().SystemStatus.Britflow_Query != undefined && selectedPolicy().SystemStatus.Britflow_Query.items != undefined && selectedPolicy().SystemStatus.Britflow_Query.items.length == 0">
+                                        <button class="btn btn-xs always-on" title="Create New Query" data-bind="click:createNewSystemStatusItem.bind($data,'Query')">
+                                            <span class="glyphicon glyphicon-plus"></span>
+                                        </button>
+                                    </div>
+                                </td>
+                                <td>
+                                    <div data-bind="if:selectedPolicy().SystemStatus.Britflow_Referral != undefined && selectedPolicy().SystemStatus.Britflow_Referral.items != undefined && selectedPolicy().SystemStatus.Britflow_Referral.items.length > 0">
+                                        <a href="" title="View Referral Details" data-bind="click:showItemsDialog.bind($data,'Referral')">
+                                            <span class="badge" data-bind="attr: { class: 'badge badge-' + selectedPolicy().SystemStatus.Britflow_Referral.colour },
+                                                      text: selectedPolicy().SystemStatus.Britflow_Referral != undefined && selectedPolicy().SystemStatus.Britflow_Referral.items != undefined ? selectedPolicy().SystemStatus.Britflow_Referral.items.length : 0"></span>
+                                        </a>
+                                    </div>
+                                    <div data-bind="if:selectedPolicy().SystemStatus.Britflow_Referral != undefined && selectedPolicy().SystemStatus.Britflow_Referral.items != undefined && selectedPolicy().SystemStatus.Britflow_Referral.items.length == 0">
+                                        <button class="btn btn-xs always-on" title="Create New Referral" data-bind="click:createNewSystemStatusItem.bind($data,'Referral')">
+                                            <span class="glyphicon glyphicon-plus"></span>
+                                        </button>
+                                    </div>
+                                </td>
+                                <td>
+                                    <div data-bind="if:selectedPolicy().SystemStatus.Britflow_CMT != undefined && selectedPolicy().SystemStatus.Britflow_CMT.items != undefined && selectedPolicy().SystemStatus.Britflow_CMT.items.length > 0">
+                                        <a href="" title="View CMT Details" data-bind="click:showItemsDialog.bind($data,'CMT')">
+                                            <span class="badge" data-bind="attr: { class: 'badge badge-' + selectedPolicy().SystemStatus.Britflow_CMT.colour },
+                                                      text: selectedPolicy().SystemStatus.Britflow_CMT != undefined && selectedPolicy().SystemStatus.Britflow_CMT.items != undefined ? selectedPolicy().SystemStatus.Britflow_CMT.items.length : 0"></span>
+                                        </a>
+                                    </div>
+                                    <div data-bind="if:selectedPolicy().SystemStatus.Britflow_CMT != undefined && selectedPolicy().SystemStatus.Britflow_CMT.items != undefined && selectedPolicy().SystemStatus.Britflow_CMT.items.length == 0">
+                                        <button class="btn btn-xs always-on" title="Create New CMT" data-bind="click:createNewSystemStatusItem.bind($data,'CMT')">
+                                            <span class="glyphicon glyphicon-plus"></span>
+                                        </button>
+                                    </div>
+                                </td>
+                                <td>
+                                    <div data-bind="if:selectedPolicy().SystemStatus.Britflow_PRC != undefined && selectedPolicy().SystemStatus.Britflow_PRC.items != undefined && selectedPolicy().SystemStatus.Britflow_PRC.items.length > 0">
+                                        <a href="" title="View Pricing Details" data-bind="click:showItemsDialog.bind($data,'PRC')">
+                                            <span class="badge" data-bind="attr: { class: 'badge badge-' + selectedPolicy().SystemStatus.Britflow_PRC.colour },
+                                                      text: selectedPolicy().SystemStatus.Britflow_PRC != undefined && selectedPolicy().SystemStatus.Britflow_PRC.items != undefined ? selectedPolicy().SystemStatus.Britflow_PRC.items.length : 0"></span>
+                                        </a>
+                                    </div>
+                                    <div data-bind="if:selectedPolicy().SystemStatus.Britflow_PRC != undefined && selectedPolicy().SystemStatus.Britflow_PRC.items != undefined && selectedPolicy().SystemStatus.Britflow_PRC.items.length == 0">
+                                        <button class="btn btn-xs always-on" title="Create New Pricing" data-bind="click:createNewSystemStatusItem.bind($data,'PRC')">
+                                            <span class="glyphicon glyphicon-plus"></span>
+                                        </button>
+                                    </div>
+                                </td>
+                                <td>
+                                    <div data-bind="if: selectedPolicy().SystemStatus.Ignis_Enquiry != undefined && selectedPolicy().SystemStatus.Ignis_Enquiry.IgnisHtml != undefined">
+                                        <button class='btn btn-xs always-on' data-bind='click:getIgnisRedirectUrl,attr:{title:selectedPolicy().SystemStatus.Ignis_Enquiry.Title}'>
+                                            <div data-bind="html:selectedPolicy().SystemStatus.Ignis_Enquiry.IgnisHtml"></div>
+                                        </button>
+                                    </div>
+                                </td>
+                                <td>
+                                    <div data-bind="if:selectedPolicy().SystemStatus.CDP_CDP != undefined && selectedPolicy().SystemStatus.CDP_CDP.items != undefined && selectedPolicy().SystemStatus.CDP_CDP.items.length > 0">
+                                        <a href="" title="View CDP Details" data-bind="click:showItemsDialog.bind($data,'CDP')">
+                                            <span class="badge" data-bind="attr: { class: 'badge badge-' + selectedPolicy().SystemStatus.CDP_CDP.colour },
+                                                                     text: selectedPolicy().SystemStatus.CDP_CDP != undefined &&  selectedPolicy().SystemStatus.CDP_CDP.items != undefined  ? selectedPolicy().SystemStatus.CDP_CDP.items.length : 0"></span>
+                                        </a>
+                                    </div>
+                                    <div data-bind="if:selectedPolicy().SystemStatus.CDP_CDP != undefined && selectedPolicy().SystemStatus.CDP_CDP.items != undefined && selectedPolicy().SystemStatus.CDP_CDP.items.length == 0">
+                                        <button class="btn btn-xs always-on" title="Create New CDP" data-bind="click:createNewSystemStatusItem.bind($data,'CDP')">
+                                            <span class="glyphicon glyphicon-plus"></span>
+                                        </button>
+                                    </div>
+                                </td>
+                                <td>
+                                    <div>
+                                        <button class="btn btn-xs always-on" title="Peer Review" data-bind="click:openPeerReviewRisksBlade">
+                                            <span class="glyphicon glyphicon-plus"></span>
+                                        </button>
+                                    </div>
+                                </td>
+                            </tr>
+                        </tbody>
+                        <tbody>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal fade" id="EntrySheetBUAAModal" tabindex="-1" role="dialog" data-backdrop="false">
+        <div class="modal-dialog grid-modal" role="document" data-bind="if:modalData() != undefined">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <div class="modal-title">
+                        <span class="icon-wrapper"><span class="icon-span"><img src="~/Content/images/icons/NewExceptionRequest.png" /></span></span> Exceptions,
+                        <span data-bind="text:modalData().ReferenceLabel"></span> <span data-bind="text:modalData().PolicyReference"></span>
+                    </div>
+                </div>
+
+                <div class="modal-body" data-bind="if:modalData().BUAA != undefined">
+                    <table class="hoverTableRow">
+                        <thead>
+                            <tr>
+                                <th>Status</th>
+                                <th>Exception Type</th>
+                                <th>Last Modified</th>
+                                <th>Assigned To</th>
+                                <th>Reference No.</th>
+                            </tr>
+                        </thead>
+                        <tbody data-bind="foreach: modalData().BUAA">
+                            <tr data-bind="click: $parent.openBUAABlade">
+                                <td><span data-bind="text: Status"></span></td>
+                                <td data-bind="text: Type ==1?'Alert':'Request'"></td>
+                                <td data-bind="text:  $parent.ModifiedFormatted(LastModified)"></td>
+                                <td data-bind="text: AssignedTo.Title"></td>
+                                <td data-bind="text: Id"></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="EntrySheetDWFModal" tabindex="-1" role="dialog" data-backdrop="false">
+        <div class="modal-dialog grid-modal" role="document" data-bind="if:modalData() != undefined">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <div class="modal-title">
+                        <span class="icon-wrapper"><span class="icon-span"><img src="~/Content/images/icons/BritWorkflowDWFLite.png" /></span></span> DWF Lite,
+                        <span data-bind="text:modalData().ReferenceLabel"></span> <span data-bind="text:modalData().PolicyReference"></span>
+                    </div>
+                </div>
+
+                <div class="modal-body" data-bind="if:modalData().DWF != undefined">
+                    <ul class="nav nav-pills">
+                        <li role="presentation">
+                            <a href="" data-bind="click:openModal.bind($data,'DWF')">
+                                View All DWF Workflows
+                                <span data-bind="text:  modalData().DWF.length, attr: { class: 'badge badge-' +  modalData().Colour }"></span>
+                            </a>
+                        </li>
+                    </ul>
+                    <table class="hoverTableRow">
+                        <thead>
+                            <tr>
+                                <th>Status</th>
+                                <th>Task Type</th>
+                                <th>Last Modified</th>
+                                <th>Assigned To</th>
+                            </tr>
+                        </thead>
+                        <tbody data-bind="foreach: modalData().DWF">
+                            <tr data-bind="click: $parent.openDWFBlade">
+                                <td><span></span> <span data-bind="text: Status"></span></td>
+                                <td data-bind="text: TaskTypes.join(',')"></td>
+                                <td data-bind="text:  $parent.ModifiedFormatted(LastModifiedDateTime)"></td>
+                                <td data-bind="text: AssignedTo.Title"></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="EntrySheetTPUModal" tabindex="-1" role="dialog" data-backdrop="false">
+        <div class="modal-dialog grid-modal" role="document" data-bind="if:modalData() != undefined">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <div class="modal-title">
+                        <span class="icon-wrapper"><span class="icon-span"><img src="~/Content/images/icons/BritWorkflowUWSystemUpdate.png" /></span></span> TPU Workflow,
+                        <span data-bind="text:modalData().ReferenceLabel"></span> <span data-bind="text:modalData().PolicyReference"></span>
+                    </div>
+                </div>
+
+                <div class="modal-body" data-bind="if:modalData().TPU != undefined">
+                    <ul class="nav nav-pills">
+                        <li role="presentation" data-bind="if:selectedPolicy()!= undefined && selectedPolicy().BritPolicyId != undefined"><a href="" data-bind="click: openTPUBlade.bind($data,undefined,selectedPolicy().BritPolicyId)">New TPU Workflow</a></li>
+                        <li role="presentation">
+                            <a href="" data-bind="click:openModal.bind($data,'TPU')">
+                                View All TPU Workflows
+                                <span data-bind="text:  modalData().TPU.length, attr: { class: 'badge badge-' +  modalData().Colour }"></span>
+                            </a>
+                        </li>
+                    </ul>
+                    <table class="hoverTableRow">
+                        <thead>
+                            <tr>
+                                <th>Status</th>
+                                <th>Task Type</th>
+                                <th>Last Modified</th>
+                                <th>Resources</th>
+                            </tr>
+                        </thead>
+                        <tbody data-bind="foreach: modalData().TPU">
+                            <tr data-bind="click: $parent.openTPUBlade">
+                                <td><span></span> <span data-bind="text: TPUStatus"></span></td>
+                                <td data-bind="text: TaskType"></td>
+                                <td data-bind="text:  $parent.ModifiedFormatted(Modified)"></td>
+                                <td data-bind="text: $parent.FormatResources(Resources)"></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="EntrySheetQueryModal" tabindex="-1" role="dialog" data-backdrop="false">
+        <div class="modal-dialog grid-modal" role="document" data-bind="if:modalData() != undefined">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <div class="modal-title">
+                        <span class="icon-wrapper"><span class="icon-span"><img src="~/Content/images/icons/BritWorkflowQuery.png" /></span></span> Query Workflow,
+                        <span data-bind="text:modalData().ReferenceLabel"></span> <span data-bind="text:modalData().PolicyReference"></span>
+                    </div>
+                </div>
+
+                <div class="modal-body" data-bind="if:modalData().Query != undefined">
+                    <ul class="nav nav-pills">
+                        <li role="presentation" data-bind="if:selectedPolicy()!= undefined && selectedPolicy().BritPolicyId != undefined"><a href="" data-bind="click: openQueryBlade.bind($data,undefined,selectedPolicy().BritPolicyId)">New Query Workflow</a></li>
+                        <li role="presentation">
+                            <a href="" data-bind="click:openModal.bind($data,'Query')">
+                                View All Query Workflows
+                                <span data-bind="text:  modalData().Query.length, attr: { class: 'badge badge-' +  modalData().Colour }"></span>
+                            </a>
+                        </li>
+                    </ul>
+                    <table class="hoverTableRow">
+                        <thead>
+                            <tr>
+                                <th>Status</th>
+                                <th>Query Group</th>
+                                <th>Query Category</th>
+                                <th>Query Type</th>
+                                <th>Last Modified</th>
+                                <th>Resources</th>
+                            </tr>
+                        </thead>
+                        <tbody data-bind="foreach: modalData().Query">
+                            <tr data-bind="click: $parent.openQueryBlade">
+                                <td><span></span> <span data-bind="text: QueryStatus"></span></td>
+                                <td data-bind="text: QueryGroup"></td>
+                                <td data-bind="text: QueryCategory"></td>
+                                <td data-bind="text: QueryType"></td>
+                                <td data-bind="text: $parent.ModifiedFormatted(Modified)"></td>
+                                <td data-bind="text: $parent.FormatResources(Resources)"></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="EntrySheetReferralModal" tabindex="-1" role="dialog" data-backdrop="false">
+        <div class="modal-dialog grid-modal" role="document" data-bind="if:modalData() != undefined">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <div class="modal-title">
+                        <span class="icon-wrapper"><span class="icon-span"><img src="~/Content/images/icons/BritWorkflowReferral.png" /></span></span> Referral Workflow,
+                        <span data-bind="text:modalData().ReferenceLabel"></span> <span data-bind="text:modalData().PolicyReference"></span>
+                    </div>
+                </div>
+
+                <div class="modal-body" data-bind="if:modalData().Referral != undefined">
+                    <ul class="nav nav-pills">
+                        <li role="presentation" data-bind="if:selectedPolicy()!= undefined && selectedPolicy().BritPolicyId != undefined"><a href="" data-bind="click: openReferralBlade.bind($data,undefined,selectedPolicy().BritPolicyId)">New Referral Workflow</a></li>
+                        <li role="presentation">
+                            <a href="" data-bind="click:openModal.bind($data,'Referral')">
+                                View All Referral Workflows
+                                <span data-bind="text:  modalData().Referral.length, attr: { class: 'badge badge-' +  modalData().Colour }"></span>
+                            </a>
+                        </li>
+                    </ul>
+                    <table class="hoverTableRow">
+                        <thead>
+                            <tr>
+                                <th>Status</th>
+                                <th>Type</th>
+                                <th>Category</th>
+                                <th>Due Date</th>
+                                <th>Last Modified</th>
+                                <th>Resource</th>
+                            </tr>
+                        </thead>
+                        <tbody data-bind="foreach: modalData().Referral">
+                            <tr data-bind="click: $parent.openReferralBlade">
+                                <td><span></span> <span data-bind="text: Status"></span></td>
+                                <td data-bind="text: ReferralType"></td>
+                                <td data-bind="text: Category"></td>
+                                <td data-bind="text: $parent.ModifiedFormatted(RequiredBy)"></td>
+                                <td data-bind="text:  $parent.ModifiedFormatted(Modified)"></td>
+                                <td data-bind="text: $parent.FormatResources(Resources)"></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="EntrySheetCMTModal" tabindex="-1" role="dialog" data-backdrop="false">
+        <div class="modal-dialog grid-modal" role="document" data-bind="if:modalData() != undefined">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <div class="modal-title">
+                        <span class="icon-wrapper"><span class="icon-span"><img src="~/Content/images/icons/BritWorkflowCMT.png" /></span></span> CMT Workflow,
+                        <span data-bind="text:modalData().ReferenceLabel"></span> <span data-bind="text:modalData().PolicyReference"></span>
+                    </div>
+                </div>
+
+                <div class="modal-body" data-bind="if:modalData().CMT != undefined">
+                    <ul class="nav nav-pills">
+                        <li role="presentation" data-bind="if:selectedPolicy()!= undefined && selectedPolicy().BritPolicyId != undefined"><a href="" data-bind="click: openCMTBlade.bind($data,undefined,selectedPolicy().BritPolicyId)">New CMT Workflow</a></li>
+                        <li role="presentation">
+                            <a href="" data-bind="click:openModal.bind($data,'CMT')">
+                                View All CMT Workflows
+                                <span data-bind="text:  modalData().CMT.length, attr: { class: 'badge badge-' +  modalData().Colour }"></span>
+                            </a>
+                        </li>
+                    </ul>
+                    <table class="hoverTableRow">
+                        <thead>
+                            <tr>
+                                <th>Status</th>
+                                <th>Priority</th>
+                                <th>Last Modified</th>
+                                <th>Resources</th>
+                            </tr>
+                        </thead>
+                        <tbody data-bind="foreach: modalData().CMT">
+                            <tr data-bind="click: $parent.openCMTBlade">
+                                <td><span></span> <span data-bind="text: CMTStatus"></span></td>
+                                <td><span data-bind="text: Priority"></span></td>
+                                <td data-bind="text:  $parent.ModifiedFormatted(Modified)"></td>
+                                <td data-bind="text: $parent.FormatResources(Resources)"></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="EntrySheetPricingModal" tabindex="-1" role="dialog" data-backdrop="false">
+        <div class="modal-dialog grid-modal" role="document" data-bind="if:modalData() != undefined">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <div class="modal-title">
+                        <span class="icon-wrapper"><span class="icon-span"><img src="~/Content/images/icons/Pricing.png" /></span></span> Pricing Workflow,
+                        <span data-bind="text:modalData().ReferenceLabel"></span> <span data-bind="text:modalData().PolicyReference"></span>
+                    </div>
+                </div>
+
+                <div class="modal-body" data-bind="if:modalData().PRC != undefined">
+                    <ul class="nav nav-pills">
+                        <li role="presentation" data-bind="if:selectedPolicy()!= undefined && selectedPolicy().BritPolicyId != undefined"><a href="" data-bind="click: openPRCBlade.bind($data,undefined,selectedPolicy().BritPolicyId)">New Pricing Workflow</a></li>
+                        <li role="presentation">
+                            <a href="" data-bind="click:openModal.bind($data,'PRC')">
+                                View All Pricing Workflows
+                                <span data-bind="text:  modalData().PRC.length, attr: { class: 'badge badge-' +  modalData().Colour }"></span>
+                            </a>
+                        </li>
+                    </ul>
+                    <table class="hoverTableRow">
+                        <thead>
+                            <tr>
+                                <th>Pricing Status</th>
+                                <th>Last Modified</th>
+                                <th>Resources</th>
+
+                            </tr>
+                        </thead>
+                        <tbody data-bind="foreach: modalData().PRC">
+                            <tr data-bind="click: $parent.openPRCBlade">
+                                <td><span data-bind="text: PricingStatus"></span></td>
+                                <td data-bind="text:  $parent.ModifiedFormatted(Modified)"></td>
+                                <td data-bind="text: $parent.FormatResources(Resource)"></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="EntrySheetCDPModal" tabindex="-1" role="dialog" data-backdrop="false">
+        <div class="modal-dialog grid-modal" role="document" data-bind="if:modalData() != undefined">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <div class="modal-title">
+                        <span class="icon-wrapper"><span class="icon-span"><img src="~/Content/images/icons/CDP.png" /></span></span> CDP,
+                        <span data-bind="text:modalData().ReferenceLabel"></span> <span data-bind="text:modalData().PolicyReference"></span>
+                    </div>
+                </div>
+
+                <div class="modal-body" data-bind="if:modalData().CDP != undefined">
+                    <ul class="nav nav-pills">
+                        <li role="presentation" data-bind="if:selectedPolicy()!= undefined && selectedPolicy().BritPolicyId != undefined"><a href="" data-bind="click: openCDPBlade.bind($data,undefined,selectedPolicy().BritPolicyId)">New CDP Workflow</a></li>
+                        <li role="presentation">
+                            <a href="" data-bind="click:openModal.bind($data,'CDP')">
+                                View All CDP Workflows
+                                <span data-bind="text:  modalData().CDP.length, attr: { class: 'badge badge-' +  modalData().Colour }"></span>
+                            </a>
+                        </li>
+                    </ul>
+                    <table style="width:100%" class="hoverTableRow">
+                        <thead>
+                            <tr>
+                                <th>Status</th>
+                                <th>Account Type</th>
+                                <th>Created </th>
+                                <th>Modified</th>
+                            </tr>
+                        </thead>
+                        <tbody data-bind="foreach: modalData().CDP">
+                            <tr data-bind="click: $parent.openCDPBlade">
+                                <td data-bind="text: Status"></td>
+                                <td data-bind="text: AccountType"></td>
+                                <td data-bind="text: moment(Created).format('DD/MM/YY HH:mm')"></td>
+                                <td data-bind="text: moment(Modified).format('DD/MM/YY HH:mm')"></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="EntrySheetEPeerModal" tabindex="-1" role="dialog" data-backdrop="false">
+        <div class="modal-dialog grid-modal" role="document" data-bind="if:modalData() != undefined">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title">
+                        <span class="icon-wrapper"><span class="icon-span"><img src="~/Content/images/icons/EPeer.png" /></span></span> EPeer,
+                        <span data-bind="text:modalData().ReferenceLabel"></span> <span data-bind="text:modalData().PolicyReference"></span>
+                    </h4>
+                </div>
+                <div class="modal-body" data-bind="if: modalData().Epeer != undefined">
+                    <ul class="nav nav-pills">
+                        @*<li role="presentation"><a data-bind="attr: {href: '@confi.EPeerUrl()/peerreview/RiskDetails.aspx?pid=' + modalData().Epeer.ProgramId }" target="_blank">Open EPeer Tab</a></li>*@
+                    </ul>
+                    @*<span data-bind="attr: { class: dialogData().first.iconClass }"></span>*@
+                    <span data-bind="text: modalData().Epeer.ReviewStatus"></span>
+                    <span data-bind="text: ModifiedFormatted( modalData().Epeer.LastUpd)"></span>
+                    <ul data-bind="foreach:  modalData().Epeer.ReviewedBy">
+                        <li data-bind="text: Title"></li>
+                    </ul>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="EntrySheetIgnisRaterModel" tabindex="-1" role="dialog" data-backdrop="false">
+        <div class="modal-dialog grid-modal" style="max-width: 350px" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title"><span><img src="~/Content/images/icons/Ignis.png" style="width:100px" /></span>Rater Model(s)</h4>
+                </div>
+                <div class="modal-body" style="max-height: 350px; overflow:auto" data-bind="if: ignisRaterData">
+
+                    <table style="margin-left: 20px;">
+                        <thead>
+                            <tr>
+                                <th style="border:0px" width="100%">Rater Model Name</th>
+                            </tr>
+                        </thead>
+                        <tbody data-bind="foreach: ignisRaterData()">
+                            <tr>
+                                <td style="border:0px"><a style="cursor: pointer;" data-bind="text: RaterModelName, click: $parent.createNewIgnisEnquiry.bind($data,$data.RaterModelId,3,undefined)"></a></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="EntrySheetIgnisModel" tabindex="-1" role="dialog" data-backdrop="false">
+        <div class="modal-dialog grid-modal" role="document" data-bind="if: modalData() != undefined">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title">
+                        <span><img src="~/Content/images/icons/Ignis.png" style="width:100px" /></span>Enquiry For  :
+                        <span data-bind="text:modalData().ReferenceLabel"></span> <span data-bind="text:modalData().PolicyReference"></span>
+                    </h4>
+                </div>
+                <div class="modal-body" data-bind="if: modalData() != undefined && modalData().Ignis_Enquiry != undefined">
+
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Enquiry Id</th>
+                                <th>Enquiry Status</th>
+                                <th style="text-align:center">Menu</th>
+                            </tr>
+                        </thead>
+                        <tbody data-bind="foreach: modalData().Ignis_Enquiry">
+                            <tr>
+                                <td data-bind="text: EnquiryId"></td>
+                                <td>
+                                    <span data-bind="text: EnquiryStatus"></span>
+                                </td>
+                                <td>
+                                    <div data-bind="visible: EnquiryStatus === 'In Progress'">
+                                        <button type="button" class="btn btn-info btn-sm" title="Edit Enquiry" data-bind="click: $parent.selectIgnisMenu.bind($data,$data,2),enable:EditPermission">
+                                            <span class="glyphicon glyphicon-edit"></span> <b>Edit</b>
+                                        </button>
+                                        <button type="button" class="btn btn-info btn-sm" title="View Enquiry" data-bind="click: $parent.selectIgnisMenu.bind($data,$data,1),enable:ViewPermission">
+                                            <span class="glyphicon glyphicon-search"></span> <b>View</b>
+                                        </button>
+                                    </div>
+                                    <div data-bind="visible: EnquiryStatus === 'Complete'">
+                                        <button type="submit" class="btn btn-info btn-sm" title="View Enquiry" data-bind="click: $parent.selectIgnisMenu.bind($data,$data,1),enable:ViewPermission">
+                                            <span class="glyphicon glyphicon-search"></span> <b>View</b>
+                                        </button>
+                                    </div>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+    <!-- /ko -->

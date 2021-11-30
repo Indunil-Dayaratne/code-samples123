@@ -1,0 +1,35 @@
+{
+	"IsEncrypted": false,
+	"Values": {
+		"AzureWebJobsStorage": "UseDevelopmentStorage=true",
+		"FUNCTIONS_WORKER_RUNTIME": "dotnet",
+		"tenantid": "8cee18df-5e2a-4664-8d07-0566ffea6dcd",
+		"KeyVaultName": "entry-sheet-kv-uks-dev",
+		"KEYVAULT_RESOURCEID": "https://entry-sheet-kv-uks-dev.vault.azure.net/secrets",
+		"OpenIdConfigurationEndPoint": "https://login.microsoftonline.com/britinsurance.com/v2.0/.well-known/openid-configuration",
+		"ValidIssuers": "https://login.microsoftonline.com/8cee18df-5e2a-4664-8d07-0566ffea6dcd/v2.0,https://sts.windows.net/8cee18df-5e2a-4664-8d07-0566ffea6dcd/",
+		"beas:BaseUrl": "https://beas-func-dev.azurewebsites.net/api",
+		"beas:ApplicationName": "Opus",
+		"beas:ApplicationArea": "UWDashboard",
+		"beas:ApplicationRole": "Entry-Sheet",
+		"EclipseRisk:BaseUrl": "http://localhost:7073",
+		"EclipseRisk:ClientId": "8be45412-d1fc-4839-8619-03208d1971fd",
+		"EclipseRisk:AzureConnectionString": "RunAs=App;AppId=8be45412-d1fc-4839-8619-03208d1971fd;TenantId=8cee18df-5e2a-4664-8d07-0566ffea6dcd;AppKey=xjXfrnT0u.I.hv2y649zV1D9--W3vX5yJ_",
+		"EclipseRiskValidation:BaseUrl": "http://localhost:7074",
+		"EclipseRiskValidation:ClientId": "21ae1f9b-acfa-4436-a6f5-6e41d2eaf0a7",
+		"EclipseRiskValidation:AzureConnectionString": "RunAs=App;AppId=21ae1f9b-acfa-4436-a6f5-6e41d2eaf0a7;TenantId=8cee18df-5e2a-4664-8d07-0566ffea6dcd;AppKey=tuqy0.g-B-4cEhOphpHg3W5Sf~BlwN27jc",
+		"britCache:ClientId": "b7777946-a31b-4eed-8db3-7c9f07f82f92",
+		"britCache:BaseURL": "https://britcache-proxy-api-func-uks-dev.azurewebsites.net/eclipse/",
+		"britCache:AzureConnectionString": "RunAs=App;AppId=b7777946-a31b-4eed-8db3-7c9f07f82f92;TenantId=8cee18df-5e2a-4664-8d07-0566ffea6dcd;AppKey=oi-K.oTp9L57GvbF_6rhoP98tntupQ1~Z.",
+		"cosmos:AccountPrimaryKey": "cosmos-account-primary-key",
+		"cosmos:DatabaseEndpoint": "https://apps-common-cosmos-nonprod.documents.azure.com:443/",
+		"cosmos:DatabaseName": "shared",
+		"cosmos:LatestDataContainerName": "entry-sheet-eclipse-dev",
+		"cosmos:HistoryDataContainerName": "entry-sheet-eclipse-history-dev"
+	},
+	"Host": {
+		"LocalHttpPort": 7072,
+		"CORS": "https://localhost",
+		"CORSCredentials": true
+	}
+}

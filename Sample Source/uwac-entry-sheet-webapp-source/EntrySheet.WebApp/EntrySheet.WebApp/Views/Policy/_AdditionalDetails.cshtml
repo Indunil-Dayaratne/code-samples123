@@ -1,0 +1,143 @@
+﻿ <!---Fifth Section Policy Additional Info--> 
+<!--  ko stopBinding: true -->
+<div id="divAdditionalDetails">
+    <div class="panel panel-default">
+        <div class="panel-heading msportalfx-text-small panel-Header">
+            <div class="row">
+                <div class="col-md-4" id="additionalDetailsHeaderDiv">
+                    <div class="pull-left" style="width:100%">
+                        Additional Details
+                    </div>
+                    <div class="clearfix"></div>
+                </div>
+            </div>
+        </div>
+        <div class="panel-body" style=" padding-top: 0px; padding-bottom: 0px;">
+            <div class="table-responsive table-scroll">
+                <table class="table table-bordered table-hover table-striped" id="additionalDetailsTable">
+                    <thead style="border-bottom-width:0px">
+                        <tr class="active">
+                            <th>Policy Ref</th>
+                            @*<th>Period Basis</th>*@
+                            <th>Period</th>
+                            <th>Inception Date</th>
+                            <th>Contract Certain (Yes/No)</th>
+                            <th>Contract Certain (Exception Code)</th>
+                            <th>Contract Certain (Date)</th>
+                            <th>Risk Rating</th>
+                            <th>Agg Risk Data</th>
+                            <th>Insurance Level</th>
+                        </tr>
+                    </thead>
+                    <tbody data-bind="foreach: additionalDetails">
+                        <tr>
+                            <td data-bind="text:policyRef">
+                            </td>
+                            <td>
+                                <div>
+                                    <input class="form-control input-sm font-bold field-recommended required periodValidation from-copy-field" type="text"
+                                           data-bind="attr: { id: 'txtPeriod' + $index(), name: 'txtPeriod' + $index()  },
+                                       event: {change:$parent.periodChanged.bind($data,$index())},
+                                      periodFormatted: period, disable:isRiskEntrySheetLocked()" />
+                                </div>
+                            </td>
+                            <td>
+                                <input class="form-control input-sm font-bold field-recommended required" type="text"
+                                       data-bind="attr: { id: 'inceptionDate' + $index(), name: 'inceptionDate' + $index()  } ,
+                                       value:inceptionDate, disable:isRiskEntrySheetLocked() " autocomplete="off" />
+                            </td>
+                            <td>
+
+
+                                <div>
+                                    <select class="form-control input-sm font-bold"
+                                            data-bind="attr: { id: 'selContractCertain' + $index(), name: 'selContractCertain' + $index()  } ,
+                                        value : contractCertain , event:{change:$parent.contractCertainChanged.bind($data,$index())}, disable:isRiskEntrySheetLocked()">
+                                        <option></option>
+                                        <option>Yes</option>
+                                        <option>No</option>
+                                    </select>
+                                </div>
+                            </td>
+                            <td>
+                                <select class="form-control font-bold input-sm field-recommended required"
+                                        data-bind="attr: { id: 'selContractCertainExceptionCode' + $index(), name: 'selContractCertainExceptionCode' + $index() },
+                                        options:$parent.contractExceptionCodes,
+                                        optionsText:'description', optionsValue:'code',
+                                        value : contractCertainCode, disable:isRiskEntrySheetLocked()"></select>
+                            </td>
+                            <td>
+
+                                <div>
+                                    <input class="form-control input-sm font-bold field-recommended required from-copy-field" type="text"
+                                           data-bind="attr: { id: 'contractCertainDate' + $index(), name: 'contractCertainDate' + $index()  },
+                                       value:contractCertainDate, disable:isRiskEntrySheetLocked()" autocomplete="off" />
+                                </div>
+                            </td>
+                            <td>
+                                <div data-bind="if: ($index() == 0 &&  ($parent.additionalDetails().length > 1))">
+                                    <div class="input-group input-group-sm">
+                                        <select class="form-control input-sm font-bold width-as-per-content from-copy-field"
+                                                data-bind="attr: { id: 'selRiskRating' + $index(), name: 'selRiskRating' + $index()  } ,
+                                        options:$parent.riskRatings,
+                                         optionsText:'description', optionsValue:'code',
+                                                    value : riskRating, disable:isRiskEntrySheetLocked()"></select>
+                                        <span class="input-group-btn">
+                                            <button type="button" id="copyRiskRating" class="btn copy-btn" title="Copy Risk Rating" data-bind="click:$parent.copyFieldValue.bind($data,$index(),'selRiskRating')">
+                                                <span class="glyphicon glyphicon-copy-option  glyphicon-circle-arrow-down"></span>
+                                            </button>
+                                        </span>
+                                    </div>
+                                </div>
+
+
+                                <div data-bind="if: ($parent.additionalDetails().length ==  1 || $index() != 0)">
+                                    <select class="form-control input-sm font-bold"
+                                            data-bind="attr: { id: 'selRiskRating' + $index(), name: 'selRiskRating' + $index()  } ,
+                                        options:$parent.riskRatings,
+                                         optionsText:'description', optionsValue:'code',
+                                                    value : riskRating, disable:isRiskEntrySheetLocked()"></select>
+                                </div>
+
+                            </td>
+                            <td>
+                                <div data-bind="if: ($index() == 0 &&  ($parent.additionalDetails().length > 1))">
+                                    <div class="input-group input-group-sm">
+                                        <select class="form-control input-sm font-bold width-as-per-content from-copy-field"
+                                                data-bind="attr: { id: 'selAggRiskData' + $index(), name: 'selAggRiskData' + $index()  } ,
+                                        options:$parent.aggRiskList,
+                                                value : aggRiskData, disable:isRiskEntrySheetLocked()"></select>
+                                        <span class="input-group-btn">
+                                            <button type="button" id="copyAggRiskData" class="btn copy-btn" title="Copy Agg Risk Data" data-bind="click:$parent.copyFieldValue.bind($data,$index(),'selAggRiskData')">
+                                                <span class="glyphicon glyphicon-copy-option  glyphicon-circle-arrow-down"></span>
+                                            </button>
+                                        </span>
+                                    </div>
+                                </div>
+
+                                <div data-bind="if: ($parent.additionalDetails().length ==  1 || $index() != 0)">
+                                    <select class="form-control input-sm font-bold"
+                                            data-bind="attr: { id: 'selAggRiskData' + $index(), name: 'selAggRiskData' + $index()  } ,
+                                        options:$parent.aggRiskList,
+                                                value : aggRiskData, disable:isRiskEntrySheetLocked()"></select>
+                                </div>
+                            </td>
+                            <td>
+
+
+                                <div>
+                                    <select class="form-control input-sm font-bold"
+                                            data-bind="attr: { id: 'selInsuranceLevel' + $index(), name: 'selInsuranceLevel' + $index()  } ,
+                                        options:$parent.insuranceLevels,
+                                        optionsText:'description', optionsValue:'code',
+                                        value : insuranceLevel, disable:isRiskEntrySheetLocked()"></select>
+                                </div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- /ko -->

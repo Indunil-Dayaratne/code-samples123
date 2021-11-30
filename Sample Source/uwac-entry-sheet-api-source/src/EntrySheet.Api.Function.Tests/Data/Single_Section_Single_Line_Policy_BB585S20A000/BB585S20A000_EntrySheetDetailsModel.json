@@ -1,0 +1,134 @@
+{
+  "id": null,
+  "britPolicyId": 1084411,
+  "EPlacing": null,
+  "Completed": false,
+  "LastUpdatedOn": "0001-01-01T00:00:00",
+  "LastUpdatedBy": null,
+  "UserName": null,
+  "ContractSection": [
+    {
+      "PolicySectionId": "929494",
+      "BritPolicyId": 1084411,
+      "PolicyRef": "BB585S20A000",
+      "UWInitials": "JVB",
+      "BrokerName": "Aon Benfield (IL)",
+      "BrokerCode": "5459",
+      "LloydsBrokerId": "15788",
+      "BrokerPseud": "ABR",
+      "ContactName": "Joe Jackson",
+      "BrokerContactId": "29638",
+      "ClassType": "R",
+      "MinorClass": "LD",
+      "MajorClass": "R",
+      "SubClass": "99011",
+      "LimitCcy": "USD",
+      "Limit": 75000000.00,
+      "LimitBasis": null,
+      "BiSubLimitBasis": null,
+      "BiSubLimitCcy": null,
+      "BiSubLimit": 0.0,
+      "ContractCoverageId": "736097013",
+      "Excess": 0.00,
+      "Deductible": 0.00,
+      "InnerAGG": 0.0,
+      "ADRLevel": null,
+      "CyberExposure": null,
+      "YOA": 2020,
+      "Syndicate": "BGSB",
+      "ProducingTeam": "B",
+      "IsMainSection": true,
+      "IndustryCode": null,
+      "CustomerType": null,
+      "ProgramRef": "BB585S20",
+      "Insured": {
+        "PartyName": null
+      },
+      "Reinsured": {
+        "PartyName": "Allied World Assurance Company (U.S.), Inc. (MA) 10050734"
+      },
+      "Coverholder": {
+        "PartyName": null
+      },
+      "ConductRating": null,
+      "ContractPeriodStartDate": "2020-04-01T00:00:00",
+      "GroupClass": "BGSB CASUALTY",
+      "IsRiskEntrySheetLocked": false,
+      "TerritoryIdAssured": "15727",
+      "TerritoryId": "604",
+      "OverridingCommission": 0.0,
+      "OtherDeductions": 0.0,
+      "ProfitCommission": 0.0,
+      "CoverOperatingBasis": "RAD"
+    }
+  ],
+  "PremiumRatings": [
+    {
+      "PolicyPremiumRatingId": "995822784",
+      "PolicyRef": "BB585S20A000",
+      "PremiumCcy": null,
+      "ReportingCcy": null,
+      "WrittenPremium": 0.0,
+      "TechPrice": 0.0,
+      "ModelPrice": 0.0,
+      "PLR": 0.0,
+      "ChangeInLDA": 100.00,
+      "ChangeInCoverage": 100.00,
+      "ChangeInOther": 0.00,
+      "RiskAdjustedRateChange": 0.0,
+      "BaseAmount": 0.0,
+      "Brokerage": null,
+      "BrokerageRateType":null,
+      "BrokerageCcy": null,
+      "IsRiskEntrySheetLocked": false,
+      "PremiumType": null,
+      "InitialToT": 0,
+      "PaymentDate": null,
+      "NumberOfInstallment": 0
+    }
+  ],
+  "PolicyLines": [],
+  "AdditionalDetails": [
+    {
+      "PolicyAdditionalDetailId": "929494",
+      "PolicyRef": "BB585S20A000",
+      "Period": "12month",
+      "InceptionDate": "2020-04-01T00:00:00",
+      "ExpiryDate": "2021-04-01T00:00:00",
+      "ContractCertain": null,
+      "ContractCertainCode": null,
+      "ContractCertainDate": null,
+      "RiskRating": null,
+      "AggRiskData": null,
+      "InsuranceLevel": null,
+      "GroupClass": "BGSB CASUALTY",
+      "PlacingType": "P",
+      "InstalmentPeriod": "365D",
+      "TimeDurationValue": 12,
+      "TimeDurationPeriodType": "M",
+      "IsRiskEntrySheetLocked": false
+    }
+  ],
+  "RelatedPoliciesDetails": [
+    {
+      "BritPolicyId": 1084411,
+      "CustomerType": null,
+      "ProgramRef": "BB585S20",
+      "Insured": {
+        "PartyName": null
+      },
+      "Reinsured": {
+        "PartyName": "Allied World Assurance Company (U.S.), Inc. (MA) 10050734"
+      },
+      "Coverholder": {
+        "PartyName": null
+      },
+      "ConductRating": null,
+      "UniqueMarketRef": "",
+      "CompanyLeader": null,
+      "LloydsLeader": "BRT 2987",
+      "PlacingType": "F",
+      "InstalmentPeriod": "365D"
+    }
+  ]
+}

@@ -1,0 +1,160 @@
+parameters:
+- name: sourceFolder
+  type: string
+  default: "src/"
+- name: functionProjects
+  type: object
+- name: deployDev
+  type: boolean
+- name: deployTst
+  type: boolean
+- name: deployUat
+  type: boolean
+- name: deployStg
+  type: boolean
+- name: deployPrd
+  type: boolean
+
+stages:
+- stage: Build
+  displayName: Build stage
+
+  jobs:
+  - job: Build
+    displayName: Build
+    pool:
+      vmImage: $(vmImageName)
+
+    steps:
+    - task: SonarQubePrepare@4
+      displayName: 'Prepare analysis on SonarQube'
+      inputs:
+        SonarQube: 'Sonarqube DEV'
+        projectKey: $(projectKey)
+        projectName: $(projectKey)
+        extraProperties: |
+          sonar.exclusions=**/packages/*
+          sonar.verbose=true
+          sonar.dependencyCheck.reportPath=$(build.artifactstagingdirectory)\dependency-check-report.xml
+          sonar.dependencyCheck.htmlReportPath=$(build.artifactstagingdirectory)\dependency-check-report.html         
+
+    - task: DotNetCoreCLI@2
+      displayName: 'Restore Packages'
+      inputs:
+       command: 'restore'
+       projects: '**/*.csproj'
+       vstsFeed: 'BritCommonCode'
+       includeNuGetOrg: true
+
+    - task: DotNetCoreCLI@2
+      displayName: Build Functions
+      inputs:
+        command: 'build'
+        projects: '**/*.csproj'
+        arguments: --configuration $(buildConfiguration)
+
+    - task: DotNetCoreCLI@2
+      displayName: Publish Functions
+      inputs:
+        command: 'publish'
+        publishWebProjects: false
+        projects: '**/*.csproj'
+        arguments: '--configuration $(buildConfiguration) -p:PublishDir=.\publish'
+        zipAfterPublish: false
+        modifyOutputPath: false
+        
+    - task: DotNetCoreCLI@2
+      displayName: 'Run tests'
+      inputs:
+        command: test
+        projects: '**/*Test*.csproj'
+        arguments: '--configuration $(buildConfiguration) --collect "Code coverage"'
+
+    - task: SonarQubeAnalyze@4
+      displayName: 'Run Code Analysis'
+
+    - task: SonarQubePublish@4
+      displayName: 'Publish Sonar Quality Gate Result'
+      enabled: false
+      inputs:
+        pollingTimeoutSec: '300'
+        
+    - template: archive-files.yml
+      parameters:
+        sourceFolder: ${{ parameters.sourceFolder }}
+        projects: ${{ parameters.functionProjects }}
+
+    - publish: $(Build.ArtifactStagingDirectory)
+      displayName: 'Publish Artifact'
+      artifact: drop
+
+- stage: dev
+  displayName: Deploy to DEV
+  condition: and(succeeded(), or(eq(variables['Build.Reason'], 'Manual'), eq(variables['Build.SourceBranchName'], 'develop')), eq(${{parameters.deployDev}},true))
+  dependsOn: Build
+  jobs:
+  - ${{ each project in parameters.functionProjects }}:
+    - ${{ each app in project.devApps }}:
+      - template: function-app.yml
+        parameters:
+          env: dev
+          appName: ${{app}}
+          projectName: ${{project.name}}
+          azureSubscription: $(azureSubscriptionNonProd)
+
+- stage: tst
+  displayName: Deploy to TST
+  condition: and(succeeded(), eq(variables['Build.Reason'], 'Manual'),eq(${{parameters.deployTst}},true))
+  dependsOn: dev
+  jobs:
+  - ${{ each project in parameters.functionProjects }}:
+    - ${{ each app in project.tstApps }}:
+      - template: function-app.yml
+        parameters:
+          env: tst
+          appName: ${{app}}
+          projectName: ${{project.name}}       
+          azureSubscription: $(azureSubscriptionNonProd)
+
+- stage: uat
+  displayName: Deploy to UAT
+  condition: and(succeeded(), eq(variables['Build.Reason'], 'Manual'),eq(${{parameters.deployUat}},true))
+  dependsOn: tst
+  jobs:
+  - ${{ each project in parameters.functionProjects }}:
+    - ${{ each app in project.uatApps }}:
+      - template: function-app.yml
+        parameters:
+          env: uat
+          appName: ${{app}}
+          projectName: ${{project.name}}  
+          azureSubscription: $(azureSubscriptionNonProd)
+
+- stage: stg
+  displayName: Deploy to STG
+  condition: and(succeeded(), eq(variables['Build.Reason'], 'Manual'),eq(${{parameters.deployStg}},true))
+  dependsOn: uat
+  jobs:
+  - ${{ each project in parameters.functionProjects }}:
+    - ${{ each app in project.stgApps }}:
+      - template: function-app.yml
+        parameters:
+          env: stg
+          appName: ${{app}}
+          projectName: ${{project.name}}
+          azureSubscription: $(azureSubscriptionNonProd)
+
+- stage: prd
+  displayName: Deploy to PRD
+  condition: and(succeeded(), and(eq(variables['Build.Reason'], 'Manual'), eq(variables['Build.SourceBranch'], 'refs/heads/main')),eq(${{parameters.deployPrd}},true))
+  dependsOn: stg
+  jobs:
+  - ${{ each project in parameters.functionProjects }}:
+    - ${{ each app in project.prdApps }}:
+      - template: function-app.yml
+        parameters:
+          env: prd
+          appName: ${{app}}
+          projectName: ${{project.name}}
+          azureSubscription: $(azureSubscriptionProd)
+

@@ -1,0 +1,33 @@
+parameters:
+- name: vmImage
+  displayName: Pool Image
+  type: string
+  default: Opus-Test-Pool
+  values:
+  - windows-latest
+  - vs2017-win2016
+  - ubuntu-latest
+  - ubuntu-16.04
+  - macOS-latest
+  - macOS-10.14
+  - Opus-Test-Pool
+
+jobs:
+- job: runScript
+  variables:
+   MAPPED_ENV_PASSWORD: $(password)
+   MAPPED_ENV_CLIENTID: $(client_id)
+   MAPPED_ENV_CLIENTSECRET: $(client_secret)
+   MAPPED_ENV_CLIENTID2: $(client_id2)
+   MAPPED_ENV_CLIENTSECRET2: $(client_secret2)
+
+  pool:
+    name: ${{parameters.vmImage}}
+  steps:
+  - script: 'newman run $(collection).json -e $(environment).json --insecure --env-var "password=$(MAPPED_ENV_PASSWORD)" --env-var "client_id=$(MAPPED_ENV_CLIENTID)" --env-var "client_secret=$(MAPPED_ENV_CLIENTSECRET)" --env-var "client_id2=$(MAPPED_ENV_CLIENTID2)" --env-var "client_secret2=$(MAPPED_ENV_CLIENTSECRET2)"  $(htmlreport)'
+    workingDirectory: opusApiTests
+    displayName: Run API Tests
+  - task: MaciejMaciejewski.postman-report.UploadPostmanHtmlReport.UploadPostmanHtmlReport@1
+    displayName: 'Upload Postman Html Report'
+    continueOnError: true
+    condition: succeededOrFailed()

@@ -1,0 +1,31 @@
+platform_state_key_name="platform.terraform.tfstate"
+platform_state_container_name="terraform-container-ukw-nonprod"
+platform_state_storage_account_name="terraformukwnonprod"
+platform_state_resource_group_name = "terraform-rg-ukw-nonprod"
+
+tenant_id = "8cee18df-5e2a-4664-8d07-0566ffea6dcd"
+spn_app_id = "3d88a81a-1f2f-47a3-b5ac-acd03cd2142b"
+spn_object_id = "0b497959-78fe-419f-83fe-8a8608a83443"
+subscription_id = "b88ff083-a2b3-420a-bb38-b4c4ee5a28ec"
+
+azure_short_region = "uks"
+azure_region = "UK South"
+project = "uwac"
+app = "britcache"
+app_shortname = "britcache"
+contact = "Ahmet Demir"
+contact_details = "ext 10129"
+costcentre = "N37"
+description = "BritCache Redis Cache"
+
+capacity = "5"
+family = "C"
+sku_name = "Basic"
+subcategory = "opus"
+
+
+azure_short_region_ukw = "ukw"
+azure_region_ukw = "UK West"
+capacity_ukw = "3"
+family_ukw = "C"
+sku_name_ukw = "Basic"

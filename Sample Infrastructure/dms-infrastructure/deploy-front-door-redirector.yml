@@ -1,0 +1,95 @@
+name: Sharepoint DMS Redirector Source Front Door Setup $(Date:yyyyMMdd)$(rev:.r)
+
+trigger:
+  batch: false
+  branches:
+    include:
+    - master
+    - develop
+variables:
+  - name: base-directory
+    value: $(System.DefaultWorkingDirectory)
+stages:
+   - stage: copy
+     displayName: Copy Files
+     jobs:
+      - job: copy
+        displayName: Copy SPOnline Redirector Front Door Setup Files
+        pool:
+            vmImage: 'windows-latest'
+        steps:
+          - checkout: self
+          - task: CopyFiles@2
+            inputs:
+              sourceFolder:  $(Build.SourcesDirectory)/dms-redirector-platform-infrastructure
+              contents: 'setup_front_door.ps1' 
+              TargetFolder: $(Build.SourcesDirectory)/buildoutput
+          - publish: $(Build.SourcesDirectory)/buildoutput
+            artifact: SPOnlineRedirector  
+   - stage: uat
+     displayName: Setup Front Door UAT
+     condition: and(succeeded(), eq(variables['Build.Reason'], 'Manual'))
+     variables:
+      - name: env
+        value: uat
+     jobs:
+       - deployment: uatSetupSpOnlineRedirectorFrontDoor 
+         pool:
+            vmImage: 'windows-latest'
+         environment: $(env)
+         displayName: Deploy UAT SP Online Redirector Front Door Setup
+         variables:
+           - group: Terraform Non-Prod Deploy
+         strategy:
+            runOnce:
+              deploy:
+                steps:
+                  - download: current
+                    artifact: SPOnlineRedirector                     
+                  - task: PowerShell@2
+                    displayName: Deploy UAT SP Online Redirector Front Door Setup
+                    inputs:
+                      targetType: 'filePath'
+                      filePath: $(Pipeline.Workspace)/SPOnlineRedirector/setup_front_door.ps1
+                      arguments: 
+                        -subscriptionId $(arm_subscription_id)
+                        -tenantId $(arm_tenant_id)
+                        -environmentNamePrefix $(env)
+                        -applicationPrefix 'dms-sponlineredirector'
+                        -spnName $(arm_client_id)
+                        -spnPassword (ConvertTo-SecureString "$(arm_client_secret)" -AsPlainText -Force)
+                        -deployFrontDoor true
+   - stage: prod
+     displayName: Setup Front Door PROD
+     condition: and(succeeded(), and(eq(variables['Build.Reason'], 'Manual'), eq(variables['Build.SourceBranch'], 'refs/heads/master')))
+     dependsOn: uat
+     variables:
+      - name: env
+        value: prd
+     jobs:
+       - deployment: prdSetupSpOnlineRedirectorFrontDoor 
+         pool:
+            vmImage: 'windows-latest'
+         environment: $(env)
+         displayName: Deploy PROD SP Online Redirector Front Door Setup
+         variables:
+           - group: Terraform Prod Deploy
+         strategy:
+            runOnce:
+              deploy:
+                steps:
+                  - download: current
+                    artifact: SPOnlineRedirector                     
+                  - task: PowerShell@2
+                    displayName: Deploy PROD SP Online Redirector Front Door Setup
+                    inputs:
+                      targetType: 'filePath'
+                      filePath: $(Pipeline.Workspace)/SPOnlineRedirector/setup_front_door.ps1
+                      arguments: 
+                        -subscriptionId $(arm_subscription_id)
+                        -tenantId $(arm_tenant_id)
+                        -environmentNamePrefix $(env)
+                        -applicationPrefix 'dms-sponlineredirector'
+                        -spnName $(arm_client_id)
+                        -spnPassword (ConvertTo-SecureString "$(arm_client_secret)" -AsPlainText -Force)
+                        -deployFrontDoor true

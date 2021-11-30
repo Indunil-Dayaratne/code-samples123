@@ -1,0 +1,249 @@
+﻿/* Please see documentation at https://docs.microsoft.com/aspnet/core/client-side/bundling-and-minification
+for details on configuring this project to bundle and minify static web assets. */
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+    /* display: none; <- Crashes Chrome on hover */
+    -webkit-appearance: none;
+    margin: 0; /* <-- Apparently some margin are still there even though it's hidden */
+}
+
+input[type=number] {
+    -moz-appearance: textfield; /* Firefox */
+}
+
+#frmRiskEntrySheet .bootstrap-select .field-validation-error {
+    font-weight: normal !important;
+    font-size: 14px !important;
+}
+
+#frmRiskEntrySheet table th {
+    font-size: 12px !important;
+}
+
+.width-as-per-content {
+    width: fit-content !important;
+    font-size: 12px !important;
+}
+
+#frmRiskEntrySheet table tfoot {
+    font-size: 12px !important;
+}
+
+#divPolicySystemsStatus .modal-body {
+    font-size: 14px;
+}
+
+.blur-filter {
+    -webkit-filter: blur(2px);
+    -moz-filter: blur(2px);
+    -o-filter: blur(2px);
+    -ms-filter: blur(2px);
+    filter: blur(2px);
+}
+.ui-datepicker .ui-datepicker-buttonpane button {
+    font-weight: bold !important;
+    opacity: 1 !important;
+}
+
+.ui-datepicker-month, .ui-datepicker-year {
+    color: black;
+}
+
+.field-recommended {
+    background-color: #ffe4e1 !important;
+}
+
+
+#divpolicyContractSection .table thead th,
+#divPremiumAndRatingDetails .table thead th,
+#divLinesDetails .table thead th,
+#divAdditionalDetails .table thead th {
+    font-weight: 400 !important;
+    background-color: #888 !important;
+    vertical-align: bottom !important;
+    color: #fff !important;
+    overflow-x: auto !important;
+}
+
+#divPolicySystemsStatus > #systemStatusDiv .table thead th {
+    font-weight: 400 !important;
+    background-color: #888 !important;
+    vertical-align: bottom !important;
+    color: #fff !important;
+}
+#policySystemStatusGrid tr td {
+    text-align: center;
+    vertical-align: middle;
+}
+
+
+
+#divpolicyContractSection .table thead th:nth-child(10),
+#divpolicyContractSection .table thead th:nth-child(13),
+#divpolicyContractSection .table thead th:nth-child(14),
+#divpolicyContractSection .table thead th:nth-child(15) {
+    min-width: 14vw !important;
+}
+
+#divpolicyContractSection .table thead th:nth-child(11) {
+    min-width: 8vw !important
+}
+#divpolicyContractSection .table thead th:nth-child(2) {
+    min-width: 14vw !important
+}
+#divLinesDetails .table thead th:nth-child(4) {
+    min-width: 10vw !important
+}
+#divLinesDetails .table thead th:nth-child(13) {
+    min-width: 12vw !important
+}
+
+#divLinesDetails .table thead th:nth-child(11) {
+    min-width: 12vw !important
+}
+#divpolicyContractSection .table thead th:nth-child(8),
+#divpolicyContractSection .table thead th:nth-child(17) {
+    min-width: 18vw !important
+}
+#divpolicyContractSection .table thead th:nth-child(5),
+#divpolicyContractSection .table thead th:nth-child(6),
+#divpolicyContractSection .table thead th:nth-child(7) {
+    min-width: 25vw !important
+}
+
+
+#divPremiumAndRatingDetails .table thead th:nth-child(12) {
+    min-width: 11vw !important;
+}
+#divPremiumAndRatingDetails .table thead th:nth-child(3) {
+    min-width: 14vw !important;
+}
+
+#divpolicyContractSection .table tbody tr td:nth-child(1),
+#divpolicyContractSection .table tbody tr td:nth-child(9),
+#divPremiumAndRatingDetails .table tbody tr td:nth-child(1),
+#divPremiumAndRatingDetails .table tbody tr td:nth-child(2),
+#divAdditionalDetails .table tbody tr td:nth-child(1),
+#divLinesDetails .table tbody tr td:nth-child(1) {
+    font-weight: bold !important;
+    vertical-align: middle !important;
+}
+
+#divpolicyContractSection .table tbody tr td,
+#divAdditionalDetails .table tbody tr td, 
+#divPremiumAndRatingDetails .table tbody tr td, 
+#divLinesDetails .table tbody tr td {
+    font-size: 12px !important;
+    padding-right: 2px !important;
+    background-color: #fff !important;
+    align-content: center !important;
+    white-space: nowrap !important;
+}
+
+ .table-column-middle {
+        vertical-align: middle !important;
+        text-align:right !important;
+ }
+
+.table-column-top {
+    vertical-align: top !important;
+}
+
+#divLinesDetails .table thead th:nth-child(8),
+#divLinesDetails .table thead th:nth-child(9),
+#divLinesDetails .table thead th:nth-child(10),
+#divLinesDetails .table thead th:nth-child(12) {
+    min-width: 6vw !important;
+}
+
+#divAdditionalDetails .table thead th:nth-child(2),
+#divAdditionalDetails .table thead th:nth-child(4) {
+    min-width: 9.5vw !important;
+}
+#divAdditionalDetails .table thead th:nth-child(3) {
+    min-width: 12vw !important;
+}
+#divAdditionalDetails .table thead th:nth-child(6) {
+    min-width: 11vw !important;
+}
+#divAdditionalDetails .table thead th:nth-child(5) {
+    min-width: 25vw !important;
+}
+
+.table-scroll {
+    white-space: nowrap
+}
+.readonly-input {
+    border: none !important;
+}
+#divPolicySystemsStatus > #systemStatusDiv .badge {
+    border-radius: 10px !important;
+}
+
+#validationDiv .control-label {
+    text-align: left !important;
+}
+
+#validationDiv .panel-body {
+    height: 115px;
+    overflow-y: auto;
+    /*overflow-y: auto;
+    padding: 5px !important;*/
+}
+
+#validationDiv .form-group {
+    margin-bottom: 0px !important;
+}
+
+#validationDiv .control-label {
+    font-size: 12px;
+}
+
+#validationDiv {
+    margin-bottom: 14px
+}
+
+#validationDiv ul {
+   margin-left: -37px;
+   margin-top: -15px;
+}
+
+#validationDiv ul li {
+       max-width : 100% !important
+}
+
+.hide-table-header{
+    display:none !important
+}
+.glyphicon-copy-option {
+    font-size: 14px !important;
+}
+
+.from-copy-field {
+    margin-right: 5px;
+    border-radius: 3px !important
+}
+.period {
+    max-width: 5.8vw !important;
+}
+
+.contract-certain {
+    max-width: 7.3vw !important;
+}
+.contract-certain-date {
+    max-width: 7.2vw !important;
+}
+.section-from-copy-field {
+    max-width: 21.2vw !important;
+}
+.copy-span{
+    vertical-align:top;
+}
+.copy-btn{
+    margin-left:4px!important;
+}
+label.field-validation-error{
+    float:left;
+}
+
+

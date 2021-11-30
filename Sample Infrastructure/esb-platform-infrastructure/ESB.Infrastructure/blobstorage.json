@@ -1,0 +1,60 @@
+﻿{
+  "$schema": "http://schema.management.azure.com/schemas/2014-04-01-preview/deploymentTemplate.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+    "accountName": {
+      "type": "string",
+      "metadata": {
+        "description": "Enter the application name."
+      }
+    },
+    "containerName": {
+      "type": "string",
+      "metadata": {
+        "description": "Enter the application name."
+      }
+    }
+  },
+  
+  "resources": [
+    {
+      "type": "Microsoft.Storage/storageAccounts",
+      "name": "[parameters('accountName')]",
+      "apiVersion": "2018-02-01",
+      "location": "UK South",
+      "kind": "BlobStorage",
+      "sku": {
+        "name": "Standard_ZRS",
+        "tier": "Standard"
+      },
+      "tags": {},
+      "dependsOn": [],
+      "properties": {
+        "accessTier": "Hot"
+      },
+      "resources": [
+        {
+          "type": "blobServices/containers",
+          "apiVersion": "2018-03-01-preview",
+          "name": "[concat('default/', parameters('containerName'))]",
+          "dependsOn": [
+            "[parameters('accountName')]"
+          ],
+          "properties": {
+            "publicAccess": "None",
+            "encryption": {
+              "services": {
+                "blob": {
+                  "enabled": "boolean"
+                },
+                "file": {
+                  "enabled": "boolean"
+                }
+              }
+            }
+          }
+        }
+      ]
+    }
+  ]
+}

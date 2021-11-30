@@ -1,0 +1,79 @@
+name: Eclipse Entry Sheet $(Date:yyyyMMdd)$(rev:.r)
+
+resources:
+  repositories:
+    - repository: templates
+      type: git
+      name: Apps/pipeline-templates
+      ref: develop
+
+
+trigger:
+ batch: true
+ branches:
+  include:
+   - develop
+   - main
+   - release/*
+ paths:
+  include:
+  - EntrySheet.WebApp/*
+
+variables:
+  BuildPlatform: 'any cpu'
+  vmImageName: 'windows-latest'
+  buildConfiguration: 'Release'
+
+parameters:
+ - name: DeployDev
+   displayName: Deploy Dev
+   type: boolean
+   default: true
+
+ - name: DeployTst
+   displayName: Deploy Test
+   type: boolean
+   default: false
+
+ - name: DeployUat
+   displayName: Deploy UAT
+   type: boolean
+   default: false 
+ 
+ - name: DeployStg
+   displayName: Deploy Staging
+   type: boolean
+   default: false
+
+ - name: DeployPrd
+   displayName: Deploy Prod
+   type: boolean
+   default: false
+
+ - name: solution
+   type: string
+   default: '**/*.sln'
+
+stages:
+  - template: azure/web-app/pipeline.yml@templates
+    parameters:
+      sourceFolder: 'EntrySheet.WebApp/'
+      deployDev: ${{parameters.DeployDev}}
+      deployTst: ${{parameters.DeployTst}}
+      deployUAT: ${{parameters.DeployUAT}}
+      deployStg: ${{parameters.DeployStg}}
+      deployPrd: ${{parameters.DeployPrd}}
+      devWebApps:                              
+        - entry-sheet-webapp-uks-dev
+      tstWebApps:                              
+        - entry-sheet-webapp-uks-tst
+        - entry-sheet-webapp-ukw-tst
+      uatWebApps:                              
+        - entry-sheet-webapp-uks-uat 
+        - entry-sheet-webapp-ukw-uat 
+      stgWebApps:                              
+        - entry-sheet-webapp-uks-stg 
+        - entry-sheet-webapp-ukw-stg 
+      prdWebApps:                              
+        - entry-sheet-webapp-uks-prd 
+        - entry-sheet-webapp-ukw-prd

@@ -1,0 +1,14 @@
+platform_state_key_name="platform.terraform.tfstate"
+platform_state_container_name="terraform-container-ukw-nonprod"
+platform_state_storage_account_name="terraformukwnonprod"
+platform_state_resource_group_name = "terraform-rg-ukw-nonprod"
+
+azure_short_region = "uks"
+azure_region = "UK South"
+
+project = "DogApp"
+app = "dog"
+contact = "Conact Name"
+contact_details = "ext 1234"
+costcentre = "T1"
+description = "Dog test app1"

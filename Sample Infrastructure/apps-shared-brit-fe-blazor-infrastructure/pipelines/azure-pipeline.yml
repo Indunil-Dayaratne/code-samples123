@@ -1,0 +1,39 @@
+name: Digital Brit UI App Shared Infrastructure $(Date:yyyyMMdd)$(rev:.r)
+
+resources:
+  repositories:
+    - repository: templates
+      type: git
+      name: pipeline-templates
+
+trigger:
+  batch: true
+  branches:
+    include:
+    - develop
+    - main
+  paths:
+    include:
+    - src/*
+
+variables:
+  backend_config_file_name_nonprod: 'partial_config_nonprod.tf'
+  backend_config_file_name_prod: 'partial_config_prod.tf'
+  terraform_version: "0.15.2"
+
+parameters:
+- name: deployNonPrd
+  displayName: Deploy Non Prd
+  type: boolean
+  default: true
+- name: deployPrd
+  displayName: Deploy Prd
+  type: boolean
+  default: false
+
+stages:
+  - template: terraform/pipeline-shared.yml@templates
+    parameters:
+      working_dir: "src"
+      deployNonPrd: ${{parameters.deployNonPrd}}
+      deployPrd: ${{parameters.deployPrd}}

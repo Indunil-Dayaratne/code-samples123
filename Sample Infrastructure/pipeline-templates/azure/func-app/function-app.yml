@@ -1,0 +1,23 @@
+parameters:
+- name: env
+- name: appName
+- name: projectName
+- name: azureSubscription
+
+jobs:
+- deployment: Deploy_${{replace(parameters.appName, '-', '_')}}
+  displayName: Deploy ${{parameters.appName}}
+  environment: ${{parameters.env}}
+  pool:
+    vmImage: $(vmImageName)
+  strategy:
+    runOnce:
+      deploy:
+        steps:
+        - task: AzureFunctionApp@1
+          displayName: 'Deploy function - ${{parameters.appName}}'
+          inputs:
+            azureSubscription: ${{parameters.azureSubscription}}
+            appType: functionApp
+            appName: ${{parameters.appName}}
+            package: '$(Pipeline.Workspace)/drop/${{parameters.projectName}}.zip'

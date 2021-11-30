@@ -1,0 +1,62 @@
+name: Eclipse Entry Sheet Platform $(Date:yyyyMMdd)$(rev:.r)
+
+resources:
+  repositories:
+    - repository: templates
+      type: git
+      name: pipeline-templates
+      ref: develop
+
+trigger:
+  batch: true
+  branches:
+    include:
+    - develop
+    - master
+  paths:
+    include:
+    - src/*
+
+variables:
+  backend_config_file_name_nonprod: 'partial_config_nonprod.hcl '
+  backend_config_file_name_prod: 'partial_config_prod.hcl '
+  terraform_version: "0.12.24"
+
+parameters:
+ - name: DeployDev
+   displayName: Deploy Dev
+   type: boolean
+   default: true
+
+ - name: DeployTst
+   displayName: Deploy Test
+   type: boolean
+   default: false
+
+ - name: DeployUAT
+   displayName: Deploy UAT
+   type: boolean
+   default: false
+ 
+ - name: DeployStg
+   displayName: Deploy Staging
+   type: boolean
+   default: false
+
+ - name: DeployPrd
+   displayName: Deploy Prod
+   type: boolean
+   default: false
+
+stages:
+  - template: terraform/pipeline.yml@templates
+    parameters:
+      working_dir: src
+      validate_file_name: validate.tests.ps1
+      deployDev: ${{parameters.DeployDev}}
+      deployTst: ${{parameters.DeployTst}}
+      deployUAT: ${{parameters.DeployUAT}}
+      deployStg: ${{parameters.DeployStg}}
+      deployPrd: ${{parameters.DeployPrd}}
+
+

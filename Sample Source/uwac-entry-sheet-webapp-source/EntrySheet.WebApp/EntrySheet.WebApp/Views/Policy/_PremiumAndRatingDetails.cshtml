@@ -1,0 +1,90 @@
+﻿<!--  ko stopBinding: true -->
+<div id="divPremiumAndRatingDetails">
+    <div class="panel panel-default">
+        <div class="panel-heading msportalfx-text-small panel-Header">
+            <div class="row">
+                <div class="col-md-4" id="premiumHeaderDiv">
+                    <div class="pull-left" style="width:100%">
+                        Premium &amp; Rating
+                    </div>
+                    <div class="clearfix"></div>
+                </div>
+            </div>
+        </div>
+        <div class="panel-body" style=" padding-top: 0px; padding-bottom: 0px;">
+            <div class="table-responsive table-scroll">
+                <table class="table table-bordered table-hover table-striped" id="premiumRatingsDetails">
+                    <thead style="border-bottom-width:0px">
+                        <tr class="active">
+                            <th>PolicyRef</th>
+                            <th>Premium Ccy</th>
+                            <th>Reporting Ccy</th>
+                            <th>Written Premium</th>
+                            <th>Tech Price</th>
+                            <th>Model Price</th>
+                            <th>PLR</th>
+                            <th>Changes in LDA</th>
+                            <th>Changes in Coverage</th>
+                            <th>Changes in Other</th>
+                            <th>Risk Adjusted Rate Change</th>
+                            <th>Base Amount</th>
+                            <th>Brokerage</th>
+                        </tr>
+                    </thead>
+                    <tbody data-bind="foreach: premiumRatingsDetails">
+                        <tr>
+                            <td class="font-bold" style="text-align:center !important" data-bind="text:policyRef">
+                            </td>
+                            <td class="font-bold" style="text-align:center !important" data-bind="text:premiumCcy">
+                            </td>
+                            <td class="table-column-top">
+                                <div data-bind="if: ($index() == 0 &&  ($parent.premiumRatingsDetails().length > 1))">
+                                    <div class="input-group input-group-sm">
+                                        <select class="form-control font-bold input-sm field-recommended required from-copy-field"
+                                                data-bind="attr: { id: 'selReportingCcy' + $index(), name: 'selReportingCcy' + $index()  },
+                                        options:$parent.reportingCcyLst , value : reportingCcy , disable:isRiskEntrySheetLocked()"></select>
+
+                                        <span class="input-group-btn copy-span">
+                                            <button type="button" id="copyReportingCcy" class="btn copy-btn" title="Copy Reporting Ccy" data-bind="click:$parent.copyFieldValue.bind($data,$index(),'selReportingCcy')">
+                                                <span class="glyphicon glyphicon-copy-option glyphicon-circle-arrow-down"></span>
+                                            </button>
+                                        </span>
+                                    </div>
+                                </div>
+                                <div data-bind="if: ($parent.premiumRatingsDetails().length ==  1 || $index() != 0)">
+                                    <select class="form-control font-bold input-sm field-recommended required"
+                                            data-bind="attr: { id: 'selReportingCcy' + $index(), name: 'selReportingCcy' + $index()  },
+                                        options:$parent.reportingCcyLst , value : reportingCcy , disable:isRiskEntrySheetLocked()"></select>
+                                </div>
+                            </td>
+                            <td class="font-bold table-column-middle" data-bind="numericText: writtenPremium, positions: 2">
+                            </td>
+                            <td class="font-bold table-column-middle" data-bind="numericText: techPrice, positions: 2">
+                            </td>
+                            <td class="font-bold table-column-middle" data-bind="numericText: modelPrice, positions: 2">
+                            </td>
+                            <td class="font-bold table-column-middle" data-bind="numericText: plr, positions: 2">
+                            </td>
+                            <td class="font-bold table-column-middle" data-bind="numericText: changeInLDA, positions: 2">
+                            </td>
+                            <td class="font-bold table-column-middle" data-bind="numericText: changeInCoverage, positions: 2">
+                            </td>
+                            <td class="font-bold table-column-middle" data-bind="numericText: changeInOther, positions: 2">
+                            </td>
+                            <td class="font-bold table-column-middle" data-bind="numericText: riskAdjustedRateChange, positions: 2">
+                            </td>
+                            <td class="table-column-top">
+                                <input class="form-control input-sm font-bold" style="text-align:right !important" type="text"
+                                       data-bind="valueFormatted : baseAmount, positions: 2 ,  disable:isRiskEntrySheetLocked()" />
+                            </td>
+                            <td class="font-bold table-column-middle" data-bind="numericText: brokerage, positions: 2">
+                            </td>
+
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- /ko -->

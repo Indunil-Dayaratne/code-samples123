@@ -1,0 +1,23 @@
+parameters:
+  - name: ssis_server_name
+  - name: dmg_db_server_name
+  - name: dmg_db_name
+  - name: velocity_db_server_name
+  - name: velocity_db_name
+  - name: eclipse_db_server_name
+  - name: eclipse_db_name
+  - name: great_plains_db_server_name
+  - name: great_plains_db_name
+  - name: claims_db_server_name
+  - name: claims_db_name
+  
+steps:
+  - task: NuGetCommand@2
+    displayName: Install SSISBuild nuget package
+    inputs:
+      command: 'custom'
+      arguments: 'install SSISBuild -OutputDirectory "packages" -ExcludeVersion'
+  - powershell: '.\packages\SSISBuild\tools\ssisbuild.exe "$(Build.SourcesDirectory)/src/current/Brit.Sharepoint.DMS.Polling/Brit.Sharepoint.DMS.Polling.dtproj" -Configuration Development -ProtectionLevel "EncryptSensitiveWithPassword" -Password "password" -NewPassword "password" -OutputFolder "$(System.DefaultWorkingDirectory)/PollingPackagesBuild" -Parameter:Project::VelocityDbServerName "${{ parameters.velocity_db_server_name }}" -Parameter:Project::VelocityDbName "${{ parameters.velocity_db_name }}" -Parameter:Project::VelocityDbPassword "query" -Parameter:Project::EclipseDbServerName "${{ parameters.eclipse_db_server_name }}" -Parameter:Project::EclipseDbName "${{ parameters.eclipse_db_name }}" -Parameter:Project::GreatPlainsDbServerName "${{ parameters.great_plains_db_server_name }}" -Parameter:Project::GreatPlainsDbName "${{ parameters.great_plains_db_name }}" -Parameter:Project::ClaimsDbServerName "${{ parameters.claims_db_server_name }}" -Parameter:Project::ClaimsDbName "${{ parameters.claims_db_name }}" -Parameter:Project::DmgDbServerName "${{ parameters.dmg_db_server_name }}" -Parameter:Project::DmgDbName "${{ parameters.dmg_db_name }}"'
+    displayName: 'Build Brit.Sharepoint.DMS.Polling SSIS Package Project'
+  - powershell: '.\packages\SSISBuild\tools\ssisdeploy.exe "$(System.DefaultWorkingDirectory)/PollingPackagesBuild/Brit.Sharepoint.DMS.Polling.ispac" -ServerInstance "${{ parameters.ssis_server_name }}" -Catalog SSISDB -Folder "Brit.Sharepoint.DMS.Polling" -ProjectName "Brit.Sharepoint.DMS.Polling" -ProjectPassword "password"'
+    displayName: 'Deploy Brit.Sharepoint.DMS.Polling SSIS Package Project'

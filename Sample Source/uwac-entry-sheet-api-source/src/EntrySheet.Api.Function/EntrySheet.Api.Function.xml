@@ -1,0 +1,88 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>EntrySheet.Api.Function</name>
+    </assembly>
+    <members>
+        <member name="M:EntrySheet.Api.Function.Handlers.CurrencyHandler.GetCurrenciesAsync(Microsoft.AspNetCore.Http.HttpRequest)">
+            <summary>
+            Fetch currency values
+            </summary>  
+            <response code="200">Request processed successfully.</response>
+            <response code="400">Invalid parameters supplied. </response>         
+            <response code="403">The request is not authenticated with AAD or does not have the BEAS authorisation.</response>         
+            <response code="500">Internal service error.</response>
+        </member>
+        <member name="M:EntrySheet.Api.Function.Handlers.EntrySheetHandler.GetEntrySheetDetailsAsync(Microsoft.AspNetCore.Http.HttpRequest,System.Int32)">
+            <summary>
+            Fetch Entry Sheet details for a given BritPolicyId
+            </summary>  
+            <response code="200">Request processed successfully.</response>
+            <response code="400">Invalid parameters supplied. </response>         
+            <response code="403">The request is not authenticated with AAD or does not have the BEAS authorisation.</response>         
+            <response code="500">Internal service error.</response>
+        </member>
+        <member name="M:EntrySheet.Api.Function.Handlers.EntrySheetHandler.GetEntrySheetsAsync(Microsoft.AspNetCore.Http.HttpRequest)">
+            <summary>
+            Query Entry Sheets by BritPolicyIds
+            </summary>       
+            <returns>Risk data.</returns>
+            <response code="200">Request processed successfully.</response>
+            <response code="400">Invalid parameters supplied. </response>         
+            <response code="403">The request is not authenticated with AAD or does not have the BEAS authorisation.</response>         
+            <response code="500">Internal service error.</response>
+        </member>
+        <member name="M:EntrySheet.Api.Function.Handlers.EntrySheetHandler.SaveEntrySheetDetailsAsync(Microsoft.AspNetCore.Http.HttpRequest)">
+            <summary>
+            Save Entry Sheet Details.
+            </summary>       
+            <returns>Risk data.</returns>
+            <response code="200">Request processed successfully.</response>
+            <response code="400">Invalid parameters supplied. </response>         
+            <response code="403">The request is not authenticated with AAD or does not have the BEAS authorisation.</response>         
+            <response code="500">Internal service error.</response>
+        </member>
+        <member name="M:EntrySheet.Api.Function.Handlers.EPlacingHandler.GetEPlacingAsync(Microsoft.AspNetCore.Http.HttpRequest)">
+            <summary>
+            Fetch E Placing values 
+            </summary>  
+            <response code="200">Request processed successfully.</response>
+            <response code="400">Invalid parameters supplied. </response>         
+            <response code="403">The request is not authenticated with AAD or does not have the BEAS authorisation.</response>         
+            <response code="500">Internal service error.</response>
+        </member>
+        <member name="M:EntrySheet.Api.Function.Handlers.GpmGenerationHandler.GenerateGpmDetailsAsync(Microsoft.AspNetCore.Http.HttpRequest)">
+            <summary>
+            Generate GPM details for a given entry sheet
+            </summary>       
+            <returns>GPM details.</returns>
+            <response code="200">Request processed successfully.</response>
+            <response code="400">Invalid parameters supplied. </response>         
+            <response code="403">The request is not authenticated with AAD or does not have the BEAS authorisation.</response>         
+            <response code="500">Internal service error.</response>
+        </member>
+        <member name="M:EntrySheet.Api.Function.Handlers.IndustryCodeHandler.GetIndustryCodesAsync(Microsoft.AspNetCore.Http.HttpRequest)">
+            <summary>
+            Fetch Industry Code values
+            </summary>  
+            <response code="200">Request processed successfully.</response>
+            <response code="400">Invalid parameters supplied. </response>         
+            <response code="403">The request is not authenticated with AAD or does not have the BEAS authorisation.</response>         
+            <response code="500">Internal service error.</response>
+        </member>
+        <member name="M:EntrySheet.Api.Function.Handlers.RiskRatingHandler.GetRiskRatingsAsync(Microsoft.AspNetCore.Http.HttpRequest)">
+            <summary>
+            Fetch Risk Rating values
+            </summary>  
+            <response code="200">Request processed successfully.</response>
+            <response code="400">Invalid parameters supplied. </response>         
+            <response code="403">The request is not authenticated with AAD or does not have the BEAS authorisation.</response>         
+            <response code="500">Internal service error.</response>
+        </member>
+        <member name="T:EntrySheet.Api.Function.Models.IPolicyRefModel">
+            <summary>
+            This interface allows a generic function to loop through any list to find a policy ref
+            </summary>
+        </member>
+    </members>
+</doc>

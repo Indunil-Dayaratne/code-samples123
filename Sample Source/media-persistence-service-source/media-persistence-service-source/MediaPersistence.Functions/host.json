@@ -1,0 +1,15 @@
+{
+  "version": "2.0",
+  "extensions": {
+    "http": {
+      "routePrefix": "api/MediaPersistenceService/v1"
+    }
+  },
+  "logging": {
+    "logLevel": {
+      "Function": "Error",
+      "Function.HealthCheck": "None",
+      "Host.Results": "Error"
+    }
+  }
+}

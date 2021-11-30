@@ -1,0 +1,338 @@
+resources:
+  repositories:
+    - repository: tf_modules
+      type: git
+      name: PSCloudModules/TerraformModules
+
+name: Apps Shared API Management $(Date:yyyyMMdd)$(rev:.r)
+
+parameters:
+  - name: DeployDev
+    displayName: Deploy Dev
+    type: boolean
+    default: false
+
+  - name: DeployChg
+    displayName: Deploy Change
+    type: boolean
+    default: false
+
+  - name: DeployInt
+    displayName: Deploy Int
+    type: boolean
+    default: false
+
+  - name: DeployUAT
+    displayName: Deploy UAT
+    type: boolean
+    default: false
+
+  - name: DeployStg
+    displayName: Deploy Staging
+    type: boolean
+    default: false
+
+  - name: DeployDmo
+    displayName: Deploy Demo
+    type: boolean
+    default: false
+
+  - name: DeployPrd
+    displayName: Deploy Production
+    type: boolean
+    default: false
+  
+trigger: none
+
+stages:
+   - stage: build
+     displayName: Build
+     jobs:
+      - job: validatetf
+        displayName: Validate TF
+        condition: 
+        pool: terraform12-pool
+        steps:
+          - checkout: self
+          - checkout: tf_modules
+          - task: PowerShell@2
+            displayName: Run Validation Tests
+            inputs:
+              targetType: inline
+              script: Invoke-Pester -Script ".\Tests\Validate.Tests.ps1" -OutputFile ".\Tests\Pester.xml" -OutputFormat "NUnitXML"
+              workingDirectory: $(Build.SourcesDirectory)\apps-shared-api-management-platform-infrastructure
+
+          - task: PublishTestResults@2
+            displayName: Publish Test Results
+            inputs:
+              testResultsFiles: $(Build.SourcesDirectory)\apps-shared-api-management-platform-infrastructure\Tests\Pester.xml
+              testResultsFormat: NUnit
+              failTaskOnFailedTests: true
+            condition: always()   
+   - stage: tst
+     displayName: Deploy Tst
+     dependsOn: build
+     variables:
+      - name: env
+        value: tst
+     jobs:
+       - deployment: tstTF
+         pool: terraform12-pool
+         variables:
+           - group: Terraform Non-Prod Deploy
+         environment: $(env)
+         displayName: Deploy Tst TF
+         strategy:
+           runOnce:
+             deploy:
+               steps:
+                 - checkout: self
+                 - checkout: tf_modules
+                 - template: tf-build.yml
+                   parameters:
+                     working_dir: $(Build.SourcesDirectory)/apps-shared-api-management-platform-infrastructure
+                     client_id: $(arm_client_id)
+                     client_secret: $(arm_client_secret)
+                     tenant_id: $(arm_tenant_id)
+                     sub_id: $(arm_subscription_id)
+                     access_key: $(arm_access_key)
+                     env: $(env)
+                     backend_config_file_name: partial_config-nonprod.tf
+                 - task: PowerShell@2
+                   displayName: Configure APIM Custom Domains
+                   name: apim_custom_domains
+                   inputs:
+                    targetType: filePath
+                    filePath: $(Build.SourcesDirectory)/apps-shared-api-management-platform-infrastructure/ps-scripts/apim_custom_domains.ps1
+                    workingDirectory: $(Build.SourcesDirectory)/apps-shared-api-management-platform-infrastructure/ps-scripts
+                    arguments: > # Use this to avoid newline characters in multiline string
+                     -environmentType "test"
+                     -primaryAzureLocationAbbrev "uks"
+                     -subscriptionId $(arm_subscription_id)
+                     -tenantId $(arm_tenant_id)
+                     -spnName $(arm_client_id)
+                     -spnPassword (ConvertTo-SecureString "$(arm_client_secret)" -AsPlainText -Force)
+   - stage: dev
+     displayName: Deploy Dev
+     condition: and(succeeded(), eq('${{parameters.DeployDev}}', true))
+     dependsOn: tst
+     variables:
+      - name: env
+        value: dev
+     jobs:
+       - deployment: devTF
+         pool: terraform12-pool
+         variables:
+           - group: Terraform Non-Prod Deploy
+         environment: $(env)
+         displayName: Deploy Dev TF
+         strategy:
+           runOnce:
+             deploy:
+               steps:
+                 - checkout: self
+                 - checkout: tf_modules
+                 - template: tf-build.yml
+                   parameters:
+                     working_dir: $(Build.SourcesDirectory)/apps-shared-api-management-platform-infrastructure
+                     client_id: $(arm_client_id)
+                     client_secret: $(arm_client_secret)
+                     tenant_id: $(arm_tenant_id)
+                     sub_id: $(arm_subscription_id)
+                     access_key: $(arm_access_key)
+                     env: $(env)
+                     backend_config_file_name: partial_config-nonprod.tf 
+   - stage: chg
+     displayName: Deploy Change
+     condition: and(succeeded(), eq('${{parameters.DeployChg}}', true))
+     dependsOn: tst
+     variables:
+      - name: env
+        value: chg
+     jobs:
+       - deployment: chgTF
+         pool: terraform12-pool
+         variables:
+           - group: Terraform Non-Prod Deploy
+         environment: $(env)
+         displayName: Deploy Change TF
+         strategy:
+           runOnce:
+             deploy:
+               steps:
+                 - checkout: self
+                 - checkout: tf_modules
+                 - template: tf-build.yml
+                   parameters:
+                     working_dir: $(Build.SourcesDirectory)/apps-shared-api-management-platform-infrastructure
+                     client_id: $(arm_client_id)
+                     client_secret: $(arm_client_secret)
+                     tenant_id: $(arm_tenant_id)
+                     sub_id: $(arm_subscription_id)
+                     access_key: $(arm_access_key)
+                     env: $(env)
+                     backend_config_file_name: partial_config-nonprod.tf                     
+   - stage: int
+     displayName: Deploy Int
+     condition: and(succeeded(), eq('${{parameters.DeployInt}}', true))
+     dependsOn: tst
+     variables:
+      - name: env
+        value: int
+     jobs:
+       - deployment: intTF
+         pool: terraform12-pool
+         variables:
+           - group: Terraform Non-Prod Deploy
+         environment: $(env)
+         displayName: Deploy Int TF
+         strategy:
+           runOnce:
+             deploy:
+               steps:
+                 - checkout: self
+                 - checkout: tf_modules
+                 - template: tf-build.yml
+                   parameters:
+                     working_dir: $(Build.SourcesDirectory)/apps-shared-api-management-platform-infrastructure
+                     client_id: $(arm_client_id)
+                     client_secret: $(arm_client_secret)
+                     tenant_id: $(arm_tenant_id)
+                     sub_id: $(arm_subscription_id)
+                     access_key: $(arm_access_key)
+                     env: $(env)
+                     backend_config_file_name: partial_config-nonprod.tf
+   - stage: uat
+     displayName: Deploy UAT
+     condition: and(succeeded(), eq('${{parameters.DeployUAT}}', true))
+     dependsOn: tst
+     variables:
+      - name: env
+        value: uat
+     jobs:
+       - deployment: uatTF
+         pool: terraform12-pool
+         variables:
+           - group: Terraform Non-Prod Deploy
+         environment: $(env)
+         displayName: Deploy UAT TF
+         strategy:
+           runOnce:
+             deploy:
+               steps:
+                 - checkout: self
+                 - checkout: tf_modules
+                 - template: tf-build.yml
+                   parameters:
+                     working_dir: $(Build.SourcesDirectory)/apps-shared-api-management-platform-infrastructure
+                     client_id: $(arm_client_id)
+                     client_secret: $(arm_client_secret)
+                     tenant_id: $(arm_tenant_id)
+                     sub_id: $(arm_subscription_id)
+                     access_key: $(arm_access_key)
+                     env: $(env)
+                     backend_config_file_name: partial_config-nonprod.tf
+   - stage: stg
+     displayName: Deploy Staging
+     condition: and(succeeded(), eq('${{parameters.DeployStg}}', true))
+     dependsOn: tst
+     variables:
+      - name: env
+        value: stg
+     jobs:
+       - deployment: stgTF
+         pool: terraform12-pool
+         variables:
+           - group: Terraform Non-Prod Deploy
+         environment: $(env)
+         displayName: Deploy Staging TF
+         strategy:
+           runOnce:
+             deploy:
+               steps:
+                 - checkout: self
+                 - checkout: tf_modules
+                 - template: tf-build.yml
+                   parameters:
+                     working_dir: $(Build.SourcesDirectory)/apps-shared-api-management-platform-infrastructure
+                     client_id: $(arm_client_id)
+                     client_secret: $(arm_client_secret)
+                     tenant_id: $(arm_tenant_id)
+                     sub_id: $(arm_subscription_id)
+                     access_key: $(arm_access_key)
+                     env: $(env)
+                     backend_config_file_name: partial_config-nonprod.tf
+   - stage: dmo
+     displayName: Deploy Demo
+     condition: and(succeeded(), eq('${{parameters.DeployDmo}}', true))
+     dependsOn: build
+     variables:
+      - name: env
+        value: dmo
+     jobs:
+       - deployment: dmoTF
+         pool: terraform12-pool
+         variables:
+           - group: Terraform Prod Deploy
+         environment: $(env)
+         displayName: Deploy Demo TF
+         strategy:
+           runOnce:
+             deploy:
+               steps:
+                 - checkout: self
+                 - checkout: tf_modules
+                 - template: tf-build.yml
+                   parameters:
+                     working_dir: $(Build.SourcesDirectory)/apps-shared-api-management-platform-infrastructure
+                     client_id: $(arm_client_id)
+                     client_secret: $(arm_client_secret)
+                     tenant_id: $(arm_tenant_id)
+                     sub_id: $(arm_subscription_id)
+                     access_key: $(arm_access_key)
+                     env: $(env)
+                     backend_config_file_name: partial_config-prod.tf 
+   - stage: prod
+     displayName: Deploy Prod
+     condition: and(succeeded(),eq(variables['Build.SourceBranch'], 'refs/heads/master'), eq('${{parameters.DeployPrd}}', true))
+     dependsOn: build
+     variables:
+      - name: env
+        value: prd
+     jobs:
+       - deployment: prdTF
+         pool: terraform12-pool
+         variables:
+           - group: Terraform Prod Deploy
+         environment: $(env)
+         displayName: Deploy Prod TF
+         strategy:
+           runOnce:
+             deploy:
+               steps:
+                 - checkout: self
+                 - checkout: tf_modules
+                 - template: tf-build.yml
+                   parameters:
+                     working_dir: $(Build.SourcesDirectory)/apps-shared-api-management-platform-infrastructure
+                     client_id: $(arm_client_id)
+                     client_secret: $(arm_client_secret)
+                     tenant_id: $(arm_tenant_id)
+                     sub_id: $(arm_subscription_id)
+                     access_key: $(arm_access_key)
+                     env: $(env)
+                     backend_config_file_name: partial_config-prod.tf
+                 - task: PowerShell@2
+                   displayName: Configure APIM Custom Domains
+                   name: apim_custom_domains
+                   inputs:
+                    targetType: filePath
+                    filePath: $(Build.SourcesDirectory)/apps-shared-api-management-platform-infrastructure/ps-scripts/apim_custom_domains.ps1
+                    workingDirectory: $(Build.SourcesDirectory)/apps-shared-api-management-platform-infrastructure/ps-scripts
+                    arguments: > # Use this to avoid newline characters in multiline string
+                     -environmentType "prod"
+                     -primaryAzureLocationAbbrev "uks"
+                     -subscriptionId $(arm_subscription_id)
+                     -tenantId $(arm_tenant_id)
+                     -spnName $(arm_client_id)
+                     -spnPassword (ConvertTo-SecureString "$(arm_client_secret)" -AsPlainText -Force)

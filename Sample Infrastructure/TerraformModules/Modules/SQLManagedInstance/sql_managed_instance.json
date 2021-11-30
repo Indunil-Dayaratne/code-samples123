@@ -1,0 +1,73 @@
+{
+	"$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+	"contentVersion": "1.0.0.0",
+	"parameters": {
+		"name": {
+			"type": "String"
+		},
+		"location": {
+			"type": "String"
+		},
+		"sku_name": {
+			"type": "String"
+		},
+		"admin_username": {
+			"type": "String"
+		},
+		"admin_password": {
+			"type": "SecureString"
+		},
+		"subnet_id": {
+			"type": "String"
+		},
+		"vcores": {
+			"type": "Int"
+		},
+		"storage_size": {
+			"type": "String"
+		},
+		"collation": {
+			"type": "String"
+		},
+		"timezone": {
+			"type": "String"
+		},
+		"license_type": {
+			"type": "String"
+		},
+		"public_endpoint": {
+			"type": "Bool"
+		},
+		"tlsversion": {
+			"type": "String"
+		},
+		"tags": {
+			"type": "Object"
+		}
+	},
+	"resources": [{
+		"name": "[parameters('name')]",
+		"type": "Microsoft.Sql/managedInstances",
+		"tags": "[parameters('tags')]",
+		"apiVersion": "2018-06-01-preview",
+		"location": "[parameters('location')]",
+		"identity": {
+			"type": "SystemAssigned"
+		},
+		"sku": {
+			"name": "[parameters('sku_name')]"
+		},
+		"properties": {
+			"administratorLogin": "[parameters('admin_username')]",
+			"administratorLoginPassword": "[parameters('admin_password')]",
+			"subnetId": "[parameters('subnet_id')]",
+			"licenseType": "[parameters('license_type')]",
+			"vCores": "[parameters('vcores')]",
+			"storageSizeInGB": "[parameters('storage_size')]",
+			"collation": "[parameters('collation')]",
+			"publicDataEndpointEnabled": "[parameters('public_endpoint')]",
+			"minimalTlsVersion": "[parameters('tlsversion')]",
+			"timezoneId": "[parameters('timezone')]"			
+		}
+	}]
+}

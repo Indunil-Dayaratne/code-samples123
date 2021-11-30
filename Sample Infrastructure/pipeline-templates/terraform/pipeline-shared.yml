@@ -1,0 +1,139 @@
+parameters:
+- name: working_dir
+  type: string
+- name: validate_file_name
+  type: string
+  default: validate.tests.ps1
+- name: verify_file_name
+  type: string
+  default: verify.tests.ps1
+- name: moduleRepos
+  type: object
+  default: []
+- name: deployNonPrd
+  type: boolean
+- name: deployPrd
+  type: boolean
+
+stages:
+  - stage: verify
+    displayName: Verify Infrastructure Configuration
+    pool:
+      vmImage: windows-latest
+    condition: eq(variables['Build.Reason'], 'Schedule')
+    jobs:
+      - job: verify_nonprod
+        displayName: Verify Non-Production Infrastructure Configuration
+        variables:
+          - group: Terraform Non-Prod Deploy
+        steps:
+          - checkout: self
+
+          - ${{ each repo in parameters.moduleRepos }}:
+            - checkout: ${{ repo }}
+
+          - template: tf-install.yml
+            parameters:
+              version: $(terraform_version)
+
+          - template: validate.yml
+            parameters:
+              env: nonprd
+              working_dir: ${{parameters.working_dir}}
+              validate_file_name: ${{parameters.verify_file_name}}          
+
+      - job: verify_prod
+        displayName: Verify Production Infrastructure Configuration
+        variables:
+          - group: Terraform Prod Deploy
+        steps:
+          - checkout: self
+
+          - ${{ each repo in parameters.moduleRepos }}:
+            - checkout: ${{ repo }}
+
+          - template: tf-install.yml
+            parameters:
+              version: $(terraform_version)
+
+          - template: validate.yml
+            parameters:
+              env: prd
+              working_dir: ${{parameters.working_dir}}
+              validate_file_name: ${{parameters.verify_file_name}}
+
+  - stage: build
+    displayName: Build
+    pool:
+      vmImage: windows-latest
+    condition: eq(variables['Build.Reason'], 'PullRequest')
+    jobs:
+    - job: validatetf_nonprod
+      displayName: Validate TF Non Prod
+      variables:
+        - group: Terraform Non-Prod Deploy
+      steps:
+        - checkout: self
+
+        - ${{ each repo in parameters.moduleRepos }}:
+          - checkout: ${{ repo }}
+
+        - template: tf-install.yml
+          parameters:
+            version: $(terraform_version)
+
+        - template: validate.yml
+          parameters:
+            env: nonprd
+            working_dir: ${{parameters.working_dir}}
+            validate_file_name: ${{parameters.validate_file_name}}
+
+    - job: validatetf_prod
+      displayName: Validate TF Prod
+      variables:
+        - group: Terraform Prod Deploy
+      steps:
+        - checkout: self
+
+        - ${{ each repo in parameters.moduleRepos }}:
+          - checkout: ${{ repo }}
+
+        - template: tf-install.yml
+          parameters:
+            version: $(terraform_version)
+
+        - template: validate.yml
+          parameters:
+            env: prd
+            working_dir: ${{parameters.working_dir}}
+            validate_file_name: ${{parameters.validate_file_name}}
+
+  - stage: nonprd
+    dependsOn: build
+    displayName: Deploy Non Prd
+    condition: and(not(failed('build')), not(eq(variables['Build.Reason'], 'Schedule')), or(eq(variables['Build.Reason'], 'Manual'), eq(variables['Build.SourceBranchName'], 'develop')), eq(${{parameters.deployNonPrd}},true))
+    variables:
+    - group: Terraform Non-Prod Deploy
+    jobs:
+    - template: tf-deploy.yml
+      parameters:
+        env: nonprd
+        moduleRepos: ${{parameters.moduleRepos}}
+        working_dir: ${{parameters.working_dir}}
+        backend_config_file_name: $(backend_config_file_name_nonprod)
+        tfvars_environment_vars: ""
+
+  - stage: prd
+    displayName: Deploy Prd
+    condition: and(not(failed('stg')), and(eq(variables['Build.Reason'], 'Manual'), or(eq(variables['Build.SourceBranch'], 'refs/heads/main'),eq(variables['Build.SourceBranch'], 'refs/heads/master'))),eq(${{parameters.deployPrd}},true))
+    dependsOn: nonprd
+    variables:
+    - group: Terraform Prod Deploy
+    jobs:
+    - template: tf-deploy.yml
+      parameters:
+        env: prd
+        moduleRepos: ${{parameters.moduleRepos}}
+        working_dir: ${{parameters.working_dir}}
+        backend_config_file_name: $(backend_config_file_name_prod)
+        tfvars_environment_vars: ""

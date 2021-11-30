@@ -1,0 +1,51 @@
+parameters:
+- name: env
+  type: string
+- name: working_dir
+  type: string
+- name: backend_config_file_name
+  type: string
+  
+steps:
+- template: ../terraform/tf-install.yml
+  parameters:
+    version: $(terraform_version)
+
+- powershell: terraform init -backend-config="./backend-config/${{ parameters.backend_config_file_name }}"
+  workingDirectory: ${{ parameters.working_dir }}
+  displayName: 'TF - Init'
+  env:
+    ARM_CLIENT_ID: $(arm_client_id)
+    ARM_CLIENT_SECRET: $(arm_client_secret)
+    ARM_TENANT_ID: $(arm_tenant_id)
+    ARM_SUBSCRIPTION_ID: $(arm_subscription_id)
+    ARM_ACCESS_KEY: $(arm_access_key)
+
+- powershell: |
+    $ws = (terraform workspace list | select-string ${{ parameters.env }})
+    if ($ws) {
+      terraform workspace select ${{ parameters.env }}
+    } else {
+      terraform workspace new ${{ parameters.env }}
+    }
+  workingDirectory: ${{ parameters.working_dir }}
+  displayName: 'TF - Workspace'
+  env:
+    ARM_CLIENT_ID: $(arm_client_id)
+    ARM_CLIENT_SECRET: $(arm_client_secret)
+    ARM_TENANT_ID: $(arm_tenant_id)
+    ARM_SUBSCRIPTION_ID: $(arm_subscription_id)
+    ARM_ACCESS_KEY: $(arm_access_key)
+
+- powershell: terraform plan -refresh=true -input=false -var-file="./terraform-vars/${{ parameters.env }}.terraform.tfvars"  -var "SENDGRIDAPIKEY=$(SendgridAPIKey)" -var "SENDGRIDFROMEMAIL=$(SendgridFromEmail)" -var "SENDGRIDFROMNAME=$(SendgridFromName)"  -out=plan
+  workingDirectory: ${{ parameters.working_dir }}
+  displayName: 'TF - Plan'
+  env:
+    ARM_CLIENT_ID: $(arm_client_id)
+    ARM_CLIENT_SECRET: $(arm_client_secret)
+    ARM_TENANT_ID: $(arm_tenant_id)
+    ARM_SUBSCRIPTION_ID: $(arm_subscription_id)
+    ARM_ACCESS_KEY: $(arm_access_key)
+    
+    
+    

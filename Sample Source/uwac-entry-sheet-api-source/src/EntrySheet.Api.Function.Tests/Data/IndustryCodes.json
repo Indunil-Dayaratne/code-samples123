@@ -1,0 +1,98 @@
+[
+  {
+    "Code": "A",
+    "Name": "Agriculture, Forestry and Fishing"
+  },
+  {
+    "Code": "B",
+    "Name": "Mining and Quarrying"
+  },
+  {
+    "Code": "C",
+    "Name": "Manufacturing"
+  },
+  {
+    "Code": "D",
+    "Name": "Electricity, Gas, Steam and Air Conditioning Supply"
+  },
+  {
+    "Code": "E",
+    "Name": "Water Supply, Sewage and Waste Management"
+  },
+  {
+    "Code": "F",
+    "Name": "Construction"
+  },
+  {
+    "Code": "G",
+    "Name": "Wholesale and Retail Trade, Repair of Motor Vehicles"
+  },
+  {
+    "Code": "H",
+    "Name": "Transportation and Storage"
+  },
+  {
+    "Code": "I",
+    "Name": "Accommodation and Food Service"
+  },
+  {
+    "Code": "J",
+    "Name": "Information and Communication"
+  },
+  {
+    "Code": "K",
+    "Name": "Financial and Insurance Activities"
+  },
+  {
+    "Code": "L",
+    "Name": "Real Estate Activities"
+  },
+  {
+    "Code": "M",
+    "Name": "Professional, Scientific and Technical Activities"
+  },
+  {
+    "Code": "N",
+    "Name": "Administrative and Support Service Activities"
+  },
+  {
+    "Code": "O",
+    "Name": "Public Administration, Defence & Social Security"
+  },
+  {
+    "Code": "P",
+    "Name": "Education"
+  },
+  {
+    "Code": "Q",
+    "Name": "Human Health and Social Work Activities"
+  },
+  {
+    "Code": "R",
+    "Name": "Arts, Entertainment and Recreation"
+  },
+  {
+    "Code": "S",
+    "Name": "Other Service Activities"
+  },
+  {
+    "Code": "T",
+    "Name": "Activities of Households as Employers"
+  },
+  {
+    "Code": "U",
+    "Name": "Activities of Extraterritorial Organisations and Bodies"
+  },
+  {
+    "Code": "UNK",
+    "Name": "Unknown"
+  },
+  {
+    "Code": "PERS",
+    "Name": "Personal Lines"
+  },
+  {
+    "Code": "MULTI",
+    "Name": "Multiple Industries"
+  }
+]

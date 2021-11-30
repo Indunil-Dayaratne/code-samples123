@@ -1,0 +1,194 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
+
+    <IsPackable>false</IsPackable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Brit.Risk.Entities" Version="0.1.0.19" />
+    <PackageReference Include="Microsoft.Azure.Cosmos" Version="3.18.0" />
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.5.0" />
+    <PackageReference Include="Moq" Version="4.16.1" />
+    <PackageReference Include="xunit" Version="2.4.1" />
+    <PackageReference Include="xunit.runner.visualstudio" Version="2.4.3">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+    <PackageReference Include="coverlet.collector" Version="1.2.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\EntrySheet.Api.Function\EntrySheet.Api.Function.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Update="Data\10044A20A000\10044A20A000_EntrySheetDetailsModel.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="Data\10044A20A000\1098461_10044A20A000_Placing.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="Data\10044A20A000\1098461_BritCache_GetRelatedPoliciesResults.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="Data\BB585S20A000\1084411_BB585S20A000_Placing.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="Data\BB585S20A000\1084411_BritCacheClient_GetRelatedPoliciesResults.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="Data\BB585S20A000\611473_BB585S14A000_Placing.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="Data\BB585S20A000\661369_BB585S15A000_Placing.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="Data\BB585S20A000\709848_BB585S16A000_Placing.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="Data\BB585S20A000\758933_BB585S17A000_Placing.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="Data\BB585S20A000\917695_BB585S18A000_Placing.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="Data\BB585S20A000\987654_BB585S19A000_Placing.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="Data\BB585S20A000\BB585S20A000_EntrySheetDetailsModel.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="Data\CF040E20B000\1046272_CF040E19B000_Placing.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="Data\CF040E20B000\1046273_CF040E19C000_Placing.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="Data\CF040E20B000\1118453_BritCache_GetRelatedPoliciesResults.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="Data\CF040E20B000\1118453_CF040E20B000_Placing.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="Data\CF040E20B000\1118454_CF040E20C000_Placing.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="Data\CF040E20B000\626697_CF040E14A000_Placing.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="Data\CF040E20B000\626699_CF040E14B000_Placing.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="Data\CF040E20B000\626706_CF040E14C000_Placing.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="Data\CF040E20B000\626708_CF040E14D000_Placing.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="Data\CF040E20B000\679872_CF040E15A000_Placing.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="Data\CF040E20B000\679873_CF040E15B000_Placing.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="Data\CF040E20B000\679874_CF040E15C000_Placing.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="Data\CF040E20B000\679875_CF040E15D000_Placing.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="Data\CF040E20B000\720854_CF040E16A000_Placing.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="Data\CF040E20B000\720855_CF040E16B000_Placing.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="Data\CF040E20B000\720856_CF040E16C000_Placing.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="Data\CF040E20B000\720857_CF040E16D000_Placing.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="Data\CF040E20B000\781031_CF040E17B000_Placing.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="Data\CF040E20B000\781032_CF040E17C000_Placing.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="Data\CF040E20B000\912004_CF040E18B000_Placing.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="Data\CF040E20B000\912007_CF040E18C000_Placing.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="Data\CF040E20B000\CF040E20B000_EntrySheetDetailsModel.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="Data\Existing_Policy_Data\Multi_Section_Multi_Line\1118453_BritCache_GetEclipsePoliciesAsyncResult.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="Data\Existing_Policy_Data\Multi_Section_Multi_Line\1118453_CF040E20B000_Placing.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="Data\Existing_Policy_Data\Multi_Section_Multi_Line\1118454_BritCache_GetEclipsePoliciesAsyncResult.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="Data\Existing_Policy_Data\Multi_Section_Multi_Line\1118454_CF040E20C000_Placing.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="Data\Existing_Policy_Data\Multi_Section_Multi_Line\CF040E20B000_EntrySheetDetailsModel.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="Data\GP942A21A000\GP942A21A000_Placing.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="Data\GP942A21A000\GPMData.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="Data\IndustryCodes.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="Data\KE688B20A000\GPMData2.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="Data\KE688B20A000\KE688B20A000_Placing.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="Data\Multi_Section_Multi_Line_Policy_CF040E20B000\1118453_BritCache_GetEclipsePoliciesAsyncResult.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="Data\Multi_Section_Multi_Line_Policy_CF040E20B000\1118453_CF040E20B000_Placing.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="Data\Multi_Section_Multi_Line_Policy_CF040E20B000\1118454_BritCache_GetEclipsePoliciesAsyncResult.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="Data\Multi_Section_Multi_Line_Policy_CF040E20B000\1118454_CF040E20C000_Placing.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="Data\Multi_Section_Multi_Line_Policy_CF040E20B000\CF040E20B000_EntrySheetDetailsModel.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="Data\Single_Section_Single_Line_Policy_BB585S20A000\1084411_BB585S20A000_Placing.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="Data\Single_Section_Single_Line_Policy_BB585S20A000\1084411_BritCacheClient_GetEclipsePoliciesAsyncResult.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="Data\Single_Section_Single_Line_Policy_BB585S20A000\BB585S20A000_EntrySheetDetailsModel.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="Data\Single_Section_Multi_Line_Policy_10044A20A000\10044A20A000_EntrySheetDetailsModel.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="Data\Single_Section_Multi_Line_Policy_10044A20A000\1098461_10044A20A000_Placing.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="Data\Single_Section_Multi_Line_Policy_10044A20A000\1098461_BritCache_GetEclipsePoliciesAsyncResult.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
+</Project>

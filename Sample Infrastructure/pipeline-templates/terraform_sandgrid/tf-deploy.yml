@@ -1,0 +1,67 @@
+parameters:
+- name: env
+- name: working_dir
+- name: backend_config_file_name
+- name: moduleRepos
+  type: object
+  default: []
+
+jobs:
+- job: Terra_Plan_${{ parameters.env }}
+  displayName: Terraform Plan - ${{ parameters.env }}
+  pool:
+    vmImage: 'windows-latest'
+  workspace:
+    clean: outputs
+  steps:
+  - checkout: self
+  
+  - ${{ each repo in parameters.moduleRepos }}:
+    - checkout: ${{ repo }}
+            
+  - template: tf-plan.yml
+    parameters:
+      env: ${{ parameters.env }}
+      working_dir: ${{ parameters.working_dir }}
+      backend_config_file_name: ${{ parameters.backend_config_file_name }}
+
+- job: Review_Terra_Plan_${{ parameters.env }}
+  displayName: Review Terraform Plan - ${{ parameters.env }}
+  dependsOn: Terra_Plan_${{ parameters.env }}
+  pool: server
+  steps:   
+  - task: ManualValidation@0
+    inputs:
+      instructions: 'Please review the terraform plan (${{ parameters.env }}) and resume'
+      onTimeout: 'reject'
+
+- deployment: Deploy_Terraform_Apply_${{ parameters.env }}
+  displayName: Terraform Apply - ${{ parameters.env }}
+  dependsOn: Review_Terra_Plan_${{ parameters.env }}
+  environment: ${{ parameters.env }}
+  pool:
+    vmImage: 'windows-latest'
+  strategy:
+    runOnce:
+      deploy:
+        steps:
+        - checkout: self
+
+        - ${{ each repo in parameters.moduleRepos }}:
+          - checkout: ${{ repo }}
+
+        - template: tf-plan.yml
+          parameters:
+            env: ${{ parameters.env }}
+            working_dir: ${{ parameters.working_dir }}
+            backend_config_file_name: ${{ parameters.backend_config_file_name }}
+
+        - powershell: terraform apply plan
+          workingDirectory: ${{ parameters.working_dir }}
+          displayName: 'TF - Apply'
+          env:
+            ARM_CLIENT_ID: $(arm_client_id)
+            ARM_CLIENT_SECRET: $(arm_client_secret)
+            ARM_TENANT_ID: $(arm_tenant_id)
+            ARM_SUBSCRIPTION_ID: $(arm_subscription_id)
+            ARM_ACCESS_KEY: $(arm_access_key)
