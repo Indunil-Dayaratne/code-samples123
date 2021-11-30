@@ -1,0 +1,80 @@
+﻿@using System.Configuration
+
+<script>
+
+    var beasFunctionBaseUrl="@ConfigurationManager.AppSettings["beas:BaseUrl"]";
+    var azureClientApplicationResourceId= "@ConfigurationManager.AppSettings["azure:ClientId"]";
+    var azureAuthorityUrl = "@ConfigurationManager.AppSettings["azure:AuthorityUrl"]";
+
+    var beasFunctionUrls = {
+        scope: "@ConfigurationManager.AppSettings["beas:AzureScope"]",
+        user: beasFunctionBaseUrl + "user",
+        userApplicationRole: beasFunctionBaseUrl + "userapplicationrole",
+        application: beasFunctionBaseUrl + "application",
+        role: beasFunctionBaseUrl + "role",
+        applicationAreas: beasFunctionBaseUrl + "applicationarea"
+    };
+
+    function scriptLoader() {
+
+        var self = this;
+        var opts = { verbose: true };
+
+        this.getOptions = function () { return opts; };
+        this.setOptions = function (options) {
+            for (var x in options) {
+                opts[x] = options[x];
+            }
+        };
+
+        this.loadRequiredFiles = function (callback, scripts, styles) {
+            var filesloaded = 0;
+            var filestoload = scripts.length + styles.length;
+            for (var i = 0; i < scripts.length; i++) {
+                log('Loading script ' + scripts[i]);
+                var script = document.createElement('script');
+                script.type = 'text/javascript';
+                script.src = scripts[i];
+                script.onload = function () {
+                    log('Loaded script');
+                    log(this);
+                    filesloaded++;
+                    finishLoad();
+                };
+                document.body.appendChild(script);
+            }
+            for (var i = 0; i < styles.length; i++) {
+                log('Loading style ' + styles[i]);
+                var style = document.createElement('link');
+                style.rel = 'stylesheet';
+                style.href = styles[i];
+                style.type = 'text/css';
+                style.onload = function () {
+                    log('Loaded style');
+                    log(this);
+                    filesloaded++;
+                    finishLoad();
+                };
+                document.body.appendChild(style);
+            }
+            function finishLoad() {
+                if (filesloaded === filestoload) {
+                    callback();
+                }
+            }
+        };
+
+        function log(msg, force) {
+            if (opts.verbose || force) {
+                console.log(msg);
+            }
+        }
+
+        this.init = function (afterLoadRequiredFiles, scripts, styles) {
+            self.loadRequiredFiles(afterLoadRequiredFiles, scripts, styles);
+        };
+    }
+
+
+
+</script>

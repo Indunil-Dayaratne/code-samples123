@@ -1,0 +1,13 @@
+// Here you can add other styles
+.table td.table-ellipsis {
+  max-width: 30em;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap
+}
+
+
+.card-header {
+  padding: 0.5em;
+  //padding-bottom: 0.5em;
+}

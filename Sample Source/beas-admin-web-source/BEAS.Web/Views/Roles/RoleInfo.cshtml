@@ -1,0 +1,42 @@
+﻿@using System.Configuration;
+@using BEAS.Web.Helpers;
+@Html.Partial("_SharedIncludes")
+<script src="https://cdnjs.cloudflare.com/ajax/libs/async/2.6.1/async.min.js"></script>
+
+<script type="text/javascript">
+    var roleInfoVm;
+
+    var roleInfoConfig = {
+        deploySpecRunner: "@ConfigurationManager.AppSettings["DeploySpecRunner"]",
+        scriptsToLoad: [
+            '@FingerPrintHelper.Tag("/Scripts/Roles/RoleInfo.js")',
+            '@FingerPrintHelper.Tag("/Scripts/Shared/Common.js")',
+            '@FingerPrintHelper.Tag("/Scripts/Shared/moment.js")'
+        ],
+        stylesToLoad: [
+            '@FingerPrintHelper.Tag("/Content/Common.css")'
+        ]
+    }
+
+    bladeUI.loadScripts(roleInfoConfig.scriptsToLoad, roleInfoConfig.stylesToLoad, true).done(function () {
+        roleInfoVm = new RoleInfoViewModel(roleInfoConfig, _BLADE_INSTANCE_);
+        roleInfoVm.initialise();
+    });
+</script>
+
+<div id="divRoleInfoMain" class="form-horizontal">
+    <form id="frmRoleInfo" data-bind="with: $root.role, bind: $root.role">
+        <div class="fxs-part">
+            <div class="form-group form-group-sm col-md-12 left-margin-zero right-margin-zero">
+                <div class="row">
+                    <label class="col-md-3 control-label label-for-static">Name</label>
+                    <div class="col-lg-6 col-md-6 col-sm-6 bottom-margin-10">
+                        <input class="form-control" id="txtName" placeholder="Name" autocomplete="off" data-bind="value: name"  />
+                    </div>
+                </div>
+             </div>
+        </div>
+    </form>
+</div>
+
+<div class="confirmDeleteRole msportalfx-text-small" title="Confirm Delete" style="display: none"></div>

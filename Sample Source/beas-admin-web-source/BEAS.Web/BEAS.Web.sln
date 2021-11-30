@@ -1,0 +1,46 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.28803.202
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BEAS.Web", "BEAS.Web.csproj", "{AB8592DB-B8CB-438E-8E48-6A70EFBD2A7D}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Development|Any CPU = Development|Any CPU
+		PRS - DEV|Any CPU = PRS - DEV|Any CPU
+		PRS - Test|Any CPU = PRS - Test|Any CPU
+		PS|Any CPU = PS|Any CPU
+		Release|Any CPU = Release|Any CPU
+		Staging|Any CPU = Staging|Any CPU
+		SysTest|Any CPU = SysTest|Any CPU
+		UAT|Any CPU = UAT|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{AB8592DB-B8CB-438E-8E48-6A70EFBD2A7D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AB8592DB-B8CB-438E-8E48-6A70EFBD2A7D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AB8592DB-B8CB-438E-8E48-6A70EFBD2A7D}.Development|Any CPU.ActiveCfg = Development|Any CPU
+		{AB8592DB-B8CB-438E-8E48-6A70EFBD2A7D}.Development|Any CPU.Build.0 = Development|Any CPU
+		{AB8592DB-B8CB-438E-8E48-6A70EFBD2A7D}.PRS - DEV|Any CPU.ActiveCfg = PRS - DEV|Any CPU
+		{AB8592DB-B8CB-438E-8E48-6A70EFBD2A7D}.PRS - DEV|Any CPU.Build.0 = PRS - DEV|Any CPU
+		{AB8592DB-B8CB-438E-8E48-6A70EFBD2A7D}.PRS - Test|Any CPU.ActiveCfg = PRS - Test|Any CPU
+		{AB8592DB-B8CB-438E-8E48-6A70EFBD2A7D}.PRS - Test|Any CPU.Build.0 = PRS - Test|Any CPU
+		{AB8592DB-B8CB-438E-8E48-6A70EFBD2A7D}.PS|Any CPU.ActiveCfg = PS|Any CPU
+		{AB8592DB-B8CB-438E-8E48-6A70EFBD2A7D}.PS|Any CPU.Build.0 = PS|Any CPU
+		{AB8592DB-B8CB-438E-8E48-6A70EFBD2A7D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AB8592DB-B8CB-438E-8E48-6A70EFBD2A7D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{AB8592DB-B8CB-438E-8E48-6A70EFBD2A7D}.Staging|Any CPU.ActiveCfg = Staging|Any CPU
+		{AB8592DB-B8CB-438E-8E48-6A70EFBD2A7D}.Staging|Any CPU.Build.0 = Staging|Any CPU
+		{AB8592DB-B8CB-438E-8E48-6A70EFBD2A7D}.SysTest|Any CPU.ActiveCfg = SysTest|Any CPU
+		{AB8592DB-B8CB-438E-8E48-6A70EFBD2A7D}.SysTest|Any CPU.Build.0 = SysTest|Any CPU
+		{AB8592DB-B8CB-438E-8E48-6A70EFBD2A7D}.UAT|Any CPU.ActiveCfg = UAT|Any CPU
+		{AB8592DB-B8CB-438E-8E48-6A70EFBD2A7D}.UAT|Any CPU.Build.0 = UAT|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {13EAAAC5-E170-435A-9ED7-92FE98E75245}
+	EndGlobalSection
+EndGlobal

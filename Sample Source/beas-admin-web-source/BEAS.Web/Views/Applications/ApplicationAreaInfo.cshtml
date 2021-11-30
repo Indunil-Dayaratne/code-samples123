@@ -1,0 +1,42 @@
+﻿@using System.Configuration;
+@using BEAS.Web.Helpers;
+@Html.Partial("_SharedIncludes")
+<script src="https://cdnjs.cloudflare.com/ajax/libs/async/2.6.1/async.min.js"></script>
+
+<script type="text/javascript">
+    var applicationAreaInfoVm;
+
+    var applicationAreaInfoConfig = {
+        deploySpecRunner: "@ConfigurationManager.AppSettings["DeploySpecRunner"]",
+        scriptsToLoad: [
+            '@FingerPrintHelper.Tag("/Scripts/Applications/ApplicationAreaInfo.js")',
+            '@FingerPrintHelper.Tag("/Scripts/Shared/Common.js")',
+            '@FingerPrintHelper.Tag("/Scripts/Shared/moment.js")'
+        ],
+        stylesToLoad: [
+            '@FingerPrintHelper.Tag("/Content/Common.css")'
+        ]
+    }
+
+    bladeUI.loadScripts(applicationAreaInfoConfig.scriptsToLoad, applicationAreaInfoConfig.stylesToLoad, true).done(function () {
+        applicationAreaInfoVm = new ApplicationAreaInfoViewModel(applicationAreaInfoConfig, _BLADE_INSTANCE_);
+        applicationAreaInfoVm.initialise();
+    });
+</script>
+
+<div id="divApplicationAreaInfoMain" class="form-horizontal">
+    <form id="frmApplicationAreaInfo" data-bind="with: $root.applicationArea, bind: $root.applicationArea">
+        <div class="fxs-part">
+            <div class="form-group form-group-sm col-md-12 left-margin-zero right-margin-zero">
+                <div class="row">
+                    <label class="col-md-3 control-label label-for-static">Name</label>
+                    <div class="col-lg-6 col-md-6 col-sm-6 bottom-margin-10">
+                        <input class="form-control" id="txtName" placeholder="Name" autocomplete="off" data-bind="value: name" />
+                    </div>
+                </div>
+             </div>
+        </div>
+    </form>
+</div>
+
+<div class="confirmDeleteApplicationArea msportalfx-text-small" title="Confirm Delete" style="display: none"></div>

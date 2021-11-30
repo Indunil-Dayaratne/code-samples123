@@ -1,0 +1,47 @@
+.delete-item-btn {
+    /* padding: 0; */
+    border-radius: 50%;
+    height: 18px;
+    width: 18px;
+    margin-top: 6px;
+    padding-top: 0px;
+    padding-bottom: 6px;
+    padding-right: 6px;
+    padding-left: 5.5px;
+    line-height: 13px;
+    transition: all 0.2s
+}
+
+tr .delete-item-btn {
+    opacity: 0;
+    transform: translateX(8px);
+}
+
+tr:hover .delete-item-btn {
+    opacity: 1;
+    transform: translateX(0);
+}
+
+.edit-filter-btn {
+    font-size: 12px;
+    padding: 0.25rem 0.5rem;
+    position: absolute;
+    left: 0;
+    transition: all 0.2s;
+    width: 30%;
+    margin-top: 2px;
+}
+
+.edit-filter-btn:not([ready]) {
+    display: none;
+}
+
+td .edit-filter-btn {
+    opacity: 0;
+    transform: translateY(8px);
+}
+
+td:hover .edit-filter-btn[ready] {
+    opacity: 1;
+    transform: translateY(0);
+}

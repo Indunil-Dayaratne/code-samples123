@@ -1,0 +1,42 @@
+{
+  "IsEncrypted": false,
+  "Values": {
+    "AzureWebJobsStorage": "UseDevelopmentStorage=true",
+    "AzureServicesAuthConnectionString": "RunAs=Developer; DeveloperTool=AzureCli",
+    "FUNCTIONS_WORKER_RUNTIME": "dotnet",
+    "SERVICE_BUS_NAME": "coreact-poc-svcbus-dev",
+    "APPINSIGHTS_INSTRUMENTATIONKEY": "9c54d3b6-a357-4b7c-ad42-9138a006b781",
+    "SERVICE_BUS_ENDPOINT": "coreact-poc-svcbus-dev.servicebus.windows.net",
+    "STORAGE_ACCOUNT_NAME": "coreactpocuksdev",
+    "STORAGE_KV_CONNECTIONSTRING": "coreactpocuksdev-cs",
+    "APP_PREFIX": "coreactpoc",
+    "COREACT_TOPIC_DNBPKYC_LISTEN_CONNECTIONSTRING": "Endpoint=sb://coreact-poc-svcbus-dev.servicebus.windows.net/;SharedAccessKeyName=listenpolicy;SharedAccessKey=Q5UucVtR8/Vchzq2bWeadn6jHhbwq/5rQqhi15zikUU=;",
+
+    "COREACT_TOPIC_DNBPCI_LISTEN_CONNECTIONSTRING": "Endpoint=sb://coreact-poc-svcbus-dev.servicebus.windows.net/;SharedAccessKeyName=listenpolicy;SharedAccessKey=xVmmDdpOysf6L86JmYJc3vfToNuRs44hTNqd/XRIgrM=;",
+    "COREACT_TOPIC_DNBPCOMP_LISTEN_CONNECTIONSTRING": "Endpoint=sb://coreact-poc-svcbus-dev.servicebus.windows.net/;SharedAccessKeyName=listenpolicy;SharedAccessKey=cMB8XJtdp1fhIbzceAZb/gAOTf9jHQv0QMw+xy6fryc=;",
+
+    "COREACT_TOPIC_DNBPVI_LISTEN_CONNECTIONSTRING": "Endpoint=sb://coreact-poc-svcbus-dev.servicebus.windows.net/;SharedAccessKeyName=listenpolicy;SharedAccessKey=maZ+wtArVy05N50CDIUXDtPoX3QMnemF1GzDq1eokRg=;",
+
+    "COREACT_TOPIC_DNBPCL_LISTEN_CONNECTIONSTRING": "Endpoint=sb://coreact-poc-svcbus-dev.servicebus.windows.net/;SharedAccessKeyName=listenpolicy;SharedAccessKey=tPjEC75mqhzOMXgxsHCxMfIt4VxZEhV7FCHY3r1uLzI=;",
+
+    "COREACT_TOPIC_DNBPML_LISTEN_CONNECTIONSTRING": "Endpoint=sb://coreact-poc-svcbus-dev.servicebus.windows.net/;SharedAccessKeyName=listenpolicy;SharedAccessKey=RMHb9H39OWTAAq16Y0XdabVUQF/VQKYVaaMxb0dq2VM=;",
+
+    "COREACT_TOPIC_DNBPOWN_LISTEN_CONNECTIONSTRING": "Endpoint=sb://coreact-poc-svcbus-dev.servicebus.windows.net/;SharedAccessKeyName=listenpolicy;SharedAccessKey=CIVB+SHl/Y//akTpFuxXI0EgNhQPgMU0onOG3xD/N2A=;",
+
+    "CacheExpiryTimeInMinutes": "30",
+    "KEYVAULT_RESOURCEID": "https://coreact-poc-kv-dev.vault.azure.net/secrets/",
+    "AzureSignalRConnectionString": "Endpoint=https://coreact-poc-signalr-dev.service.signalr.net;AccessKey=Tgn0f3kIHgEp0DsOtDwIjgzMuNxOcaO651wd01N+WtE=;Version=1.0;",
+    "COREACT_TOPIC_DNBPLEB_LISTEN_CONNECTIONSTRING": "Endpoint=sb://coreact-poc-svcbus-dev.servicebus.windows.net/;SharedAccessKeyName=listenpolicy;SharedAccessKey=2YHKovRQEq144NjZ9HHi92hTh24FRsZ9xQg+IiS0UrA=;",
+    "COREACT_TOPIC_DNBPLEJ_LISTEN_CONNECTIONSTRING": "Endpoint=sb://coreact-poc-svcbus-dev.servicebus.windows.net/;SharedAccessKeyName=listenpolicy;SharedAccessKey=xbZhTqbUgw6lSS33Bq1kgYkv39pC2b6c9JzSoeu7lB4=;",
+    "COREACT_TOPIC_DNBPLES_LISTEN_CONNECTIONSTRING": "Endpoint=sb://coreact-poc-svcbus-dev.servicebus.windows.net/;SharedAccessKeyName=listenpolicy;SharedAccessKey=AZ0LQbp7iHASVxijXgcRrxfUj0bT26jlzpKUs57VdWg=;",
+    "COREACT_TOPIC_DNBPMED_LISTEN_CONNECTIONSTRING": "Endpoint=sb://coreact-poc-svcbus-dev.servicebus.windows.net/;SharedAccessKeyName=listenpolicy;SharedAccessKey=Qe2c48RofXbdmhHhca0VmH8tbPg+FmK/PqOUKh5WnnU=;",
+    "COREACT_TOPIC_DNBPCR_LISTEN_CONNECTIONSTRING": "Endpoint=sb://coreact-poc-svcbus-dev.servicebus.windows.net/;SharedAccessKeyName=listenpolicy;SharedAccessKey=TumxQuPFKIcOjpuZnWPfgnnjHZON6J6ydGB60vc8foI=;",
+    "COREACT_TOPIC_DNBPPR_LISTEN_CONNECTIONSTRING": "Endpoint=sb://coreact-poc-svcbus-dev.servicebus.windows.net/;SharedAccessKeyName=listenpolicy;SharedAccessKey=gnjvwmYNQyV26i/UyXVqhfH+qod0165ooZioF5FBVGc=;"
+  },
+
+  "Host": {
+    "LocalHttpPort": 7072,
+    "CORS": "http://localhost:28124",
+    "CorsCredentials" :  "true"
+  }
+}

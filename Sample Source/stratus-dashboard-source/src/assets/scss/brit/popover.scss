@@ -1,0 +1,28 @@
+.popover {
+    max-width: 100% !important;
+    white-space: normal;
+}
+
+.brit-popover-body {
+    width: 400px;
+}
+
+.tab-content {
+    height: 90%;
+    overflow: auto;
+}
+
+button.close.popoverClose {
+    font-size: 1em;
+    padding: 0.25em 0.4em;
+    margin-top: -0.25em;
+    margin-right: -0.25em;
+}
+
+.popover-title {
+    min-height: 1em;
+}
+
+.popover-body *:focus {
+    outline: 0;
+}

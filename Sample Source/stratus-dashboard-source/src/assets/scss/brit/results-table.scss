@@ -1,0 +1,40 @@
+.results-table {
+    th {
+        text-align: center;
+
+        &:first-child {
+            border: none;
+        }
+
+        &.header-border {
+            border: 1px solid #c8ced3;
+        }
+    }
+
+    thead {
+        th.header-border {
+            vertical-align: bottom;
+            border: 1px solid #c8ced3;
+        }
+    }
+
+    .b-table-sticky-header > .table.b-table > thead > tr > .b-table-sticky-column, 
+    .b-table-sticky-header > .table.b-table > tbody > tr > .b-table-sticky-column, 
+    .b-table-sticky-header > .table.b-table > tfoot > tr > .b-table-sticky-column, 
+    &.table-responsive > .table.b-table > thead > tr > .b-table-sticky-column, 
+    &.table-responsive > .table.b-table > tbody > tr > .b-table-sticky-column, 
+    &.table-responsive > .table.b-table > tfoot > tr > .b-table-sticky-column, 
+    [class*="table-responsive-"] > .table.b-table > thead > tr > .b-table-sticky-column, 
+    [class*="table-responsive-"] > .table.b-table > tbody > tr > .b-table-sticky-column, 
+    [class*="table-responsive-"] > .table.b-table > tfoot > tr > .b-table-sticky-column {
+        left: -1px;
+    }
+
+    .table-cell-width {
+        width: 100px;
+    }
+
+    .results-cell {
+        text-align: right;
+    }
+}

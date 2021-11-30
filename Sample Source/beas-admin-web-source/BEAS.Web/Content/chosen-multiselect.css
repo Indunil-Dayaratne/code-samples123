@@ -1,0 +1,12 @@
+﻿.chosen-single:focus {
+    outline: none;
+    background-color: #d3d3d3;
+}
+
+.animate-refresh {
+    animation: spin 0.5s infinite linear;
+}
+
+.chosen-autocomplete .chosen-container .chosen-drop {
+    display: none !important;
+}

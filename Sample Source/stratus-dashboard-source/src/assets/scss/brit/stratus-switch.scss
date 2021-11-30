@@ -1,0 +1,12 @@
+.stratus-switch {
+    .selected-option-switch {
+        font-weight: bold;
+    }
+
+    .custom-control-label {
+        &::before, 
+        &::after {
+            cursor: pointer;
+        }
+    } 
+} 

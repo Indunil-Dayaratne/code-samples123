@@ -1,0 +1,52 @@
+﻿@using System.Configuration;
+@using BEAS.Web.Helpers;
+@Html.Partial("_SharedIncludes")
+<script src="https://cdnjs.cloudflare.com/ajax/libs/async/2.6.1/async.min.js"></script>
+
+<script type="text/javascript">
+    var userRoleInfoVm;
+
+    var userRoleInfoConfig = {
+        deploySpecRunner: "@ConfigurationManager.AppSettings["DeploySpecRunner"]",
+        scriptsToLoad: [
+            '@FingerPrintHelper.Tag("/Scripts/Users/UserRoleInfo.js")',
+            '@FingerPrintHelper.Tag("/Scripts/Shared/Common.js")',
+            '@FingerPrintHelper.Tag("/Scripts/Shared/moment.js")'
+        ],
+        stylesToLoad: [
+            '@FingerPrintHelper.Tag("/Content/Common.css")'
+        ]
+    }
+
+    bladeUI.loadScripts(userRoleInfoConfig.scriptsToLoad, userRoleInfoConfig.stylesToLoad, true).done(function () {
+        userRoleInfoVm = new UserRoleInfoViewModel(userRoleInfoConfig, _BLADE_INSTANCE_);
+        userRoleInfoVm.initialise();
+    });
+</script>
+
+<div id="divUserRoleInfoMain" class="form-horizontal">
+    <form id="frmUserRoleInfo" data-bind="with: $root.userApplicationAreaRole, bind: $root.userApplicationAreaRole">
+        <div class="fxs-part">
+            <div class="form-group form-group-sm col-md-12 left-margin-zero right-margin-zero">
+                <div class="row">
+                    <label class="control-label">Role</label>
+                        <select class="form-control" id="selRole" name="selPolicySearch"
+                                data-placeholder="Role"
+                                data-bind=" options: userInfoVm.roles,optionsValue: 'id',optionsText: 'name',optionsCaption: 'Please select..',value: roleId">
+                        </select>
+                </div>
+                <div class="row">
+                    <label class="control-label">Application Area</label>
+                        <select id="selApplicationArea" name="selApplicationArea"
+                                data-placeholder="Application Area"
+                                class="form-control"
+                                 data-bind=" options: userInfoVm.applicationAreas,optionsValue: 'id',optionsText: 'nameWithAppName',optionsCaption: 'Please select..',value: applicationAreaId">
+                        </select>
+
+                </div>
+             </div>
+        </div>
+    </form>
+</div>
+
+<div class="confirmDeleteAreaRole msportalfx-text-small" title="Confirm Delete" style="display: none"></div>

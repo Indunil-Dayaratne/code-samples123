@@ -1,0 +1,40 @@
+﻿@using System.Configuration
+@using System.Web.Mvc.Html
+@using Newtonsoft.Json
+@using BEAS.Web.Helpers;
+@Html.Partial("_SharedIncludes")
+<script src="https://secure.aadcdn.microsoftonline-p.com/lib/0.2.3/js/msal.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/async/2.6.1/async.min.js"></script>
+
+<script>
+    var applicationsVm;
+
+    @{ string scriptPath = Request.Browser.Browser == "Chrome" ? "/Scripts" : "/Scripts"; }
+    var applicationsConfig = {
+        scriptsToLoad: [
+            '@FingerPrintHelper.Tag(scriptPath + "/Applications/Applications.js")',
+            '@FingerPrintHelper.Tag(scriptPath + "/Shared/moment.min.js")',
+            '@FingerPrintHelper.Tag(scriptPath + "/Shared/beas.js")'
+        ],
+        cssToLoad: [ '@FingerPrintHelper.Tag("/Content/Site.css")']
+    };
+
+    bladeUI.loadScripts(applicationsConfig.scriptsToLoad, applicationsConfig.cssToLoad, true).done(function () {
+        applicationsVm = new ApplicationsViewModel(applicationsConfig, _BLADE_INSTANCE_);
+        applicationsVm.initialise();
+
+
+    });
+
+</script>
+
+<div id="divApplicationsMain" class="fxs-part">
+    <form id="frmApplications" data-bind="with: $root, bind: $root">
+        <div id="divApplications" class="fxs-part">
+            <div id="applicationsGridContainer" class="form-group form-group-sm msportalfx-text-small col-md-12 fill-Space-Sideways">
+                <table id="applicationsGrid" class="col-md-12 leftRight-padding-zero"></table>
+            </div>
+        </div>
+    </form>
+</div>
+

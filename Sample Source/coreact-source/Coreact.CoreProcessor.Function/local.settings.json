@@ -1,0 +1,21 @@
+{
+  "IsEncrypted": false,
+  "Values": {
+    "AzureWebJobsStorage": "UseDevelopmentStorage=true",
+    "FUNCTIONS_WORKER_RUNTIME": "dotnet",
+    "APPINSIGHTS_INSTRUMENTATIONKEY": "9c54d3b6-a357-4b7c-ad42-9138a006b781",
+    "SERVICE_BUS_NAME": "coreact-poc-svcbus-dev",
+    "SERVICE_BUS_ENDPOINT": "coreact-poc-svcbus-dev.servicebus.windows.net",
+    "STORAGE_ACCOUNT_NAME": "coreactpocuksdev",
+    "STORAGE_KV_CONNECTIONSTRING": "coreactpocuksdev-cs",
+    "APP_PREFIX": "coreactpoc",
+    "COREACT_NAMESPACE_LISTEN_CONNECTIONSTRING": "Endpoint=sb://coreact-poc-svcbus-dev.servicebus.windows.net/;SharedAccessKeyName=listenpolicy;SharedAccessKey=YKbXsvbt13gyzGZgZ4SkX9xjvBrkT3Bket4rpTrnPkQ=;",
+    "KEYVAULT_RESOURCEID": "https://coreact-poc-kv-dev.vault.azure.net/secrets/",
+    "CacheExpiryTimeInMinutes": "30",
+    "AzureServicesAuthConnectionString": "RunAs=Developer; DeveloperTool=AzureCli"
+  },
+  "Host": {
+    "LocalHttpPort": 7071,
+    "CORS": "http://localhost:28124"
+  }
+}

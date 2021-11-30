@@ -1,0 +1,42 @@
+﻿@using System.Configuration
+@using System.Web.Mvc.Html
+@using Newtonsoft.Json
+@using BEAS.Web.Helpers;
+@Html.Partial("_SharedIncludes")
+<script src="https://secure.aadcdn.microsoftonline-p.com/lib/0.2.3/js/msal.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/async/2.6.1/async.min.js"></script>
+
+<script>
+
+
+    var rolesVm;
+
+    @{ string scriptPath = Request.Browser.Browser == "Chrome" ? "/Scripts" : "/Scripts"; }
+    var rolesConfig = {
+        scriptsToLoad: [
+            '@FingerPrintHelper.Tag(scriptPath + "/Roles/Roles.js")',
+            '@FingerPrintHelper.Tag(scriptPath + "/Shared/moment.min.js")',
+            '@FingerPrintHelper.Tag(scriptPath + "/Shared/beas.js")'
+        ],
+        cssToLoad: [ '@FingerPrintHelper.Tag("/Content/Site.css")']
+    };
+
+    bladeUI.loadScripts(rolesConfig.scriptsToLoad, rolesConfig.cssToLoad, true).done(function () {
+        rolesVm = new RolesViewModel(rolesConfig, _BLADE_INSTANCE_);
+        rolesVm.initialise();
+
+
+    });
+
+</script>
+
+<div id="divRolesMain" class="fxs-part">
+    <form id="frmRoles" data-bind="with: $root, bind: $root">
+        <div id="divRoles" class="fxs-part">
+            <div id="rolesGridContainer" class="form-group form-group-sm msportalfx-text-small col-md-12 fill-Space-Sideways">
+                <table id="rolesGrid" class="col-md-12 leftRight-padding-zero"></table>
+            </div>
+        </div>
+    </form>
+</div>
+

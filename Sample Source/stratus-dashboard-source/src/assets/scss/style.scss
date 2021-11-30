@@ -1,0 +1,26 @@
+// If you want to override variables do it here
+@import "variables";
+
+// Import styles
+@import "~@coreui/coreui/scss/coreui";
+
+//Bootstrap
+//@import 'node_modules/bootstrap/scss/bootstrap';
+@import 'node_modules/bootstrap-vue/src/index.scss';
+
+// If you want to add something do it here
+@import "custom";
+
+// ie fixes
+@import "ie-fix";
+
+// Brit Specific
+@import "./brit/popover.scss";
+@import "./brit/buttons.scss";
+@import "./brit/multiselect.scss";
+@import "./brit/results-table.scss";
+@import "./brit/stratus-switch.scss";
+
+.main .container-fluid {
+    padding: 0 10px;
+}

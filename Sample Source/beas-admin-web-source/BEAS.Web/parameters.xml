@@ -1,0 +1,9 @@
+﻿<parameters>
+  <parameter name="BladeUIHostURL" description="Description for BladeUIHostURL" defaultvalue="__BLADEUIHOSTURL__" tags="">
+    <parameterentry kind="XmlFile" scope="\\web.config$" match="/configuration/appSettings/add[@key='BladeUIHostURL']/@value" />
+  </parameter>
+
+  <parameter name="BritCacheUrl" description="Description for BritCacheUrl" defaultvalue="__BRITCACHEURL__" tags="">
+    <parameterentry kind="XmlFile" scope="\\web.config$" match="/configuration/appSettings/add[@key='BritCacheUrl']/@value" />
+  </parameter>
+</parameters>

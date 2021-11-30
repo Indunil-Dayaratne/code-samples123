@@ -1,0 +1,39 @@
+﻿div.fill-Space-Sideways {
+    margin-left: 0 !important;
+    margin-right: 0 !important;
+    padding-left: 0 !important;
+    padding-right: 0 !important;
+}
+
+.left-margin-zero {
+    margin-left: 0 !important;
+}
+
+.right-margin-zero {
+    margin-right: 0 !important;
+}
+
+.left-padding-zero {
+    padding-left: 0 !important;
+}
+
+.right-padding-zero {
+    padding-right: 0 !important;
+}
+
+.leftRight-padding-zero {
+    padding-left: 0 !important;
+    padding-right: 0 !important;
+}
+
+.bottom-margin-zero {
+    margin-bottom: 0 !important;
+}
+
+.top-margin-zero {
+    margin-top: 0 !important;
+}
+
+.bottom-margin-10 {
+    margin-bottom: 10px !important;
+}

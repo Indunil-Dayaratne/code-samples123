@@ -1,0 +1,67 @@
+﻿.custom-height {
+    height: 735px!important;
+}
+.chosen-container {
+    width: 354px !important
+}
+.align_left {
+    text-align: left !important;
+}
+.customMarginBottom {
+    margin-bottom: 13px !important;
+}
+@media screen and (max-width:2560px) {
+    .chosen-container {
+        width: 514px !important
+    }
+}
+@media screen and (max-width:2400px) {
+    .chosen-container {
+        width: 474px !important
+    }
+}
+@media screen and (max-width:2140px) {
+    .chosen-container {
+        width: 408px !important
+    }
+}
+@media screen and (max-width: 1920px) {
+    .chosen-container {
+        width: 350px !important
+    }
+}
+@media screen and (max-width: 1919px) and (min-width: 1745px) {
+    .chosen-container {
+        width: 306px !important
+    }
+}
+@media screen and (max-width: 1663px) {
+    .chosen-container {
+        width: 286px !important
+    }
+}
+@media screen and (max-width: 1536px) {
+    .chosen-container {
+        width: 254px !important
+    }
+}
+@media screen and (max-width: 1440px) {
+    .chosen-container {
+        width: 226px !important
+    }
+}
+@media screen and (max-width: 1364px) {
+    .chosen-container {
+        width: 214px !important
+    }
+}
+@media screen and (max-width: 1280px) {
+    .chosen-container {
+        width: 192px !important
+    }
+}
+@media screen and (max-width: 1024px) {
+    .chosen-container {
+        width: 126px !important
+    }
+}

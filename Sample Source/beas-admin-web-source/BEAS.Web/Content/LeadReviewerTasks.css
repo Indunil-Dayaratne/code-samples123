@@ -1,0 +1,18 @@
+﻿.zero-margin-leftRight-padding-left {
+    margin-left: 0 !important;
+    margin-right: 0 !important;
+    padding-left: 0 !important;
+}
+
+.fxs-part {
+    min-height: 250px !important;
+}
+
+.chosen-disabled .chosen-single:focus {
+    outline: none;
+    background-color: #d3d3d3;
+}
+
+.chosen-choices {
+    border: 1px dashed #1ba1e2 !important;
+}
